@@ -89,6 +89,6 @@ Penggunaan _online versioning system_ untuk kebutuhan _project tracking_ dapat
 membantu _developer_ dan _project manager_ untuk mengelola pekerjaannya pada
 lebih sedikit _tool_, ketimbang menggunakan beberapa _software_ terpisah. Di
 sisi lain, mungkin tim Anda membutuhkan lebih banyak fitur yang belum diakomodir
-Gitlab, terutama fitur _free tiernya_.
+Gitlab, terutama pada versi gratisnya.
 
 
