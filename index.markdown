@@ -4,4 +4,4 @@
 
 layout: home
 ---
-My name is **Nito**. I love to build simple Minecraft house and software!
+
