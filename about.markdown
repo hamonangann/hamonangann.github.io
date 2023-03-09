@@ -21,6 +21,7 @@ Mail me at [b.hamonangan.p@gmail.com](mailto:b.hamonangan.p@gmail.com)
 
 ----
 
+
 Made with love with a help from [Jekyll (Ruby)](https://jekyllrb.com/) static-site generator. 
 Licensed under [Creative Commons BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/).
 
