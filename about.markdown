@@ -3,8 +3,6 @@ layout: page
 title: About
 permalink: /about/
 ---
-
-# About
 Greetings! This is **B. Hamonangan**. I love to build simple Minecraft house and software.
 
 ### Projects:
