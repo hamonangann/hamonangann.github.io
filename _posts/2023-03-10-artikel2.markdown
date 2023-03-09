@@ -132,7 +132,10 @@ terkait produk diterjemahkan ke dalam _sprint_ (backlog), setiap mahasiswa harus
 Product Owner atau Scrum Master tidak memilihkan (atau menyuruh tim untuk mengambil) backlog tertentu. Dosen atau asisten dosen sebagai pembimbing
 proyek yang mengingatkan hal ini sangat mendukung mahasiswanya untuk menerapkan Scrum dengan baik dan benar.
 
-## Akhir kata
+## Rujukan
 
-Mudah-mudahan artikel ini dapat menjawab tentang posisi istilah **Agile dan Scrum** pada pengembangan perangkat lunak, sekaligus menghindari
-tim dari miskonsepi yang boleh jadi merugikan.
+Manifesto for Agile Software Development. (n.d.). https://agilemanifesto.org/ 
+
+Scrum Guide | Scrum Guides. (n.d.). https://scrumguides.org/scrum-guide.html 
+
+What is Scrum? (n.d.). Scrum.org. https://www.scrum.org/learning-series/what-is-scrum
