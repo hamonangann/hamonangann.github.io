@@ -1,0 +1,138 @@
+---
+layout: post
+title:  "Apakah Agile dan Scrum adalah Metodologi Pengembangan Perangkat Lunak?"
+categories: tips
+---
+Agile dan Scrum. Keduanya adalah kata yang sangat populer, khususnya di dunia pengembangan perangkat lunak. Menurut saya, kita perlu mengulas tentang 
+pengertian keduanya dan hubungannya dengan metodologi pengembangan perangkat lunak.
+
+## Manifesto Agile
+
+Untuk mengetahui apa yang dimaksud dengan Agile, kita perlu merujuk kepada apa yang dimaksud para pencetusnya. Kita dapat memeriksanya pada 
+[4 Agile Manifesto](https://agilemanifesto.org/) sebagai berikut:
+
+```
+We are uncovering better ways of developing
+software by doing it and helping others do it.
+Through this work we have come to value:
+
+Individuals and interactions over processes and tools
+Working software over comprehensive documentation
+Customer collaboration over contract negotiation
+Responding to change over following a plan
+
+That is, while there is value in the items on
+the right, we value the items on the left more.
+```
+
+Merujuk KBBI, manifesto adalah pernyataan terbuka tentang tujuan dan pandangan seseorang atau suatu kelompok. Sekarang coba bacakan manifesto di atas
+secara lantang di depan anak kecil atau orang yang belum pernah dengar kata Agile. Mereka akan dengan mudah mengatakan bahwa keempat poin di atas
+adalah **pola pikir** atau **paradigma**. Mereka tidak akan berpikir kejauhan kalau Agile ini (harus) menjelaskan tentang cara membuat perangkat lunak.
+
+Setelah membaca keempat manifesto di atas, kita bisa melanjutkannya dengan membaca [12 Prinsip Agile](https://agilemanifesto.org/principles.html)
+
+```
+We follow these principles:
+Our highest priority is to satisfy the customer
+through early and continuous delivery
+of valuable software.
+
+Welcome changing requirements, even late in
+development. Agile processes harness change for
+the customer's competitive advantage.
+
+Deliver working software frequently, from a
+couple of weeks to a couple of months, with a
+preference to the shorter timescale.
+
+Business people and developers must work
+together daily throughout the project.
+
+Build projects around motivated individuals.
+Give them the environment and support they need,
+and trust them to get the job done.
+
+The most efficient and effective method of
+conveying information to and within a development
+team is face-to-face conversation.
+
+Working software is the primary measure of progress.
+
+Agile processes promote sustainable development.
+The sponsors, developers, and users should be able
+to maintain a constant pace indefinitely.
+
+Continuous attention to technical excellence
+and good design enhances agility.
+
+Simplicity--the art of maximizing the amount
+of work not done--is essential.
+
+The best architectures, requirements, and designs
+emerge from self-organizing teams.
+
+At regular intervals, the team reflects on how
+to become more effective, then tunes and adjusts
+its behavior accordingly.
+```
+
+Bisa dikatakan bahwa kedua belas poin ini adalah cerminan dari 4 manifesto yang telah disebutkan sebelumnya. 
+Lagi-lagi, orang yang belum pernah dengar kata Agile akan setuju bahwa ini merujuk pada pola pikir yang disepakati pencetusnya.
+Mereka tidak akan punya bayangan tentang bagaimana membangun perangkat lunak hanya berdasarkan poin-poin di atas.
+
+Dengan demikian, **Agile adalah mindset, bukan metodologi pengembangan perangkat lunak**.
+
+## Catatan untuk Agile
+
+Satu hal yang perlu diingat saat membahas manifesto Agile adalah **Agile tidak menolak process and tools, comprehensive documentation, dan seterusnya**.
+Hanya saja sebagai pola pikir, seorang yang menganut agile akan tahu mana yang harus dipilih ketika mengalami dilema atau harus memilih antara "sisi kiri atau kanan".
+Jika bisa keduanya tercapai, itu akan lebih bagus.
+
+Sebagai contoh, sebuah tim proyek perangkat lunak mahasiswa diminta untuk membuat dokumentasi yang lengkap, baik pada tahap desain maupun implementasi (kode).
+Tim ini memiliki waktu yang panjang, yaitu sekitar satu semester, dengan proyek yang masuk akal untuk dikerjakan dalam jangka waktu tersebut.
+Tim yang Agile tidak lantas menolak membuat dokumentasi yang lengkap, seperti dokumen PBI, PRD, SDS, dan sebagainya jika memungkinkan.
+Hal ini justru akan membantu implementasi. Yang jadi masalah adalah ketika dokumen-dokumen di atas dianggap sebagai undang-undang mutlak yang tidak bisa diubah
+atau diimprovisasi.
+
+## Lantas, bagaimana dengan Scrum?
+
+Pertama-tama Anda dapat membaca dokumen tentang Scrum (yang tidak panjang-panjang amat) pada [guide](https://scrumguides.org/scrum-guide.html) ini atau 
+[artikel](https://www.scrum.org/learning-series/what-is-scrum) ini.
+
+Cukup jelas bahwa Anda akan menemukan Scrum dimaksudkan sebagai **Agile Framework**.
+
+Apa maksudnya? Mengutip Cambridge, kerangka kerja atau 
+_framework_ adalah '_a system of rules, ideas, or beliefs that is used to plan or decide something_' 
+atau Merriam-Webster '_a basic conceptional structure (as of ideas)_'.
+
+Selain sebagai Agile Framwork, Scrum juga disebutkan sebagai "light framework". Tujuan dari Scrum ini sendiri _people-oriented_,
+yaitu membantu orang atau tim untuk menciptakan _value_ (Scrum Guide, 2020) melalui solusi yang adaptif. Poin-poin dari Scrum adalah
+
+- Teori (3 pilar)
+- 5 Nilai
+- Tim
+- Event
+- Artefak/perwujudan
+
+Perhatikan bahwa Scrum sama sekali tidak menyinggung metode dan memang tidak dimaksudkan untuk mendikte cara mengembangkan perangkat lunak.
+Sebagai _light framework_, Scrum harus digunakan seutuhnya (tidak bisa di-_cherry-pick_), tapi kita bisa meletakkan metodologi, praktik, dan teknik di atasnya
+(Scrum Guide, 2020). Ini artinya, Scrum menyisakan ruang untuk improvisasi. Di atasnyalah kita meletakkan metodologi, yang diserahkan kepada tim.
+
+Jadi, **Scrum adalah framework, bukan metodologi pengembangan perangkat lunak**.
+
+## Penerapan
+
+Untuk menerapkan Scrum, Scrum Master yang baik harus memahami Scrum sebagai kerangka kerja dan menjadi pemimpin sekaligus pelayan yang baik.
+Jika pemimpin dan pelayan adalah hal yang terdengar kontradiktif, kita harus merujuk pada tujuan Scrum. Scrum untuk orang (anggota), dan orang untuk value.
+Pada akhirnya keberhasilan proyek yang menggunakan Scrum bergantung pada inisiatif **seluruh** anggota tim, bukan ide autokratik dari satu orang saja,
+sebrilian atau sesukses apapun ide tersebut.
+
+Contoh kasus paling sederhana dari penerapan Scrum adalah pembagian kerja. Kita kembali ke contoh tim proyek mahasiswa di atas. Setelah dokumen-dokumen
+terkait produk diterjemahkan ke dalam _sprint_ (backlog), setiap mahasiswa harus berinisiatif untuk **mengambil pekerjaannya sendiri** (mengambil backlog).
+Product Owner atau Scrum Master tidak memilihkan (atau menyuruh tim untuk mengambil) backlog tertentu. Dosen atau asisten dosen sebagai pembimbing
+proyek yang mengingatkan hal ini sangat mendukung mahasiswanya untuk menerapkan Scrum dengan baik dan benar.
+
+## Akhir kata
+
+Mudah-mudahan artikel ini dapat menjawab tentang posisi istilah **Agile dan Scrum** pada pengembangan perangkat lunak, sekaligus menghindari
+tim dari miskonsepi yang boleh jadi merugikan.
