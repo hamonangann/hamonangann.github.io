@@ -22,6 +22,7 @@ This is **B. Hamonangan**. I build simple Minecraft home and software...
 ### Want to say hi?
 
 Mail me at [b.hamonangan.p@gmail.com](mailto:b.hamonangan.p@gmail.com) 📬
+
 ---
 .
 
