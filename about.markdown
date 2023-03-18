@@ -20,10 +20,10 @@ Dengan komputer saya bisa membuat **rumah Minecraft sederhana** dan **perangkat 
 
 Kirim email ke [b.hamonangan.p@gmail.com](mailto:b.hamonangan.p@gmail.com) 📬
 
----
+### Catatan
 
 Situs ini dibuat dengan [Jekyll (Ruby)](https://jekyllrb.com/) static-site generator.
 
-Berlisensi [Creative Commons BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/).
+Mohon ikuti ketentuan [Creative Commons BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/).
 
 [Lihat kode sumber situs ini](https://github.com/hamonangann/hamonangann.github.io)
