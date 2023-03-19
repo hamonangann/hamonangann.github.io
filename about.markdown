@@ -3,7 +3,7 @@ layout: page
 title: Halo! 👋
 permalink: /halo/
 ---
-Nama saya **B. Hamonangan**. Saya cukup aktif menggunakan komputer dan tertarik untuk mengenal komputer luar dalam. Dengan komputer saya bisa membuat **rumah Minecraft sederhana** dan **perangkat lunak**, termasuk situs ini!
+Nama saya **B. Hamonangan**. Saya membuat beberapa rumah Minecraft sederhana dan juga perangkat lunak, seperti situs ini!
 
 ### Mungkin ini berguna
 
