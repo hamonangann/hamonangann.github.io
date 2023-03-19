@@ -3,13 +3,13 @@ layout: page
 title: Halo! 👋
 permalink: /halo/
 ---
-Nama saya **B. Hamonangan**. Saya membuat beberapa rumah Minecraft sederhana dan juga perangkat lunak, seperti situs ini!
+Nama saya **B. Hamonangan**. Saya mengembangkan beberapa rumah Minecraft sederhana dan juga perangkat lunak, seperti situs ini!
 
 ### Mungkin ini berguna
 
 - Coba mainkan [command-line challenge](https://cmdchallenge.com/) ini
 - Belajar bahasa pemrograman Golang di ["A Tour of Go"](https://go.dev/tour/welcome/1)
-- Tutorial [GitHub flow](https://ooloo.io/project/github-flow/git-workflows) karya Ooloo
+- Tutorial [GitHub flow](https://ooloo.io/project/github-flow/git-workflows) dari Ooloo
 - [Developer roadmap](https://roadmap.sh/) karya [Kamran, et al.](https://github.com/kamranahmedse)
 - Kunjungi blog saya (yang lain) di [Medium](https://hamonangan.medium.com)
 
