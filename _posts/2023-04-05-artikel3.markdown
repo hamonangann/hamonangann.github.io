@@ -1,0 +1,173 @@
+---
+layout: post
+title:  "Menerapkan TDD dengan Git"
+categories: tips
+---
+Test Driven Development atau TDD adalah suatu konsep dalam pengembangan perangkat lunak, yang pada intinya adalah
+setiap kode yang ditulis bertujuan untuk memenuhi test. Test di sini mewakili kasus-kasus yang mungkin ditangani
+oleh software. Perbedaan TDD dengan paradigma biasa adalah unit test dibuat sebelum kode, bukan sebaliknya.
+
+## Bagaimana Melakukan TDD?
+
+Cukup banyak referensi tentang TDD dan ketika saya mencari di Internet, cukup banyak simpang siur yang barangkali
+menandakan bahwa penerapan TDD tidaklah seragam. Akan tetapi, dalam buku berjudul "Test Driven Development by Example"
+yang ditulis oleh Kent Beck (pengembang perangkat lunak yang juga mempopulerkan TDD dan mencetuskan Extreme Programming)
+pada 2002, terdapat kesimpulan sebagai berikut:
+
+```
+1. Quickly add a test
+2. Run all tests and see the new one fail
+3. Make a little change
+4. Run all tests and see them all succeed
+5. Refactor to remove duplication
+```
+
+Sebagai catatan, pada langkah ketiga kita tidak perlu langsung membuat solusi final, yang penting unit testnya lolos
+semua . Kita merapikan solusi pada langkah kelima. Setelah kelima langkah selesai, kembali ke langkah 1
+
+Sebutan populer untuk siklus ini adalah Red-Green-Refactor, di mana langkah 1-2 adalah RED, langkah 3-4 adalah GREEN
+dan langkah 5 adalah REFACTOR.
+
+Selain Kent Beck, ada juga 3 Hukum TDD yang diajukan oleh Robert Martin (Uncle Bob) dalam [artikelnya]():
+
+```
+1. You are not allowed to write any production code unless it is to make a failing unit test pass.
+2. You are not allowed to write any more of a unit test than is sufficient to fail; and compilation failures are 
+failures.
+3. You are not allowed to write any more production code than is sufficient to pass the one failing unit test.
+```
+
+Ini menjelaskan kapan kita dapat melangkah dari Red ke Green. Pertama-tama, kita tulis sebuah unit test. Karena ada
+hukum 2, segera setelah unit test jika dijalankan tidak bisa dikompilasi atau mengembalikan assertion error, berhenti. 
+Lanjut dengan buat kode. Dalam membuat kode, tidak boleh mengerjakan kode selain untuk meloloskan 1 tes yang gagal
+(hukum 3).
+
+Menurut saya, TDD memastikan developer secara terus-menerus mencoba menjalankan aplikasinya. Ini meningkatkan pemahaman
+terhadap code yang dibuat. Di sisi lain siklus ini menuntut kesabaran ekstra.
+
+## Studi Kasus Penerapan TDD
+
+Sebagai contoh, kita akan membuat suatu fungsi yang menerima sejumlah bilangan dan mengembalikan bilangan positif
+terbesar. Pada contoh ini kita akan menggunakan bahasa pemrograman Javascript dengan Jest untuk testing.
+
+```javascript
+// maxNumber_test.js
+describe('Function maxNumber', () => {
+    it('should return greatest number from a non-empty list', () => {
+        expect(maxNumber(2,5,4)).toEqual(5)
+    })
+})
+```
+
+Kita berhenti sampai sini. Jika dijalankan, kompilasi gagal karena kita belum punya maxNumber. Lanjut ke buat kode
+
+```javascript
+// maxNumber.js
+maxNumber = (...args) => {
+    let max = args[0]
+    for (let i=1; i < args.length; i++) {
+        if (args[i] > max) {max = args[i]}
+    }
+    return max
+}
+```
+
+Jalankan tes dan voila! Kita berhasil memenuhi tes pertama. Untuk saat ini tidak ada kebutuhan untuk refactor, jadi
+kita bisa lanjut ke unit test selanjutnya.
+
+```javascript
+// maxNumber_test.js
+describe('Function maxNumber', () => {
+    it('should return greatest number from a non-empty list', () => {
+        expect(maxNumber(2,5,4)).toEqual(5)
+    })
+    it('should return -1 if receives list empty', () => {
+        expect(maxNumber()).toEqual(-1)
+    })
+})
+```
+
+Nah, test terakhir akan gagal (tidak bisa dikompilasi), jadi mari kita buat kodenya.
+
+```javascript
+// maxNumber.js
+maxNumber = (...args) => {
+    if (args.length == 0) {
+        return -1
+    }
+    let max = args[0]
+    for (let i=1; i < args.length; i++) {
+        if (args[i] > max) {max = args[i]}
+    }
+    return max
+}
+```
+
+Kedua tes akan sukses dengan kode di atas. Akan tetapi, kita dapat mengurangi duplikasi perbandingan dengan kode
+sebagai berikut:
+
+```javascript
+// maxNumber.js
+maxNumber = (...args) => {
+    // cukup buat nilai default dari max adalah -1
+    let max = -1
+    for (let i=1; i < args.length; i++) {
+        if (args[i] > max) {max = args[i]}
+    }
+    return max
+}
+```
+
+Langkah di atas termasuk refactoring. Siklus berikutnya barangkali adalah memastikan bilangan yang masuk ke dalam input
+adalah bilangan positif, dan sebagainya.
+
+## Penerapannya di Git
+
+Kita dapat menggunakan Git untuk menyimpan versi perubahan program yang dikembangkan. Salah satu contoh alurnya adalah
+sebagai berikut
+
+```
+1.  Jalankan `git init` untuk memulai program dalam git
+2.  Buat file maxNumber_test.js, tuliskan unit test pertama, jalankan tes
+3.  Apabila tes pertama gagal dikompilasi, simpan file, kemudian lakukan `git add .` dan `git commit -m "[red]
+    add unit test maxNumber return greatest number"`
+4.  Buat file maxNumber.js, tuliskan kode yang diperlukan, jalankan tes lagi
+5.  Apabila tes pertama berhasil, lakukan `git add .` dan `git commit -m [green] add maxNumber function return greatest
+    number`
+6.  Buat unit test kedua pada maxNumber_test.js, jalankan tes
+7.  Pastikan tes pertama berhasil dan tes kedua gagal. Jika ya, lakukan git add dan commit [red] serupa langkah 3
+8.  Tambahkan logika if pada maxNumber.js, kemudian jalankan tes lagi
+9.  Pastikan kini kedua tes berhasil. Jika ya, lakukan git add dan commit [green] serupa langkah 5
+10. Tambahkan nilai -1 sebagai default return value dan hapus if. Jalankan tes. Pastikan kedua tes tetap berhasil.
+    Jika ya, lakukan `git add .` dan `git commit -m "[refactor] add maxNumber default return value"
+```
+
+Kesepuluh langkah di atas memastikan kita merekan setiap perubahan tahap dalam TDD. Ini membuat proses TDD menjadi
+transparan.
+
+Akan tetapi, pada proyek perangkat lunak yang besar, ini dapat menimbulkan jumlah commit yang sangat banyak! Meskipun
+Git bekerja dengan sangat cepat, ini akan merepotkan developer jika perlu melakukan perintah rollback seperti revert
+atau rebase.
+
+Sebagai alternatifnya kita dapat meringkas jumlah commit dalam TDD dengan langkah seperti berikut:
+
+```
+1.  Pastikan file untuk kode dan file untuk test terpisah
+2.  Lakukan beberapa kali siklus TDD sampai menyelesaikan sebuah use case. Use case di sini mencakup happy path
+    dan juga kasus-kasus error. Bisa juga sampai menyelesaikan sebuah backlog.
+3.  Lakukan `git add` pada setiap test file, kemudian `git commit -m "[red]..."`
+4.  Lakukan `git add` pada setiap code file, kemudian `git commit -m "[green]..."`
+5.  Apabila ada refactor yang masih perlu dilakukan, kita bisa selalu membuat refactor commit selama test berhasil
+```
+
+Menurut saya ini cukup cocok diterapkan pada feature branch suatu proyek. Pada merge request, reviewer
+tidak perlu mengetahui commit setiap siklus TDD, tapi cukup mengetahui test apa saja yang dibuat dan code apa saja
+yang dibuat untuk menyelesaikan semua unit test yang ada. Reviewer dapat mencoba menghapus sebagian code yang tidak
+diperlukan (melanggar hukum 3), kemudian meminta koreksi atau menyelesaikannya pada commit refactor.
+
+
+## Rujukan
+
+Beck, K. (2003). Test-driven Development: By Example. Addison-Wesley Professional. 
+
+Martin, R. C. (2005, October 6). The Three Rules Of Tdd. http://butunclebob.com. http://butunclebob.com/ArticleS.UncleBob.TheThreeRulesOfTdd
