@@ -1,0 +1,159 @@
+---
+layout: post
+title:  "Prinsip SOLID pada API"
+categories: tips
+---
+
+SOLID adalah gabungan dari lima design principles yang relevan dengan pengembangan program berorientasi objek. SOLID
+itu sendiri dipopulerkan oleh Robert C. Martin (Uncle Bob). Istilah SOLID dipopulerkan oleh Michael Feathers.
+
+Kali ini kita akan mengembangkan API sederhana yang menerapkan prinsip SOLID. API ini punya satu endpoint dan
+mengembalikan sebuah gambar kucing.
+
+## Penerapan
+
+Kita dapat membuat pseudocode untuk API sebagai berikut
+
+```javascript
+function main() {
+    numberOfCats = number of "*.png" on "./assets"
+    when have request with URL == "/cat" {
+        catChoice = string(random between(1, numberOfCats))
+        catImage = get file(formattedString("./assets/cat%s", catChoice))
+        response = render(catImage)
+        return response
+    }
+    listen to port(":9001")
+}
+```
+
+Secara singkat, API berjalan di port 9001. Gambar-gambar kucing disimpan pada folder `assets` dengan nama `cat1.png`,
+`cat2.png`, dan seterusnya.
+
+Program di atas melakukan berbagai hal: menerima API request, melakukan filter (URL harus "/cat"), generate bilangan
+acak, dan mengambil gambar dari folder. Jika ingin menerapkan SOLID kita harus memisahkan program sehingga setiap
+fungsi atau prosedur hanya fokus menjalankan satu hal. Ini bisa kita capai dengan membuat beberapa fungsi:
+
+```javascript
+function main() {
+    handler()
+    listen to port(":9001")
+}
+```
+
+```javascript
+function handler() {
+    when have request with URL == "/cat" {
+        catImage = service()
+        response = render(catImage)
+        return response
+    }
+}
+```
+
+```javascript
+function service() {
+    numberOfCats = number of "*.png" on "./assets"
+    catChoice = string(random between(1, numberOfCats))
+    catImage = repository(catChoice)
+}
+```
+
+```javascript
+function repository(catChoice) {
+    catImage = get file(formattedString("./assets/cat%s", catChoice))
+    return catImage
+}
+```
+
+Nah! Kita telah menerapkan salah satu prinsip SOLID yaitu Single Responsibility principle, di mana setiap kelas atau
+fungsi hanya melakukan satu hal.
+
+## Bagaimana dengan prinsip lainnya?
+
+API kita populer dan kita ingin menambahkan fitur untuk mengambil gambar anjing. Di masa depan bisa saja kita akan
+perlu fitur untuk mengirim gambar panda, kelinci dan sebagainya.
+
+Berdasarkan prinsip Open-Closed, sebisa mungkin kelas tidak diubah melainkan ditambahkan (kecuali untuk bug fix).
+Kita bisa melakukan refactoring untuk memudahkan hal ini ke depannya.
+
+Pertama-tama, akan lebih rapi jika setiap layer diletakkan pada satu folder, jadi kita bisa membuat folder
+`handler`, `service`, dan `repository`, sedangkan `main` tetap pada root project folder.
+
+Kemudian refactor Repository menjadi berikut:
+
+```javascript
+class Repository {
+    function getImage(choice) {
+        image = get file(formattedString("./assets/%s", choice))
+        return image
+    }
+}
+```
+
+Sekarang repository bisa mengambil seluruh file PNG pada folder assets.
+
+Pada folder `service` buatlah file `CatService` dan `DogService`
+
+```javascript
+class CatService {
+    function serve() {
+        numberOfCats = number of regex("cat[0-9]+.png") on "./assets"
+        catChoice = string(random between(1, numberOfCats))
+        catImage = Repository.getImage("cat"+catChoice)
+    }
+}
+```
+
+```javascript
+class DogService {
+    function serve() {
+        numberOfDogs = number of regex("dog[0-9]+.png") on "./assets"
+        dogChoice = string(random between(1, numberOfDogs))
+        dogImage = Repository.getImage("dog"+dogChoice)
+    }
+}
+```
+
+Pada folder `handler` buatlah file `CatHandler` dan `DogHandler`
+
+```javascript
+class CatHandler {
+    function handle() { // ini adalah method untuk class CatHandler
+        when have request with URL == "/cat" {
+            catImage = CatService.serve()
+            response = render(catImage)
+            return response
+        }
+    }
+}
+```
+
+```javascript
+class DogHandler {
+    function handle() {
+        when have request with URL == "/dog" {
+            dogImage = DogService.serve()
+            response = render(dogImage)
+            return response
+        }
+    }
+}
+```
+
+Pada main, kita tinggal menambahkan handler:
+
+```javascript
+function main() {
+    CatHandler.handle()
+    DogHandler.handle()
+    listen to port(":9001")
+}
+```
+
+Nah, ketika ada fitur baru kita tidak perlu lagi mengubah kode selain pada main. Kita telah menerapkan Open-Closed
+principle.
+
+## Referensi
+
+Martin, R. C. (2018). Clean Architecture: A Craftsman’s Guide to Software Structure and Design. Pearson Professional.
