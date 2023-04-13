@@ -56,4 +56,6 @@ ini akan sangat berguna untuk menguji suatu behavior.
 
 ## Referensi
 
+Eftimov, I. (2019). Testing in Go: Test Doubles by Example. https://ieftimov.com/posts/testing-in-go-test-doubles-by-example/ 
+
 Test Double at XUnitPatterns.com. (n.d.). http://xunitpatterns.com/Test%20Double.html
