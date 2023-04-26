@@ -5,6 +5,7 @@ categories: tips
 ---
 
 ![Git Logo](/img/artikel3-gambar1.png)
+
 Pada artikel kali ini, kita akan menerapkan paradigma pengembangan perangkat lunak **Test Driven Development** (TDD)
 dan mengintegrasikannya dengan **Git**, tool yang digunakan untuk memantau kode program.
 
