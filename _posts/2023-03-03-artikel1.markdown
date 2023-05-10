@@ -1,94 +1,108 @@
 ---
 layout: post
-title:  "Gitlab sebagai Project Tracking Tool"
+title:  "Manajemen Proyek Perangkat Lunak dengan Gitlab"
 categories: tips
 ---
-Untuk memantau perkembangan suatu proyek perangkat lunak, beberapa _tools_ yang
-memang lazim digunakan untuk manajemen proyek sangatlah populer, seperti Jira
-atau Trello. Akan tetapi, salah satu _hosting_ untuk _versioning tool_ Git yaitu
-Gitlab ternyata juga memiliki fitur _project tracking_ yang cukup mumpuni.
-Penasaran? Berikut ulasan **Gitlab sebagai Project Tracking Tool**.
+Ada beberapa tools yang biasa digunakan untuk melakukan project tracking atau manajemen proyek, seperti Jira atau Trello.
+Akan tetapi, Gitlab ternyata juga punya PM tools yang cukup mumpuni. Artikel ini akan membahas cara memulai proyek
+perangkat lunak dengan Gitlab.
 
-## Gitlab Group
+## Membuat Project Gitlab
 
-Untuk memanfaatkan fitur _project tracking_ secara utuh, _project manager_ atau
-_lead developer_ perlu menginisiasi suatu tempat untuk organisasi/tim. Pertama-tama, setiap anggota perlu membuat 
-[akun Gitlab](https://gitlab.com/users/sign_in). Setelah itu, buatlah sebuah
-grup dengan mengakses [tautan ini](https://gitlab.com/groups/new). Kemudian,
-isi formulir yang ada.
+Manajemen proyek dapat dilakukan pada level organisasi atau project. Kita akan membahas pada level lebih sederhana yaitu
+project. Pada level ini kita akan melakukan manajemen pada satu Git repository. 
 
-Tentu saja kita perlu membuat suatu project untuk dikerjakan. Project ini adalah
-satuan dari [Git Repository](https://git-scm.com/book/en/v2/Git-Basics-Getting-a-Git-Repository)
- pada layanan Gitlab. Buatlah sebuah project dummy untuk mempelajari fitur.
-[Akses link berikut](https://gtilab.com/projects/new)
+Kita akan menggunakan Gitlab versi gratis.
+
+Pertama-tama, setiap anggota perlu membuat [akun Gitlab](https://gitlab.com/users/sign_in). Setelah itu, buatlah 
+sebuah [project](https://gtilab.com/projects/new). Untuk praktik kali ini, pilih "Create Blank Project". Kita akan
+dihadapkan dengan formulir, isi project name dengan nama apa saja. Pada kolom group pilih nama user. Buat visibility 
+ke Public (bisa diubah nantinya) dan tidak perlu mencentang apa-apa pada Project Configuration
+
+![Setup Project](/img/artikel1-setup-project.png)
+
+## Membuat Milestone
+
+Sebuah project biasanya dikerjakan dalam jangka waktu tertentu. Kita dapat memetakannya dengan menggunakan fitur
+**Milestone**. Pada sidebar, akses Issues > Milestones. Tambahkan nama milestone, misalnya "SPRINT-1". Tetapkan
+starting date dan due date (deadline). Deskripsi dapat diisi atau dikosongkan. Klik "Create Milestone"
+
+Tentu saja kita dapat membuat beberapa milestone.
+
+![Membuat Milestone](/img/artikel1-milestone.png)
+
+## Membuat Label
+
+Selanjutnya, kita perlu menandai setiap task/backlog sesuai progresnya. Misalnya, kita bisa membuat "To-Do",
+"Ongoing", "Testing", dan "Done". Untuk membuat hal ini, pertama-tama kita perlu membuat label. Pada sidebar,
+akses Project Information > Labels. Kemudian klik "New Label".
+
+![Membuat Label](/img/artikel1-label.png)
+
+Isikan title dengan "To-Do". Deskripsi dapat dikosongkan. Pilih warna apa saja. Setelah itu, klik Create Label.
+Label "To-Do" akan terbuat. Ulangi hal yang sama untuk membuat label "Ongoing", "Testing", dan "Done". Hasil akhir
+akan seperti di bawah
+
+![Hasil Membuat Label](/img/artikel1-label-hasil.png)
 
 ## Membuat Task (Issue)
 
-Pada Gitlab, setiap _tasks_ dapat diletakkan di level project atau group. Ini
-dapat dimanfaatkan untuk memisahkan _concern_ antara task yang berhubungan
-dengan repositori Gitlab dengan yang berada di luar repositori proyek Gitlab.
-Pada contoh kali ini kita akan membuat beberapa _tasks_ pada level project.
+Persiapan sudah cukup. Kita sudah dapat membuat backlog atau tasks dan mengelompokkannya sesuai label. Untuk
+membuat task, pada sidebar buka Issue > List dan klik New Issue.
 
-[comment]: <> (sebuah ilustrasi)
+Isikan title dengan nama task, pada contoh kali ini isikan dengan "Task-001: Membuat Readme". Tambahkan informasi
+yang sesuai. Pada kolom Assignee, masukkan user developer atau owner dari task. Pada kolom Milestone, isikan dengan
+SPRINT-1. Pada kolom label, karena task belum dikerjakan, isikan dengan To-Do. Developer dapat mengubahnya nanti.
 
-Pertama-tama, kunjungi laman proyek Anda kemudian akses _issue_. Buatlah _issue_ baru dengan menekan tombol
-**New Issue**, kemudian isikan judul dan deskripsi yang relevan. Buatlah
-beberapa item sesuai dengan _task_, misalnya "Buat autentikasi" dan
-"Buat fitur menampilkan daftar user".
+Kita juga bisa menambahkan beberapa issue lain.
 
-Tasks-task yang sudah dibuat dapat dilihat dalam bentuk _list_ atau
-_kanban-style board_. Ini akan memudahkan tim pengembang dalam melihat apa saja
-task yang tersedia. Apabila tim menggunakan [Scrum](https://scrumguides.org/), 
-tasks bisa berupa satu _backlog_ utuh atau bagian dari suatu _backlog_.
+![Membuat Issue](/img/artikel1-issue.png)
 
-Pada tampilan _list_ dan _board_ terdapat daftar tasks yang dapat diakses
-detailnya. Pada laman detail tersebut, pengembang dapat berdiskusi, melakukan
-_push kode_, meminta review, dan sebagainya. Ini adalah fitur standar dari
-pengembangan aplikasi dalam tim.
+## Membuat Kanban-style Board untuk Memantau Proyek
 
-## Memanfaatkan label untuk kustomisasi board
+Kita masuk ke bagian paling menarik. Salah satu fitur powerful yang bahkan tersedia pada Gitlab versi gratis adalah
+board. Dengan konfigurasi yang kita sudah lakukan, kita bisa membuat tampilan kanban-style yang berguna untuk
+memantau proyek.
 
-Di sisi lain, tampilan _board_ semestinya terdiri dari dua kolom _default_,
-yaitu _open_ dan _closed_. Pada Gitlab versi gratis, pengguna dapat memanfaatkan
-_label_ untuk kustomisasi board agar lebih praktikal. Label dapat diisi
-informasi berikut:
+Pada sidebar buka Issue > Board. Kita akan melihat board dengan nama Development (dapat diubah dan ditambahkan nanti).
+Selanjutnya, temukan tombol Edit Board kemudian hapus centang pada "Show the Open list" dan "Show the Closed list".
+Klik "Save Changes". Kini board menjadi kosong.
 
-- _Todo_
-- _Ongoing_
-- _In review_
-- _Done_
+![Edit board](/img/artikel1-edit-board.png)
 
-Label _Todo_ digunakan untuk task-task yang **belum dimulai pengerjaannya**. Ketika
-suatu _task_ **mulai dikerjakan** seorang developer, label _Todo_ pada _task_
-tersebut perlu diganti developer tersebut menjadi _Ongoing_. Apabila kode
-yang dikerjakan **perlu _code review_ dari rekan atau perlu di-test** (misalnya
-_regression testing_), developer yang menyelesaikan kode mengubah label 
-menjadi _In review_. Terakhir, jika sudah **selesai direview (atau dimerge)**, 
-label dibah menjadi _Done_ dan _task_ dinyatakan selesai.
+Sekarang kita tambahkan sesuai label yang kita telah buat. Klik "Create List" pada pojok kanan atas layar. Kemudian,
+pada Scopes masukkan label yang kita telah mulai, dimulai dari "To-Do". Klik "Add to Board". Ulangi hal yang sama
+untuk label-label lainnya, dimulai dari "Ongoing", "Testing", sampai "Done".
 
-Untuk membuat label, kunjungi **Project Information > Labels** pada sidebar. Kemudian, buatlah
-label-label yang diperlukan, untuk menandai status task. Setelah itu, developer dapat menambahkan, mengedit, dan menghapus label
-pada setiap project.
+![Scope](/img/artike1-scope.png)
 
-Nah, untuk menampilkan _board_ yang sudah dikustomisasi, kunjungi **Issues/
-Boards**. Klik _edit board_ dan hapus centang pada **Show the Open list**
-dan **Show the Closed list**, kemudian **Save changes**. Kini tidak ada kolom
-yang muncul. Tambahkan dengan menekan tombol **Create List**. Pada _scope_
-pilihlah label mulai dari _Todo_, kemudian klik **Add to board**. Lakukan
-hal yang sama untuk label-label lain.
+Tampilan board pada project yang sudah siap akan seperti berikut
 
-Kini, issue tracker kita menjadi lebih matang, tidak hanya menampilkan
-distingsi antara open/closed issue (pada Issue > List), 
-tapi juga terkait status pengembangannya (pada Issue > Board) dengan kanban.
-Pada fitur Gitlab untuk _enterprise_, ada lebih banyak fitur _project tracker_
-yang menarik
+![Hasil akhir board](/img/artikel1-board.png)
+
+## Menyelesaikan Issue pada Gitlab
+
+Setiap task yang sudah dikerjakan dapat diubah statusnya dengan mudah oleh developer. Ada berbagai cara untuk
+melakukannya, termasuk dengan mengeditnya langsung pada Board. Buka Issue > Board lalu klik salah satu task.
+Pada contoh kali ini kita akan mengubah status "Task-001: Membuat Readme" menjadi In-Progress. Caranya, klik task
+tersebut dan akan muncul sidebar pada sebelah kanan. Klik edit pada sebelah kanan Labels lalu hapus centang pada
+"To-Do" dan tambahkan centang pada "In-progress".
+
+![Update Status](/img/artikel1-update-status.png)
+
+Refresh dan tampilan board akan berubah
+
+![Board Changes](/img/artikel1-board-change.png)
 
 ## Opini
 
-Penggunaan _online versioning system_ untuk kebutuhan _project tracking_ dapat 
+Penggunaan _online versioning system_ seperti Gitlab untuk kebutuhan _project tracking_ dapat 
 membantu _developer_ dan _project manager_ untuk mengelola pekerjaannya pada
 lebih sedikit _tool_, ketimbang menggunakan beberapa _software_ terpisah. Di
 sisi lain, mungkin tim Anda membutuhkan lebih banyak fitur yang belum diakomodir
 Gitlab, terutama pada versi gratisnya.
+
+Demikian artikel ini, semoga bermanfaat untuk setiap tim proyek perangkat lunak
+
 
 
