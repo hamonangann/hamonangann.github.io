@@ -74,7 +74,7 @@ Sekarang kita tambahkan sesuai label yang kita telah buat. Klik "Create List" pa
 pada Scopes masukkan label yang kita telah mulai, dimulai dari "To-Do". Klik "Add to Board". Ulangi hal yang sama
 untuk label-label lainnya, dimulai dari "Ongoing", "Testing", sampai "Done".
 
-![Scope](/img/artike1-scope.png)
+![Scope](/img/artikel1-scope.png)
 
 Tampilan board pada project yang sudah siap akan seperti berikut
 
