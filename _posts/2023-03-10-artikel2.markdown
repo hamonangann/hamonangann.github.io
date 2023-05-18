@@ -1,141 +1,105 @@
 ---
 layout: post
-title:  "Apakah Agile dan Scrum adalah Metodologi Pengembangan Perangkat Lunak?"
+title:  "Benarkah Agile dan Scrum adalah Metodologi Pengembangan Perangkat Lunak?"
 categories: tips
 ---
-Agile dan Scrum. Keduanya adalah kata yang sangat populer, khususnya di dunia pengembangan perangkat lunak. Menurut saya, kita perlu mengulas tentang 
-pengertian keduanya dan hubungannya dengan metodologi pengembangan perangkat lunak.
+Sebagai istilah yang sangat populer di dunia pengembangan perangkat lunak, saya rasa ada hal yang cukup simpang siur
+tentang Agile dan Scrum. Jadi, mari kita telusuri sedikit tentang kedua istilah tersebut.
 
-## Manifesto Agile
+![What is Agile](/img/artikel2-what-is-agile.png)
 
-Untuk mengetahui apa yang dimaksud dengan Agile, kita perlu merujuk kepada apa yang dimaksud para pencetusnya. Kita dapat memeriksanya pada 
-[4 Agile Manifesto](https://agilemanifesto.org/) sebagai berikut:
+Wah, ternyata di page one cukup banyak sumber yang menyebutkan Agile sebagai metodologi. Tapi apakah ini benar?
+Bagaimana dengan Scrum?
 
-```
-We are uncovering better ways of developing
-software by doing it and helping others do it.
-Through this work we have come to value:
+![What is Scrum](/img/artikel2-what-is-scrum.png)
 
-Individuals and interactions over processes and tools
-Working software over comprehensive documentation
-Customer collaboration over contract negotiation
-Responding to change over following a plan
+Beberapa sumber pada page one juga menyebutkan Scrum sebagai metodologi atau metode.
 
-That is, while there is value in the items on
-the right, we value the items on the left more.
-```
+Kita bisa melihat masalah ini dengan dua pendekatan:
 
-Merujuk KBBI, manifesto adalah pernyataan terbuka tentang tujuan dan pandangan seseorang atau suatu kelompok. Sekarang coba bacakan manifesto di atas
-secara lantang di depan anak kecil atau orang yang belum pernah dengar kata Agile. Mereka akan dengan mudah mengatakan bahwa keempat poin di atas
-adalah **pola pikir** atau **paradigma**. Mereka tidak akan berpikir kejauhan kalau Agile ini (harus) menjelaskan tentang cara membuat perangkat lunak.
+- Apakah sumber **resmi** merujuk Agile/Scrum sebagai metodologi?
+- Memangnya apa sih itu metodologi? Apakah Agile dan Scrum termasuk?
 
-Setelah membaca keempat manifesto di atas, kita bisa melanjutkannya dengan membaca [12 Prinsip Agile](https://agilemanifesto.org/principles.html)
+Mari kita mulai
 
-```
-We follow these principles:
-Our highest priority is to satisfy the customer
-through early and continuous delivery
-of valuable software.
+## Apakah sumber **resmi** merujuk Agile/Scrum sebagai metodologi?
 
-Welcome changing requirements, even late in
-development. Agile processes harness change for
-the customer's competitive advantage.
+Pertama mari kita cek sumber asli Agile. Tidak banyak yang dikatakan oleh pendirinya, kecuali 4 manifesto dan 12
+prinsip yang dipegang oleh Agile. Kita dapat melihatnya tidak lain dan tidak bukan pada http://agilemanifesto.org/
+Ini juga termasuk laman [sejarah Agile](http://agilemanifesto.org/history.html) di mana Agile tidak dirujuk sebagai
+sebuah metodologi. 
 
-Deliver working software frequently, from a
-couple of weeks to a couple of months, with a
-preference to the shorter timescale.
+Untuk mengetahui sebagai apa Agile dirujuk, laman [Agile 101](https://www.agilealliance.org/agile101/) oleh Agile
+Alliance. Agile Alliance ini didirikan oleh pembuat manifesto Agile. Pada sumber tersebut, Agile disebutkan sebagai
+pola pikir atau mindset. Untuk tim yang menerapkan mindset Agile, metodologi dipilih sesuai kesepakatan tim untuk
+mengikuti apa yang diyakini Agile. Jadi bukan Agile yang menjadi metodologi.
 
-Business people and developers must work
-together daily throughout the project.
+Nah, Scrum sendiri adalah bagian dari Agile (tapi tidak dengan sebaliknya!). Apakah Scrum adalah metodologi yang
+dimaksud?
 
-Build projects around motivated individuals.
-Give them the environment and support they need,
-and trust them to get the job done.
+Sayangnya terlihat sumber resmi juga tidak merujuk Scrum sebagai metodologi.
 
-The most efficient and effective method of
-conveying information to and within a development
-team is face-to-face conversation.
+Pada [Scrum Guide](https://scrumguides.org/scrum-guide.html) edisi 2020, kata metode atau metodologi hanya disebutkan
+2 kali: yang pertama menyebutkan bahwa beragam metode dapat diterapkan ke dalam Scrum, dan yang kedua menyebutkan
+Scrum berfungsi dengan baik sebagai kontainer untuk teknik, metodologi, dan praktik lain.
 
-Working software is the primary measure of progress.
+Alih-alih sebagai metodologi, Scrum secara jelas disebutkan sebagai "lightweight framework" atau "framework"
 
-Agile processes promote sustainable development.
-The sponsors, developers, and users should be able
-to maintain a constant pace indefinitely.
+```Scrum is a lightweight framework that helps people, teams and organizations generate value through adaptive solutions for complex problems.```
 
-Continuous attention to technical excellence
-and good design enhances agility.
+## Memangnya apa itu metodologi?
 
-Simplicity--the art of maximizing the amount
-of work not done--is essential.
+Kita akan membuka beberapa kamus. 
 
-The best architectures, requirements, and designs
-emerge from self-organizing teams.
+Menurut KBBI, metodologi adalah ilmu tentang metode. Sepertinya KBBI mengartikan akhiran -logi sebagai ilmu (logos).
+Kalau begitu mari kita periksa arti dari metode:
 
-At regular intervals, the team reflects on how
-to become more effective, then tunes and adjusts
-its behavior accordingly.
-```
+```Metode: cara teratur yang digunakan untuk melaksanakan suatu pekerjaan agar tercapai sesuai dengan yang dikehendaki; cara kerja yang bersistem untuk memudahkan pelaksanaan suatu kegiatan guna mencapai tujuan yang ditentukan```
 
-Bisa dikatakan bahwa kedua belas poin ini adalah cerminan dari 4 manifesto yang telah disebutkan sebelumnya. 
-Lagi-lagi, orang yang belum pernah dengar kata Agile akan setuju bahwa ini merujuk pada pola pikir yang disepakati pencetusnya.
-Mereka tidak akan punya bayangan tentang bagaimana membangun perangkat lunak hanya berdasarkan poin-poin di atas.
+Kita perlu memberikan perhatian lebih pada kata "teratur" dan "bersistem". Ini menyiratkan bahwa sebuah metode (harus)
+memilik aturan dan sistem. Nanti kita akan cocokkan dengan Agile dan Scrum.
 
-Dengan demikian, **Agile adalah mindset, bukan metodologi pengembangan perangkat lunak**.
+Bagaimana dengan kamus lain. Mari kita lihat Merriam-Webster:
 
-## Catatan untuk Agile
+```a body of methods, rules, and postulates employed by a discipline : a particular procedure or set of procedures```
 
-Satu hal yang perlu diingat saat membahas manifesto Agile adalah **Agile tidak menolak process and tools, comprehensive documentation, dan seterusnya**.
-Hanya saja sebagai pola pikir, seorang yang menganut agile akan tahu mana yang harus dipilih ketika mengalami dilema atau harus memilih antara "sisi kiri atau kanan".
-Jika bisa keduanya tercapai, itu akan lebih bagus.
+Ada kesamaan yaitu kata "rules" dan "procedure" sebagai syarat bagi metodologi. Perbedaannya, metode dilihat sebagai
+bagian dari metodologi. Tidak disebutkan spesifik sebagai ilmu seperti pada KBBI. Ini serupa dengan pengertian
+menurut Oxford:
 
-Sebagai contoh, sebuah tim proyek perangkat lunak mahasiswa diminta untuk membuat dokumentasi yang lengkap, baik pada tahap desain maupun implementasi (kode).
-Tim ini memiliki waktu yang panjang, yaitu sekitar satu semester, dengan proyek yang masuk akal untuk dikerjakan dalam jangka waktu tersebut.
-Tim yang Agile tidak lantas menolak membuat dokumentasi yang lengkap, seperti dokumen PBI, PRD, SDS, dan sebagainya jika memungkinkan.
-Hal ini justru akan membantu implementasi. Yang jadi masalah adalah ketika dokumen-dokumen di atas dianggap sebagai undang-undang mutlak yang tidak bisa diubah
-atau diimprovisasi.
+```a set of methods and principles used to perform a particular activity```
 
-## Lantas, bagaimana dengan Scrum?
+Kurang lebih sama. Metodologi adalah kumpulan dari metode dan prinsip.
 
-Pertama-tama Anda dapat membaca dokumen tentang Scrum (yang tidak panjang-panjang amat) pada [guide](https://scrumguides.org/scrum-guide.html) ini atau 
-[artikel](https://www.scrum.org/learning-series/what-is-scrum) ini.
+Menurut saya pribadi, Agile dan Scrum memang tidak cocok disebut sebagai metodologi. Ada istilah lain yang lebih
+tepat, dan sudah dirujuk oleh pendirinya yaitu Agile sebagai mindset dan Scrum sebagai framework.
 
-Cukup jelas bahwa Anda akan menemukan Scrum dimaksudkan sebagai **Agile Framework**.
+Potongan yang hilang dari Agile dan Scrum adalah "step-by-step". Sebuah metodologi (misalnya metodologi ilmiah)
+mengandung tahap demi tahap yang harus dilalui untuk mencapai hasil akhir.
 
-Apa maksudnya? Mengutip Cambridge, kerangka kerja atau 
-_framework_ adalah '_a system of rules, ideas, or beliefs that is used to plan or decide something_' 
-atau Merriam-Webster '_a basic conceptional structure (as of ideas)_'.
+Agile jelas tidak menyebutkan step-by-step sama sekali, jadi tidak bisa disebut metodologi. Scrum terlihat memiliki
+step-by-step, tapi kalau kita lebih jeli sebetulnya proses Scrum sama sekali tidak menyebutkan cara mendapat hasil
+akhir. Ini karena proses dalam Scrum adalah sebuah siklus pengembangan produk yang belum tentu punya garis finis.
+Yang ada di akhir sprint adalah retrospektif (di mana ini bukan akhir dari pengembangan sama sekali, lebih ke
+evaluasi). Dengan demikian, Scrum juga tidak bisa disebut sebagai metodologi.
 
-Selain sebagai Agile Framwork, Scrum juga disebutkan sebagai "light framework". Tujuan dari Scrum ini sendiri _people-oriented_,
-yaitu membantu orang atau tim untuk menciptakan _value_ (Scrum Guide, 2020) melalui solusi yang adaptif. Poin-poin dari Scrum adalah
+Dalam hal ini, saya setuju dan terinspirasi dari komentar Daniel Wilhite pada [forum resmi Scrum](https://www.scrum.org/forum/scrum-forum/6117/agile-methodology-or-framework-or-philosophy)
 
-- Teori (3 pilar)
-- 5 Nilai
-- Tim
-- Event
-- Artefak/perwujudan
+![Is Scrum a Methodology?](/img/artikel2-is-scrum-a-methodology.png)
 
-Perhatikan bahwa Scrum sama sekali tidak menyinggung metode dan memang tidak dimaksudkan untuk mendikte cara mengembangkan perangkat lunak.
-Sebagai _light framework_, Scrum harus digunakan seutuhnya (tidak bisa di-_cherry-pick_), tapi kita bisa meletakkan metodologi, praktik, dan teknik di atasnya
-(Scrum Guide, 2020). Ini artinya, Scrum menyisakan ruang untuk improvisasi. Di atasnyalah kita meletakkan metodologi, yang diserahkan kepada tim.
+Intinya, baik Agile maupun Scrum bukanlah hal yang "lengkap" untuk disebut sebagai metodologi.
 
-Jadi, **Scrum adalah framework, bukan metodologi pengembangan perangkat lunak**.
+## Penutup
 
-## Penerapan
-
-Untuk menerapkan Scrum, Scrum Master yang baik harus memahami Scrum sebagai kerangka kerja dan menjadi pemimpin sekaligus pelayan yang baik.
-Jika pemimpin dan pelayan adalah hal yang terdengar kontradiktif, kita harus merujuk pada tujuan Scrum. Scrum untuk orang (anggota), dan orang untuk value.
-Pada akhirnya keberhasilan proyek yang menggunakan Scrum bergantung pada inisiatif **seluruh** anggota tim, bukan ide autokratik dari satu orang saja,
-sebrilian atau sesukses apapun ide tersebut.
-
-Contoh kasus paling sederhana dari penerapan Scrum adalah pembagian kerja. Kita kembali ke contoh tim proyek mahasiswa di atas. Setelah dokumen-dokumen
-terkait produk diterjemahkan ke dalam _sprint_ (backlog), setiap mahasiswa harus berinisiatif untuk **mengambil pekerjaannya sendiri** (mengambil backlog).
-Product Owner atau Scrum Master tidak memilihkan (atau menyuruh tim untuk mengambil) backlog tertentu. Dosen atau asisten dosen sebagai pembimbing
-proyek yang mengingatkan hal ini sangat mendukung mahasiswanya untuk menerapkan Scrum dengan baik dan benar.
+Saya rasa, anggapan bahwa Agile dan Scrum adalah metodologi adalah kesalahpahaman. Ini tidak benar dan pendiri
+keduanya tidak menyebutnya demikian.
 
 ## Rujukan
 
+Agile 101. (n.d.). AgileAlliance.org. https://www.agilealliance.org/agile101/
+
 Manifesto for Agile Software Development. (n.d.). https://agilemanifesto.org/ 
 
-Scrum Guide | Scrum Guides. (n.d.). https://scrumguides.org/scrum-guide.html 
+Scrum Guides. (n.d.). https://scrumguides.org/scrum-guide.html 
 
 What is Scrum? (n.d.). Scrum.org. https://www.scrum.org/learning-series/what-is-scrum
