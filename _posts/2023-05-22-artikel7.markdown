@@ -1,0 +1,465 @@
+---
+layout: post
+title:  "Bisakah Kita Menerapkan Prinsip SOLID pada Python?"
+categories: tips
+---
+
+Bahasa pemrograman Python adalah salah satu yang paling diminati. Menurut saya, salah satu alasannya adalah Python
+termasuk bahasa yang fleksibel untuk banyak pemrograman, sehingga cocok untuk pemula yang ingin menentukan arah karir
+(misalnya). Kita bisa membuat aplikasi desktop, web (Django, Flask, FastAPI), game (PyGame), analisis data (Pandas),
+pemelajaran mesin (Tensorflow), socket programming, dan sebagainya.
+
+Salah satu pertanyaan yang cukup sering ditanyakan adalah "Bahasa xxx merupakan Object-oriented atau bukan". Untuk
+Python, jawabannya adalah **ya**
+
+## Mengapa Python termasuk Object-oriented?
+
+Tidak ada tipe data primitif dalam Python. Semua implementasi di Python diletakkan dalam objek dan kelas, bahkan
+integer atau char sekalipun. Dengan demikian, kita mesti mengimplementasikan pemrograman berorientasi objek (OOP) dalam
+menggunakan bahasa Python.
+
+Artikel ini akan menjelajahi apakah kita bisa menerapkan prinsip yang biasa digunakan dalam OOP, dalam hal ini prinsip
+SOLID. Saya melihat cukup banyak yang membahas ini dalam bahasa Java, C, atau C++, jadi mari kita lakukan hal yang sama
+untuk Python.
+
+## Apa itu SOLID?
+
+SOLID adalah gabungan dari lima design principles yang relevan dengan pengembangan program berorientasi objek. SOLID
+itu sendiri dicetuskan oleh Robert C. Martin (Uncle Bob). Istilah SOLID dipopulerkan oleh Michael Feathers.
+
+Ada lima prinsip dalam SOLID:
+
+1. Single-responsibility principle
+2. Open–closed principle
+3. Liskov substitution principle
+4. Interface segregation principle
+5. Dependency inversion principle
+
+## Single-responsibility principle (SRP)
+
+Menurut saya ini hal yang cukup mudah. Kita bisa membuat beberapa fungsi atau kelas untuk memisahkan concern, sehingga
+setiap fungsi atau kelas hanya mengerjakan satu hal.
+
+Misalnya kita memiliki program yang menghitung faktorial suatu bilangan dalam Python. Kita akan refactor kode berikut
+untuk menerapkan prinsip SRP:
+
+```shell
+def faktorial(user_input: str) -> str:
+    if not user_input.isnumeric():
+        return "Harap masukkan input numerik (0-9)"
+
+    # Cast user_input string to integer
+    user_input = int(user_input)
+
+    result = 1
+    for i in range(1, user_input+1):
+        result *= i
+    
+    return "Nilai faktorialnya adalah " + str(result)
+```
+
+Kita pisahkan fungsi untuk menghitung, validasi data, dan input/output
+
+```shell
+def hitung(x: int) -> int:
+    result = 1
+    for i in range(1, x+1):
+        result *= i
+    return result
+
+def validasi(user_input: str) -> bool:
+    return user_input.isnumeric()
+
+def io(user_input: str) -> str:
+    if not validasi(user_input):
+        return "Harap masukkan input numerik (0-9)"
+    return "Nilai faktorialnya adalah " + str(hitung(int(user_input)))
+```
+
+Refactor selesai. Agar dapat berinteraksi dengan user, kita tambahkan satu fungsi lagi untuk menerima standard input
+dan mencetak di standard output.
+
+```shell
+def hitung(x: int) -> int:
+    result = 1
+    for i in range(1, x+1):
+        result *= i
+    return result
+
+def validasi(user_input: str) -> bool:
+    return user_input.isnumeric()
+
+def io(user_input: str) -> str:
+    if not validasi(user_input):
+        return "Harap masukkan input numerik (0-9)"
+    return "Nilai faktorialnya adalah " + str(hitung(int(user_input)))
+
+def main():
+    user_input = input("Masukkan bilangan yang ingin dihitung faktorialnya: ")
+    print(io(user_input))
+
+if __name__ == '__main__':
+    main()
+```
+
+Oke. Bagimana jika fungsi hitung(), validasi(), dan io() diletakkan dalam masing-masing method satu kelas?
+
+```shell
+class Penghitung:
+    @classmethod
+    def hitung(self, x: int) -> int:
+        result = 1
+        for i in range(1, x+1):
+            result *= i
+        return result
+
+class Validator:
+    @classmethod
+    def validasi(self, user_input: str) -> bool:
+        return user_input.isnumeric()
+
+class IoHandler:
+    @classmethod
+    def io(self, user_input: str) -> str:
+        if not Validator.validasi(user_input):
+            return "Harap masukkan input numerik (0-9)"
+        return "Nilai faktorialnya adalah " + str(Penghitung.hitung(int(user_input)))
+
+def main():
+    user_input = input("Masukkan bilangan yang ingin dihitung faktorialnya: ")
+    print(IoHandler.io(user_input))
+
+if __name__ == '__main__':
+    main()
+```
+
+Ada beberapa yang disesuaikan di sini. Pertama, kita bungkus fungsi menjadi method dalam sebuah class (Penghitung,
+Validator, IoHandler). Setelah itu, tambahkan parameter self pada setiap method. Tambahkan dekorator @classmethod
+untuk menandai bahwa method ini berada pada level kelas (bukan object atau instance). Terakhir, ubah format 
+pemanggilan fungsi menjadi pemanggilan method.
+
+Dengan demikian, terbukti kita dapat menerapkan prinsip Single Responsibility Principle pada Python.
+
+## Open-closed Principle
+
+Open-closed principle (OCP) menyatakan bahwa _"A software artifact should be open for extension but closed for 
+modification."_ Yang dimaksud artifact di sini adalah class, functions, dan sebagainya. Biasanya hal ini bisa dicapai
+dengan membentuk hirarki kelas. Ini hal yang bisa diimplementasikan dengan mudah di Python.
+
+```shell
+class Warung:
+    def __init__(self, sedia: [str]) -> None:
+        self.sedia = sedia
+    
+    def get_sedia(self) -> [str]:
+        return self.sedia
+
+# WarungKopi adalah subclass atau anak dari Warung
+class WarungKopi(Warung):
+    def __init__(self, sedia: [str], jumlah_kursi: int) -> None:
+        super().__init__(sedia)
+        self.jumlah_kursi = jumlah_kursi
+    
+    def get_jumlah_kursi(self) -> int:
+        return self.jumlah_kursi
+
+def main():
+    warung = Warung(["Obat", "Sabun", "Sampo", "Snack"])
+    warung_kopi = WarungKopi(["Kopi Tubruk", "Kopi Joss"], 20)
+
+    print(warung.get_sedia())
+    print(warung_kopi.get_sedia())
+    print(warung_kopi.get_jumlah_kursi())
+
+if __name__ == "__main__":
+    main()
+```
+
+Program di atas akan menghasilkan output
+
+```shell
+['Obat', 'Sabun', 'Sampo', 'Snack']
+['Kopi Tubruk', 'Kopi Joss']
+20
+```
+
+Perhatikan bahwa instance dari WarungKopi (yaitu warung_kopi) memiliki get_sedia() milik warung dan punya method baru
+yaitu get_jumlah_kursi(). Ketika membuat fitur baru (misalnya WarungKopi atau WarungTegal), kode pada kelas Warung 
+tidak perlu diubah sama sekali. Pemrogram cukup menambahkan kelas baru yang meng-extend superclassnya.
+
+## Liskov substitution principle
+
+Liskov substituion principle (LSP)memiliki pengertian sebagai berikut: _"If for each object o1 of type S there is an 
+object o2 of type T such that for all programs P defined in terms of T, the behaviour of P is unchanged when o1 is 
+substituted for o2 then S is a subtype of T."_
+
+Sekilas cukup rumit, namun ini bisa diartikan sebagai subclass perlu memiliki perilaku yang identik dengan parentnya.
+Bukan hanya memiliki instance dan method yang sama.
+
+Dalam tahap desain, prinsip ini memudahkan kita untuk mengetahui letak class baru dalam hirarki: apakah class ini
+bisa dijadikan subclass?
+
+```shell
+# Wahana class to be overriden
+class Wahana:
+    def get_harga(self) -> int:
+        return 1000
+
+    def get_maksimal_umur(self) -> int:
+        return 99
+
+class OdongOdong(Wahana):
+    def __init__(self, harga, maksimal_umur):
+        self.harga = harga
+        self.maksimal_umur = maksimal_umur
+
+    def get_harga(self) -> int:
+        return self.harga
+    
+    def get_maksimal_umur(self) -> int:
+        return self.maksimal_umur
+
+class RollerCoaster(Wahana):
+    def __init__(self, harga):
+        self.harga = harga
+
+    def get_harga(self) -> int:
+        return self.harga
+    
+    def get_maksimal_umur(self) -> None:
+        raise Exception("Tidak ada maksimal umur")
+```
+
+Pada kode di atas, terlihat bahwa RollerCoaster sebetulnya tidak bisa menjadi subtype atau subclass dari Wahana, karena
+tidak mengimplementasikan perilaku get_maksimal_umur yang sesuai (malah melempar exception). Dengan sedikit refactoring,
+kita bisa membuat hirarki kelas ini menjadi sesuai
+
+```shell
+# Wahana class to be overriden
+class Wahana:
+    def get_harga(self) -> int:
+        return 1000
+
+class WahanaKhususAnak:
+    def get_maksimal_umur(self) -> int:
+        return 18
+
+class OdongOdong(WahanaKhususAnak):
+    def __init__(self, harga, maksimal_umur):
+        self.harga = harga
+        self.maksimal_umur = maksimal_umur
+
+    def get_harga(self) -> int:
+        return self.harga
+    
+    def get_maksimal_umur(self) -> int:
+        return self.maksimal_umur
+
+class RollerCoaster(Wahana):
+    def __init__(self, harga):
+        self.harga = harga
+
+    def get_harga(self) -> int:
+        return self.harga
+```
+
+Kini kita punya hirarki yang lebih baik dan memenuhi LSP. Caranya adalah dengan membuat kelas baru sehingga pewarisannya
+menjadi OdongOdong -> WahanaKhususAnak -> Wahana dan RollerCoaster -> Wahana. Dengan demikian, tidak perlu ada maksimal
+umur di RollerCoaster.
+
+## Interface segregation principle
+
+Uncle Bob (Robert C. Martin) mengatakan bahwa _"Clients should not be forced to depend upon interfaces that they do not
+use."_ Prinsip Interface Segregation (ISP) ini erat kaitannya dengan interface.
+
+Pertanyaannya, apakah ada interface dalam Python bawaan? Jawabannya memang tidak, tapi kita bisa membuat interface
+dengan sedikit trik.
+
+Ada beberapa cara mengimplementasikan interface di Python, saya memilih berdasarkan beberapa kriteria:
+
+1. Ada pada standard library (tidak perlu menginstall tambahan)
+2. Mudah diimplementasikan seperti pada bahasa yang mendukung interface
+3. Efektif (mendeteksi class tidak mengimplementasikan apa yang diminta interface)
+
+Sebagai contoh kita memiliki interface Hewan yang mewajibkan method jalan() dan terbang(). Kita akan membuat class
+Burung untuk mengimplementasikan interface ini.
+
+```shell
+import abc
+
+class Hewan(metaclass=abc.ABCMeta):
+    @classmethod
+    @abc.abstractmethod
+    def jalan(self) -> str:
+        pass
+
+    @classmethod
+    @abc.abstractmethod
+    def terbang(self) -> str:
+        pass
+```
+
+Di sini kita menggunakan library bawaan abc. Penggunaannya mudah, pada method jalan dan terbang cukup diberikan
+decorator `@abc.abstractmethod`. Sekarang kita buat class Burung
+
+```shell
+import abc
+
+class Hewan(metaclass=abc.ABCMeta):
+    @classmethod
+    @abc.abstractmethod
+    def jalan(self) -> str:
+        pass
+
+    @classmethod
+    @abc.abstractmethod
+    def terbang(self) -> str:
+        pass
+
+class Burung(Hewan):
+    @classmethod
+    def jalan(self) -> str:
+        return "Cip cip berjalan"
+
+def main():
+    burung = Burung()
+
+if __name__ == "__main__":
+    main()
+```
+
+Perhatikan bahwa burung belum mengimplementasikan method terbang. Ketika program dijalankan, akan ada error
+
+```shell
+TypeError: Can't instantiate abstract class Burung with abstract method terbang
+```
+
+Jadi kita tambahkan method terbang pada burung. Letakkan ini di bawah method jalan pada burung
+
+```shell
+    @classmethod
+    def terbang(self) -> str:
+        return "Cip cip terbang"
+```
+
+Program berjalan dengan semestinya. Nah sekarang kita misalnya menambahkan kucing. Sayangnya kita tidak mau ada method
+terbang pada kucing. Solusinya, kita bisa memecah Hewan menjadi interface HewanBerkaki yang meminta method jalan, dan
+HewanBersayap yang meminta method terbang.
+
+```shell
+import abc
+
+class HewanBerkaki(metaclass=abc.ABCMeta):
+    @classmethod
+    @abc.abstractmethod
+    def jalan(self) -> str:
+        pass
+
+class HewanBersayap(metaclass=abc.ABCMeta):
+    @classmethod
+    @abc.abstractmethod
+    def terbang(self) -> str:
+        pass
+
+class Burung(HewanBerkaki, HewanBersayap):
+    @classmethod
+    def jalan(self) -> str:
+        return "Cip cip berjalan"
+
+    @classmethod
+    def terbang(self) -> str:
+        return "Cip cip terbang"
+
+class Kucing(HewanBerkaki):
+    @classmethod
+    def jalan(self) -> str:
+        return "Meow meow berjalan"
+
+def main():
+    burung = Burung()
+    kucing = Kucing()
+    print(burung.terbang())
+    print(kucing.jalan())
+
+if __name__ == "__main__":
+    main()
+```
+
+Dengan demikian, kita sudah mengimplementasikan ISP.
+
+## Dependency inversion principle
+
+Dependency Inversion Principle (DIP) mengatakan bahwa _"High-level modules should not depend on low-level modules. Both 
+should depend on abstractions."_ (Uncle Bob). Prinsip ini juga erat kaitannya dengan interface.
+
+Misalnya kita punya class Pintu yang memiliki subclass PintuKayu dan PintuKaca
+
+```shell
+import abc
+
+class Pintu:
+    @classmethod
+    def warna(self) -> str:
+        pass
+
+class PintuKayu(Pintu):
+    @classmethod
+    def warna(self) -> str:
+        return "Coklat"
+
+class PintuKaca(Pintu):
+    @classmethod
+    def warna(self) -> str:
+        return "Bening"
+```
+
+Setelah itu, kita akan membuat class Rumah yang memiliki atribut pintu. DIP meminta kita untuk tidak bergantung
+langsung dengan PintuKayu atau PintuKaca karena ini tidak fleksibel. Kita buatlah class Pintu menjadi interface.
+
+```shell
+import abc
+
+# Class Pintu adalah interface yang akan digunakan oleh subclass
+class Pintu:
+    @classmethod
+    @abc.abstractmethod
+    def warna_pintu(self) -> str:
+        pass
+
+class PintuKayu(Pintu):
+    @classmethod
+    def warna_pintu(self) -> str:
+        return "Coklat"
+
+class PintuKaca(Pintu):
+    @classmethod
+    def warna_pintu(self) -> str:
+        return "Bening"
+
+class Rumah(Pintu):
+    def __init__(self, pintu: Pintu):
+        self.pintu = pintu
+
+    @classmethod
+    def warna_pintu(self) -> str:
+        return self.pintu.warna_pintu()
+
+def main():
+    rumah_saya = Rumah(PintuKayu)
+    print(rumah_saya.warna_pintu())
+
+if __name__ == "__main__":
+    main()
+```
+
+Program akan mengembalikan `Coklat`. Perhatikan bahwa baik Rumah maupun PintuKayu dan PintuKaca bergantung pada Pintu
+yang berubah menjadi interface.
+
+## Kesimpulan
+
+Sebagai bahasa yang mendukung OOP, walaupun tidak secara native didukung penuh, Python tetap bisa kita gunakan untuk
+mengimplementasikan prinsip SOLID.
+
+## Referensi
+
+Martin, R. C. (2018). Clean Architecture: A Craftsman’s Guide to Software Structure and Design. Pearson Professional.
