@@ -4,13 +4,76 @@ title:  "Prinsip SOLID pada API"
 categories: tips
 ---
 
+Kita akan mencoba menerapkan prinsip SOLID pada sebuah API yang dibuat dengan Django.
+
 SOLID adalah gabungan dari lima design principles yang relevan dengan pengembangan program berorientasi objek. SOLID
-itu sendiri dipopulerkan oleh Robert C. Martin (Uncle Bob). Istilah SOLID dipopulerkan oleh Michael Feathers.
+itu sendiri dicetuskan oleh Robert C. Martin (Uncle Bob). Istilah SOLID dipopulerkan oleh Michael Feathers.
+
+Ada lima prinsip dalam SOLID:
+
+1. Single-responsibility principle 
+2. Open–closed principle 
+3. Liskov substitution principle 
+4. Interface segregation principle 
+5. Dependency inversion principle
 
 Kali ini kita akan mengembangkan API sederhana yang menerapkan prinsip SOLID. API ini punya satu endpoint dan
-mengembalikan sebuah gambar kucing.
+mengembalikan nama orang secara random.
 
-## Penerapan
+## Setup Proyek
+
+Pastikan sudah menginstal Python 3. Panduan instalasinya terdapat pada [situs resmi Python](https://www.python.org/downloads/)
+Tutorial ini menggunakan versi 3.11.2. Pada instalasi, jangan lupa tambahkan python ke PATH.
+
+Buat proyek baru. Eksekusi perintah berikut pada CMD/terminal:
+```shell
+# Buat folder
+mkdir praktik-solid-api-django
+cd praktik-solid-api-django
+
+# Buat virtual environment untuk instalasi Django
+python3 -m venv env
+source env/bin/activate  # Pada Windows gunakan perintah `env\Scripts\activate`
+
+# Install Django dan Django REST framework
+pip install django
+pip install djangorestframework
+
+# Buat satu project dan satu app
+django-admin startproject solidapi .  # Jangan lupa tambahkan . di akhir
+cd solidapi
+django-admin startapp generator
+cd ..
+```
+
+Selanjutnya eksekusi perintah berikut untuk coba menjalankan server
+
+```shell
+python3 manage.py migrate
+python3 manage.py runserver
+```
+
+Setup proyek selesai.
+
+## Menerapkan Single Responsibility Principle (SRP)
+
+Django sendiri sudah membuat ini menjadi mudah dengan membuat folder `generator` berisi file-file yang mengatur
+satu kepentingan saja. Ini sejalan dengan SRP yang menginginkan kelas atau fungsi hanya bertanggu jawab terhadap
+satu hal saja.
+
+- `admin.py`: mengatur Django Admin
+- `apps.py`: mengatur config
+- `models.py`: mengatur model (apa saja atribut yang diperlukan sebuah objek, dalam hal ini nama orang)
+- `tests.py`: unit test
+- `views.py`: mengatur controller (request dan response untuk user)
+
+Kita tinggal melanjutkan ini dengan konsisten.
+
+Mari kita isi beberapa file yang dibutuhkan.
+
+```shell
+
+```
 
 Kita dapat membuat pseudocode untuk API sebagai berikut
 

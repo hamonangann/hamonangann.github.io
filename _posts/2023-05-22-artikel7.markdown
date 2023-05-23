@@ -460,6 +460,8 @@ yang berubah menjadi interface.
 Sebagai bahasa yang mendukung OOP, walaupun tidak secara native didukung penuh, Python tetap bisa kita gunakan untuk
 mengimplementasikan prinsip SOLID.
 
+Sumber kode dari praktik di atas terdapat pada [link berikut](https://github.com/hamonangann/blog-hands-on/tree/praktik-solid-python)
+
 ## Referensi
 
 Martin, R. C. (2018). Clean Architecture: A Craftsman’s Guide to Software Structure and Design. Pearson Professional.
