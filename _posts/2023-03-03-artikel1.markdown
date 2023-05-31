@@ -104,5 +104,6 @@ Gitlab, terutama pada versi gratisnya.
 
 Demikian artikel ini, semoga bermanfaat untuk setiap tim proyek perangkat lunak
 
+Project yang digunakan dalam contoh dapat dilihat pada [link Gitlab ini](https://gitlab.com/hamonangan.nito/pm-tool-starter)
 
 
