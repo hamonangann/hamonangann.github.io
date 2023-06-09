@@ -7,11 +7,10 @@ Nama saya **B. Hamonangan**. Saya mengembangkan beberapa rumah Minecraft sederha
 
 ### Mungkin ini berguna
 
-- Coba mainkan [command-line challenge](https://cmdchallenge.com/) ini
 - Belajar bahasa pemrograman Golang di ["A Tour of Go"](https://go.dev/tour/welcome/1)
-- Tutorial [GitHub flow](https://ooloo.io/project/github-flow/git-workflows) dari Ooloo
-- [Developer roadmap](https://roadmap.sh/) karya [Kamran, et al.](https://github.com/kamranahmedse)
-- Kunjungi blog saya (yang lain) di [Medium](https://hamonangan.medium.com)
+- Coba mainkan [command-line challenge](https://cmdchallenge.com/) ini
+- Pakai GitHub flow untuk berkolaborasi. [Panduan GitHub flow](https://ooloo.io/project/github-flow/git-workflows) dari Ooloo
+- Lihat [developer roadmap](https://roadmap.sh/) karya [Kamran, et al.](https://github.com/kamranahmedse) agar tidak tersesat
 
 ### Mau bertegur sapa?
 
