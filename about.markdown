@@ -16,8 +16,11 @@ Nama saya **B. Hamonangan**. Saya membangun beberapa rumah Minecraft sederhana d
 
 Sebagai pengembang yang bangga (sempat) terlibat di dalamnya, berikut sedikit promosi untuk perangkat lunak berikut:
 - Jika Anda mahasiswa Universitas Indonesia, mari gunakan [SusunJadwal](https://susunjadwal.cs.ui.ac.id) untuk persiapan SIAK WAR!
+
     ![SusunJadwal](/img/about-sunjad.png)
+
 - Pada saat promosi ini ditambahkan, ini adalah tahun pertama sistem [Pemantauan Publikasi Ilmiah](http://ppi.cs.ui.ac.id) digunakan mahasiswa dan dosen S2/S3 FASILKOM UI. Saya penasaran bagaimana kelanjutannya sekarang.
+
     ![Pemantauan Publikasi Ilmiah](/img/about-ppi.png)
 
 ### Mungkin ini berguna:
