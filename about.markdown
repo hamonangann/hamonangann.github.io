@@ -29,9 +29,9 @@ Sebagai pengembang yang bangga (sempat) terlibat di dalamnya, saya mempromosikan
 
 ### Link ini mungkin berguna
 
-- Coba pakai Github untuk kelola text file, baik secara individu atau bersama-sama. [Tutorial Github Flow](https://ooloo.io/project/github-flow/git-workflows).
-- Coba bahasa pemrograman, Golang misalnya: ["A Tour of Go"](https://go.dev/tour/welcome/1).
-- Jika tertarik menjadi pengembang perangkat lunak, lihat [The (Software) Developer Roadmap](https://roadmap.sh/) oleh [Kamran, et al.](https://github.com/kamranahmedse) ini.
+- Coba GitHub flow untuk mengatur text file bersama rekan. [Tutorial Github Flow](https://ooloo.io/project/github-flow/git-workflows).
+- Coba bahasa pemrograman, misalnya Golang: ["A Tour of Go"](https://go.dev/tour/welcome/1).
+- Lihat [The (Software) Developer Roadmap](https://roadmap.sh/) oleh [Kamran, et al.](https://github.com/kamranahmedse) ini.
 
 ### Kontak
 
