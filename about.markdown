@@ -12,6 +12,14 @@ Nama saya **B. Hamonangan**. Saya membangun beberapa rumah Minecraft sederhana d
 - <a href="https://www.firebase.com/" title="Firebase"><img src="https://github.com/get-icon/geticon/raw/master/icons/firebase.svg" alt="Firebase" width="15px" height="15px"></a> __Firebase__: Database terbaik untuk memulai. Lebih gampang dipelajari ketimbang SQL dan cocok untuk hampir semua kebutuhan. 
 - <a href="https://www.docker.com/" title="docker"><img src="https://github.com/get-icon/geticon/raw/master/icons/docker-icon.svg" alt="docker" width="15px" height="15px"></a> __Docker__: Setelah kita pakai lebih dari 1 environment untuk perangkat lunak kita, alat ini akan membuat segalanya bekerja semestinya.
 
+### Sedikit promosi:
+
+Sebagai pengembang yang bangga (sempat) terlibat di dalamnya, berikut sedikit promosi untuk perangkat lunak berikut:
+- Jika Anda mahasiswa Universitas Indonesia, mari gunakan [SusunJadwal](https://susunjadwal.cs.ui.ac.id) untuk persiapan SIAK WAR!
+    ![SusunJadwal](/img/about-sunjad.png)
+- Pada saat promosi ini ditambahkan, ini adalah tahun pertama sistem [Pemantauan Publikasi Ilmiah](http://ppi.cs.ui.ac.id) digunakan mahasiswa dan dosen S2/S3 FASILKOM UI. Saya penasaran bagaimana kelanjutannya sekarang.
+    ![Pemantauan Publikasi Ilmiah](/img/about-ppi.png)
+
 ### Mungkin ini berguna:
 
 - Coba pakai Github, secara individu atau bersama-sama. [Tutorial dari Ooloo](https://ooloo.io/project/github-flow/git-workflows) ini bagus.
