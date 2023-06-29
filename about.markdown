@@ -15,7 +15,7 @@ Nama saya **B. Hamonangan**. Saya membangun beberapa rumah Minecraft sederhana d
 ### Sedikit promosi:
 
 Sebagai pengembang yang bangga (sempat) terlibat di dalamnya, berikut sedikit promosi untuk perangkat lunak berikut:
-- Jika Anda mahasiswa Universitas Indonesia, mari gunakan [SusunJadwal](https://susunjadwal.cs.ui.ac.id) untuk persiapan SIAK WAR!
+- Jika Anda mahasiswa Universitas Indonesia, mari gunakan [SusunJadwal](https://susunjadwal.cs.ui.ac.id) untuk persiapan SIAK WAR! Anda juga bisa [berkontribusi](https://oss.ristek.cs.ui.ac.id/) mengembangkan sistem free/open-source ini.
 
     ![SusunJadwal](/img/about-sunjad.png)
 
