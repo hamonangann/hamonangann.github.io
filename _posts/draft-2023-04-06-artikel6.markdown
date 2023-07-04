@@ -23,7 +23,13 @@ Ada apa saja jenis test double dan perbedaannya? Mari kita kupas satu-satu:
 ## Dummy
 
 Dummy adalah test double paling sederhana. Ia tidak punya fungsionalitas apa-apa dan biasanya digunakan hanya untuk
-menempati parameter sebuah fungsi. 
+menempati parameter sebuah fungsi.
+
+Sebagai contoh dalam Python kita memiliki program untuk memilih nama dari daftar secara acak sebagai berikut
+
+```python
+def 
+```
 
 ## Stub
 
