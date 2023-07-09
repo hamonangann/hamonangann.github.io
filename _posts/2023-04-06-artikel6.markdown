@@ -1,0 +1,201 @@
+---
+layout: post
+title:  "Isolasi Unit Test dengan Bantuan Test Double"
+categories: tips
+---
+
+Unit test berarti tes satuan. Ini artinya unit test hanya menguji satu fungsi atau modul terhadap suatu kasus uji 
+(test case).
+
+Akan tetapi, bagaimana jika suatu fungsi atau modul yang dites memiliki dependensi ke fungsi, kelas, atau modul lainnya?
+Di sinilah peran test double diperlukan, yaitu untuk mengisolasi unit test dengan mengganti setiap dependensi dengan
+fungsi, kelas, atau modul tiruan yang memiliki perilaku yang dimodifikasi.
+
+Ada beberapa level dalam test double. Kita bisa membuat sendiri test double atau menggunakan test framework.
+
+Sebagai contoh, kita akan membuat beberapa unit test untuk menguji fungsi randomizer nama. Fungsi ini memiliki dua
+parameter, yaitu object randomizer yang bertugas memilih nama secara acak dan array/list nama yang hendak dirandomize.
+
+```python
+def random_names(self, randomizer, names):
+    if len(names) == 0:
+        return "No name provided"
+    return randomizer.randomize(names)
+```
+
+## Dummy
+
+Dummy adalah test double paling sederhana. Ia tidak punya fungsionalitas apa-apa dan biasanya digunakan hanya untuk
+menempati parameter sebuah fungsi.
+
+Sebagai contoh, kita dapat membuat test case untuk pemanggilan fungsi dengan array kosong. Dengan demikian, tentu saja
+kita tidak akan memanggil fungsi randomize. Jadi kita bisa gunakan dummy function sebagai berikut
+
+```python
+import unittest
+
+class DummyRandomizer:
+    pass
+
+class TestFaktorial(unittest.TestCase):
+    def test_empty_name(self):
+        result = random_names(DummyRandomizer(), [])
+        self.assertEqual(result, "No name provided")
+
+if __name__ == "__main__":
+    unittest.main()
+```
+
+## Stub
+
+Stub adalah dummy yang naik level. Fungsi pada Dummy tidak bisa digunakan sama sekali, karena tidak memiliki efek atau
+return value. Di sisi lain, stub bisa mengembalikan return value tertentu yang biasanya disesuaikan dengan kebutuhan
+tes. Sebagai contoh, stub bisa digunakan untuk selalu mengembalikan string bernama "Budi"
+
+```python
+import unittest
+
+class DummyRandomizer:
+    pass
+    
+class StubRandomizer:
+    def randomize(self, names):
+        return "Budi"
+
+class TestFaktorial(unittest.TestCase):
+    def test_empty_name(self):
+        result = random_names(DummyRandomizer(), [])
+        self.assertEqual(result, "No name provided")
+        
+    def test_single_name(self):
+        result = random_names(StubRandomizer(), ["Budi"])
+        self.assertEqual(result, "Budi")
+
+if __name__ == "__main__":
+    unittest.main()
+```
+
+## Spy
+
+Spy adalah level berikutnya dari stub. Spy punya fungsionalitas tambahan sesuai kebutuhan dalam unit test, yaitu
+mencatat berapa kali fungsinya dipanggil atau dipanggil dengan parameter apa. Kita akan membuat contoh spy sederhana
+untuk `test_single_name` yang telah kita buat.
+
+```python
+import unittest
+
+class SpyRandomizer:
+    self.randomize_method_called = False
+    
+    def randomize(self, names):
+        self.randomize_method_called = True
+        return "Budi"
+    
+
+class TestFaktorial(unittest.TestCase):
+    def test_single_name(self):
+        randomizer = SpyRandomizer()
+        result = random_names(randomizer, ["Budi"])
+        self.assertEqual(result, "Budi")
+        self.assertEqual(randomizer.randomize_method_called, True)
+
+if __name__ == "__main__":
+    unittest.main()
+```
+
+## Mocks
+
+Mocks adalah spy dalam versi yang lebih canggih. Jika spy punya kemampuan untuk mendengar, mock punya kemampuan untuk
+merangkum apa yang ia dengar. Misalnya dalam suatu test, fungsi yang ditest harus memanggil fungsi lain A() 1 kali,
+B() 1 kali, dan C() 2 kali. Jika menggunakan spy kita bisa membutuhkan 3-4 kali assertion untuk memastikan setiap fungsi 
+dipanggil dengan jumlah yang tepat. Akan tetapi, mocks dilengkapi dengan fungsionalitas verify sehingga kita cukup 
+melakukan assertion sebanyak 1 kali.
+
+Kebanyakan test framework membuat objek/fungsi dalam bentuk mocks ini.
+
+```python
+import unittest
+
+class MockRandomizer:
+    self.count_called = 0
+    self.expected_methods_called = {}
+    
+    def expect(self, expectations):
+        for ex in expectations:
+            self.expected_methods_called[ex] = False
+    
+    def verify(self):
+        for val in self.expected_methods_called.valued():
+            if val != True:
+                return False
+        return True
+    
+    def randomize(self, names):
+        self.count_called += 1
+        self.expected_methods_called["randomize"] = True
+        return "Budi"
+    
+
+class TestFaktorial(unittest.TestCase):
+    def test_single_name(self):
+        randomizer = MockRandomizer()
+        randomizer.expect(["randomize"])
+        result = random_names(randomizer, ["Budi"])
+        self.assertEqual(result, "Budi")
+        self.assertEqual(randomizer.verify, True)
+
+if __name__ == "__main__":
+    unittest.main()
+```
+
+## Fakes
+
+Fakes punya fungsionalitas yang serupa dengan fungsi asli, tapi dalam behavior yang palsu. Misalnya pada randomizer user 
+di atas, fakes dapat dibuat untuk selalu mengembalikan user pertama dalam list, atau null jika listnya kosong. Tentu
+saja kita tidak mau production app kita selalu mengembalikan user pertama, tapi untuk kebutuhan testing dan development
+ini akan sangat berguna untuk menguji suatu behavior.
+
+```python
+import unittest
+
+class FakeRandomizer:
+    self.count_called = 0
+    self.expected_methods_called = {}
+    
+    def expect(self, expectations):
+        for ex in expectations:
+            self.expected_methods_called[ex] = False
+    
+    def verify(self):
+        for val in self.expected_methods_called.valued():
+            if val != True:
+                return False
+        return True
+    
+    def randomize(self, names):
+        self.count_called += 1
+        self.expected_methods_called["randomize"] = True
+        
+        if len(names) == 0:
+            return ""
+        else:
+            return names[0]
+    
+
+class TestFaktorial(unittest.TestCase):
+    def test_single_name(self):
+        randomizer = FakeRandomizer()
+        randomizer.expect(["randomize"])
+        result = random_names(randomizer, ["Cheryl", "Ibnu", "Matthew"])
+        self.assertEqual(result, "Cheryl")
+        self.assertEqual(randomizer.verify, True)
+
+if __name__ == "__main__":
+    unittest.main()
+```
+
+## Referensi
+
+Eftimov, I. (2019). Testing in Go: Test Doubles by Example. https://ieftimov.com/posts/testing-in-go-test-doubles-by-example/ 
+
+Test Double at XUnitPatterns.com. (n.d.). http://xunitpatterns.com/Test%20Double.html
