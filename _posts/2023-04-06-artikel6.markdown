@@ -17,7 +17,7 @@ Sebagai contoh, kita akan membuat beberapa unit test untuk menguji fungsi random
 parameter, yaitu object randomizer yang bertugas memilih nama secara acak dan array/list nama yang hendak dirandomize.
 
 ```python
-def random_names(self, randomizer, names):
+def random_names(randomizer, names):
     if len(names) == 0:
         return "No name provided"
     return randomizer.randomize(names)
@@ -32,15 +32,20 @@ Sebagai contoh, kita dapat membuat test case untuk pemanggilan fungsi dengan arr
 kita tidak akan memanggil fungsi randomize. Jadi kita bisa gunakan dummy function sebagai berikut
 
 ```python
+from random_names import random_names
+
 import unittest
+
 
 class DummyRandomizer:
     pass
+
 
 class TestFaktorial(unittest.TestCase):
     def test_empty_name(self):
         result = random_names(DummyRandomizer(), [])
         self.assertEqual(result, "No name provided")
+
 
 if __name__ == "__main__":
     unittest.main()
@@ -85,8 +90,9 @@ untuk `test_single_name` yang telah kita buat.
 import unittest
 
 class SpyRandomizer:
-    self.randomize_method_called = False
-    
+    def __init__(self):
+        self.randomize_method_called = False
+
     def randomize(self, names):
         self.randomize_method_called = True
         return "Budi"
@@ -98,9 +104,6 @@ class TestFaktorial(unittest.TestCase):
         result = random_names(randomizer, ["Budi"])
         self.assertEqual(result, "Budi")
         self.assertEqual(randomizer.randomize_method_called, True)
-
-if __name__ == "__main__":
-    unittest.main()
 ```
 
 ## Mocks
@@ -117,19 +120,20 @@ Kebanyakan test framework membuat objek/fungsi dalam bentuk mocks ini.
 import unittest
 
 class MockRandomizer:
-    self.count_called = 0
-    self.expected_methods_called = {}
-    
+    def __init__(self):
+        self.count_called = 0
+        self.expected_methods_called = {}
+
     def expect(self, expectations):
         for ex in expectations:
             self.expected_methods_called[ex] = False
-    
+
     def verify(self):
-        for val in self.expected_methods_called.valued():
+        for val in self.expected_methods_called.values():
             if val != True:
                 return False
         return True
-    
+
     def randomize(self, names):
         self.count_called += 1
         self.expected_methods_called["randomize"] = True
@@ -142,10 +146,7 @@ class TestFaktorial(unittest.TestCase):
         randomizer.expect(["randomize"])
         result = random_names(randomizer, ["Budi"])
         self.assertEqual(result, "Budi")
-        self.assertEqual(randomizer.verify, True)
-
-if __name__ == "__main__":
-    unittest.main()
+        self.assertEqual(randomizer.verify(), True)
 ```
 
 ## Fakes
@@ -159,23 +160,24 @@ ini akan sangat berguna untuk menguji suatu behavior.
 import unittest
 
 class FakeRandomizer:
-    self.count_called = 0
-    self.expected_methods_called = {}
-    
+    def __init__(self):
+        self.count_called = 0
+        self.expected_methods_called = {}
+
     def expect(self, expectations):
         for ex in expectations:
             self.expected_methods_called[ex] = False
-    
+
     def verify(self):
-        for val in self.expected_methods_called.valued():
+        for val in self.expected_methods_called.values():
             if val != True:
                 return False
         return True
-    
+
     def randomize(self, names):
         self.count_called += 1
         self.expected_methods_called["randomize"] = True
-        
+
         if len(names) == 0:
             return ""
         else:
@@ -183,15 +185,12 @@ class FakeRandomizer:
     
 
 class TestFaktorial(unittest.TestCase):
-    def test_single_name(self):
+    def test_multiple_names(self):
         randomizer = FakeRandomizer()
         randomizer.expect(["randomize"])
         result = random_names(randomizer, ["Cheryl", "Ibnu", "Matthew"])
         self.assertEqual(result, "Cheryl")
-        self.assertEqual(randomizer.verify, True)
-
-if __name__ == "__main__":
-    unittest.main()
+        self.assertEqual(randomizer.verify(), True)
 ```
 
 ## Referensi
@@ -199,3 +198,5 @@ if __name__ == "__main__":
 Eftimov, I. (2019). Testing in Go: Test Doubles by Example. https://ieftimov.com/posts/testing-in-go-test-doubles-by-example/ 
 
 Test Double at XUnitPatterns.com. (n.d.). http://xunitpatterns.com/Test%20Double.html
+
+Source code program di artikel ini dapat diakses pada [link ini](https://github.com/hamonangann/blog-hands-on/tree/praktik-test-double)
