@@ -4,8 +4,6 @@ title:  "Isolasi Unit Test dengan Bantuan Test Double"
 categories: tips
 ---
 
-![Stunt man - salah satu penerapan double - Photo by Aleksandr Popov on Unsplash](/img/artikel6-stunt.jpeg)
-
 Unit test berarti tes satuan. Ini artinya unit test hanya menguji satu fungsi atau modul terhadap suatu kasus uji 
 (test case).
 

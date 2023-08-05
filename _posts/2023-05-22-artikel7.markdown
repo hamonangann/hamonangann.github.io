@@ -2,10 +2,8 @@
 layout: post
 title:  "Bisakah Kita Menerapkan Prinsip SOLID pada Python?"
 categories: tips
+featured_image: /img/artikel7-logo-python.png
 ---
-
-![Python logo - diambil dari situs python.org](/img/artikel7-logo-python.png)
-
 Bahasa pemrograman Python adalah salah satu yang paling diminati. Menurut saya, salah satu alasannya adalah Python
 termasuk bahasa yang fleksibel untuk banyak pemrograman, sehingga cocok untuk pemula yang ingin menentukan arah karir
 (misalnya). Kita bisa membuat aplikasi desktop, web (Django, Flask, FastAPI), game (PyGame), analisis data (Pandas),

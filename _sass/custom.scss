@@ -1,0 +1,40 @@
+.site-title {
+  color: dimgray;
+  &:visited {
+    color: dimgray;
+  }
+}
+
+.featured-image {
+  margin-bottom: 50px;
+
+  img {
+    width: 100%;
+    object-fit: cover;
+  }
+}
+
+.post-list > li {
+  display: flex;
+  flex-wrap: wrap-reverse;
+
+  div:first-child {
+    flex: 1 0 300px;
+    align-items: center;
+  }
+  .featured-image {
+    max-width: 300px;
+    margin-bottom: 0;
+    align-items: center;
+  }
+
+  .post-highlight {
+    flex: 1 0 300px;
+    margin-bottom: 0;
+    align-items: center;
+  }
+}
+
+.read-more-link {
+    padding-top: 4px;
+}
