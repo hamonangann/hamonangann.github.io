@@ -2,6 +2,7 @@
 layout: post
 title:  "Manajemen Proyek Perangkat Lunak dengan Gitlab"
 categories: tips
+github_comments_issueid: 1
 ---
 Ada beberapa tools yang biasa digunakan untuk melakukan project tracking atau manajemen proyek, seperti Jira atau Trello.
 Akan tetapi, Gitlab ternyata juga punya PM tools yang cukup mumpuni. Artikel ini akan membahas cara memulai proyek
