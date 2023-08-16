@@ -27,7 +27,7 @@ url: "https://hamonangann.github.io" # the base hostname & protocol for your sit
 twitter_username: 
 github_username: hamonangann
   
-github_comments_repository: hamonangann/blog-comments
+github_comments_repository: hamonangann/hamonangann.github.io
 
 # Build settings
 theme: minima
