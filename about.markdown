@@ -13,7 +13,6 @@ Saya menggunakan sebagian dari banyak tools untuk membangun perangkat lunak yang
 
 - <a href="https://www.go.dev/" title="Golang"><img src="https://github.com/get-icon/geticon/raw/master/icons/go.svg" alt="Golang" width="21px" height="21px"></a> __Golang__: Sederhana tapi powerful. Internal librarynya lengkap, dan gampang untuk mengelola external library.
 - <a href="https://www.python.org/" title="Python"><img src="https://github.com/get-icon/geticon/raw/master/icons/python.svg" alt="Python" width="21px" height="21px"></a> __Python__: Ramah pemula juga. Sudah seperti virus, ditemukan dimana-mana mulai dari script sederhana sampai AI tercanggih.
-- <a href="https://www.firebase.com/" title="Firebase"><img src="https://github.com/get-icon/geticon/raw/master/icons/firebase.svg" alt="Firebase" width="21px" height="21px"></a> __Firebase__: Database terbaik untuk memulai. Lebih gampang dipelajari ketimbang SQL dan cocok untuk hampir semua kebutuhan. 
 - <a href="https://www.docker.com/" title="docker"><img src="https://github.com/get-icon/geticon/raw/master/icons/docker-icon.svg" alt="docker" width="21px" height="21px"></a> __Docker__: Setelah kita pakai lebih dari 1 environment untuk perangkat lunak kita, alat ini akan membuat segalanya bekerja semestinya.
 
 ### Proyek
