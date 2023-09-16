@@ -3,7 +3,6 @@ layout: post
 title:  "Test-Driven Development dengan Git"
 categories: tips
 featured_image: /img/artikel3-gambar1.png
-github_comments_issueid: 3
 ---
 Pada artikel kali ini, kita akan menerapkan paradigma pengembangan perangkat lunak **Test Driven Development** (TDD)
 dan mengintegrasikannya dengan **Git**, tool yang digunakan untuk memantau kode program.

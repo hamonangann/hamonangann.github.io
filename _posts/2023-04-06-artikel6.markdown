@@ -2,7 +2,6 @@
 layout: post
 title:  "Isolasi Unit Test dengan Bantuan Test Double"
 categories: tips
-github_comments_issueid: 4
 ---
 
 Unit test berarti tes satuan. Ini artinya unit test hanya menguji satu fungsi atau modul terhadap suatu kasus uji 
