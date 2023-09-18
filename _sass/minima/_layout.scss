@@ -253,3 +253,19 @@
     }
   }
 }
+
+/**
+ * Comments
+ */
+
+.comments {
+  margin-top: $spacing-unit;
+
+  h2 {
+    @include relative-font-size(2);
+
+    @include media-query($on-laptop) {
+      @include relative-font-size(1.75);
+    }
+  }
+}
