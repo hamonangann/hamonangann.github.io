@@ -9,12 +9,14 @@
       <div class="footer-col footer-col-1">
         <ul class="contact-list">
           <li class="p-name">
+            <!--
             {%- if site.author -%}
               {{ site.author | escape }}
             {%- else -%}
               {{ site.title | escape }}
             {%- endif -%}
             </li>
+            -->
             {%- if site.email -%}
             <li><a class="u-email" href="mailto:{{ site.email }}">{{ site.email }}</a></li>
             {%- endif -%}
@@ -27,6 +29,7 @@
 
       <div class="footer-col footer-col-3">
         <p>{{- site.description | escape -}}</p>
+        <p>Mohon ikuti ketentuan lisensi Situs ini dibuat dengan [Jekyll (Ruby)](https://jekyllrb.com/). Mohon ikuti <a href="https://creativecommons.org/licenses/by-sa/4.0/">ketentuan lisensi</a></p>
       </div>
     </div>
 
