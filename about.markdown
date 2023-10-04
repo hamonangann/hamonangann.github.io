@@ -9,22 +9,18 @@ Saya **B. Hamonangan**. Saya membangun beberapa rumah Minecraft sederhana dan ju
 
 ### Tools
 
-Saya menggunakan sebagian dari banyak tools untuk membangun perangkat lunak yang tersedia. Sebagian dari sebagian tools tersebut menjadi andalan saya:
-
-- <a href="https://www.go.dev/" title="Golang"><img src="https://github.com/get-icon/geticon/raw/master/icons/go.svg" alt="Golang" width="21px" height="21px"></a> __Golang__: Sederhana tapi powerful. Internal librarynya lengkap, dan gampang untuk mengelola external library.
-- <a href="https://www.python.org/" title="Python"><img src="https://github.com/get-icon/geticon/raw/master/icons/python.svg" alt="Python" width="21px" height="21px"></a> __Python__: Ramah pemula juga. Sudah seperti virus, ditemukan dimana-mana mulai dari script sederhana sampai AI tercanggih.
-- <a href="https://www.docker.com/" title="docker"><img src="https://github.com/get-icon/geticon/raw/master/icons/docker-icon.svg" alt="docker" width="21px" height="21px"></a> __Docker__: Setelah kita pakai lebih dari 1 environment untuk perangkat lunak kita, alat ini akan membuat segalanya bekerja semestinya.
+- Cukup familiar: GNU/Linux, MySQL, Python 3, Go
+- Sedang belajar: Apache2, MariaDB, PHP
 
 ### Proyek
 
-Sebagai pengembang yang bangga (sempat) terlibat di dalamnya, saya mempromosikan perangkat lunak berikut:
-- Jika Anda mahasiswa Universitas Indonesia, mari gunakan [SusunJadwal](https://susunjadwal.cs.ui.ac.id) untuk persiapan SIAK WAR! Anda juga bisa [berkontribusi](https://oss.ristek.cs.ui.ac.id/) mengembangkan sistem free/open-source ini.
+- **[SusunJadwal](https://susunjadwal.cs.ui.ac.id)** by [RISTEK Open Source Software](https://oss.ristek.cs.ui.ac.id/): aplikasi web untuk mahasiswa Universitas Indonesia mempersiapkan rencana studinya. Link repo: [backend](https://github.com/ristekoss/susunjadwal-backend) dan [frontend](https://github.com/ristekoss/susunjadwal-frontend)
 
     ![SusunJadwal](/img/about-sunjad.png)
 
-- Pada saat promosi ini ditambahkan, ini adalah tahun pertama sistem [Pemantauan Publikasi Ilmiah](http://ppi.cs.ui.ac.id) digunakan mahasiswa dan dosen S2/S3 FASILKOM UI. Saya penasaran bagaimana kelanjutannya sekarang.
+- **[Perkalian](https://perkalian.netlify.app)**: game belajar perkalian dengan konsep deliberate practice. Aplikasi ini open source dan Anda dapat memainkannnya secara offline atau self-hosting game ini. Link repo: [web](https://)
 
-    ![Pemantauan Publikasi Ilmiah](/img/about-ppi.png)
+    ![Perkalian](/img/about-perkalian.png)
 
 ### Link ini mungkin berguna
 
