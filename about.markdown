@@ -18,7 +18,7 @@ Saya **B. Hamonangan**. Saya membangun beberapa rumah Minecraft sederhana dan ju
 
     ![SusunJadwal](/img/about-sunjad.png)
 
-- **[Perkalian](https://perkalian.netlify.app)**: game belajar perkalian dengan konsep deliberate practice. Aplikasi ini open source dan Anda dapat memainkannnya secara offline atau self-hosting game ini. Link repo: [web](https://)
+- **[Perkalian](https://perkalian.netlify.app)**: game belajar perkalian dengan konsep deliberate practice. Aplikasi ini open source dan Anda dapat memainkannnya secara offline atau self-hosting game ini. Link repo: [web](https://github.com/hamonangann/perkalian-web)
 
     ![Perkalian](/img/about-perkalian.png)
 
