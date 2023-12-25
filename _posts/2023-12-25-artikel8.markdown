@@ -1,0 +1,85 @@
+---
+layout: post
+title:  "Hati-hati! Pastikan Proyek Web Aman dengan Cara Ini!"
+categories: tips
+---
+Dalam belajar atau mewujudkan suatu konsep seringkali kita melakukan deployment project web
+ke internet, baik sumber kodenya (pada Git hosting seperti GitHub.com) atau website itu sendiri.
+Seringkali faktor keamanan menjadi hal yang terluput pada project dengan level iseng, padahal
+ini bisa sangat membahayakan.
+
+Daftar celah keamanan yang akan kita bahas tentulah tidak semuanya, tapi saya coba rangkum
+**hal-hal paling umum** pada proyek kecil-kecilan. Tidak tertutup kemungkinan proyek yang
+lebih besar juga terjangkit hal ini.
+
+## 1. Jangan Simpan Secret secara Polosan!
+
+Ketika kita mengunggah suatu nilai yang secret, entah itu username atau password database,
+pastikan untuk tidak mengunggahnya mentah-mentah ke dalam source code upload di GitHub dsb!
+Supaya lebih aman, semua nilai yang berkaitan dengan konfigurasi hendaknya disimpan secara
+local (untuk keperluan development) atau pada server privat.
+
+Kita bisa memakai pattern seperti ini pada proyek Git.
+
+a. Buatlah (atau buka) file `.gitignore` pada root folder, lalu tambahkan `.env` pada baris 
+terakhir
+
+b. Buat file bernama `.env` lalu tuliskan secrets disitu, misalnya
+
+```shell
+username_db=hamonangann
+password_db=S34mx=_sq+
+```
+
+c. Fila `.env` di atas TIDAK akan terupload ke Github, karena sudah di-ignore. Nah di sini
+agar konfigurasi bisa dipasang siapa saja di komputer/servernya masing-masing, kita buat
+satu file lagi bernama `.env.example`
+
+```shell
+username_db=example
+password_db=test
+```
+
+Ini sudah termasuk aman karena nilai yang kita expose hanyalah key-nya (di mana ini juga
+di-expose di kodingannya, anyway). Setiap orang bisa menggunakan konfigurasinya masing-masing
+untuk mengembangkan proyek.
+
+## 2. Jangan Malas Validasi Input!
+
+Pada point ini, baik pada sisi front-end (browser atau kodingan HTML) maupun back-end terapkanlah
+validasi input pada isian form. Paling sederhana kita bisa batasi tipe karakter yang bisa
+dimasukkan (misalnya jika untuk tanggal gunakanlah date) atau jumlah karakter.
+
+Di sisi backend lakukan hal yang sama, pastikan input divalidasi. Kita bisa lakukan ini pada
+layer controller/handler atau sebelum masuk logic aplikasi.
+
+Dalam menulis query untuk SQL, gunakan tanda tanya `?` untuk mengganti satu variabel. Jangan
+lakukan konkatenasi query string secara manual, karena ini berisiko di-exploit dengan teknik
+SQL injection. Salah-salah informasi rahasia pada database bisa bocor.
+
+Apabila terdapat file upload pastikan tipe dan ukurannya filenya divalidasi. Misalnya pastikan
+fitur upload gambar tidak mengizinkan pengguna mengupload shell script.
+
+## 3. Terapkan Rate Limit
+
+Pada project dengan level iseng kita mungkin tidak butuh web diakses terlalu sering. Di sisi
+lain kita juga tidak ingin menghabiskan resource untuk project tersebut.
+
+Di sinilah rate limit jadi berguna. Konsepnya sederhana, pengguna dibatasi dalam mengakses
+website (endpoint) dalam waktu tertentu, misalnya 60x hit dalam 1 menit. Hal ini mengantisipasi
+serangan Denial of Service (DDoS). Pada beberapa kasus serangan ini bisa membuat dompet tipis
+karena budget membengkak.
+
+Dalam development rate limiting juga berguna untuk mengatasi kesalahan yang sangat umum seperti
+infinite loop atau infinite recursion yang menyebabkan terjadinya redirect berkali-kali ke
+situs yang sama. Rate limit di sini berperan sebagai interceptor yang menghentikan koneksi
+sehingga kesalahan dapat terlihat dengan baik.
+
+## Kesimpulan
+
+Demikianlah beberapa cara memastikan keamanan web dalam proyek skala kecil yang dideploy ke
+internet. Hindarilah berkompromi untuk hal-hal seperti ini, supaya data kita aman.
+
+## Referensi
+
+Pengalaman pribadi
