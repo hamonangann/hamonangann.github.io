@@ -14,12 +14,12 @@ Mau bertegur sapa? Kirim email ke [b.hamonangan.p@gmail.com](mailto:b.hamonangan
 - Cukup familiar: GNU/Linux, MySQL Community, Python 3
 - Sedang belajar: Apache2, PHP
 
-### Buku bagus
+### Saran buku
 
 - [Automate the Boring Stuff with Python](https://automatetheboringstuff.com/) karya AI Swegart. Memandu cara automasi hal-hal yang berulang di komputer untuk programmer dan juga non-programmer.
 - [But How Do It Know—The Basic Principles of Computers For Everyone](https://openlibrary.org/books/OL26675175M/But_How_Do_It_Know) karya J. Clark Scott. Cara kerja komputer dijelaskan dengan sederhana untuk segala kalangan.
 
-### Proyek
+### Proyek saya
 
 - **[SusunJadwal](https://susunjadwal.cs.ui.ac.id)** by [RISTEK Open Source Software](https://oss.ristek.cs.ui.ac.id/): aplikasi web untuk mahasiswa Universitas Indonesia mempersiapkan rencana studinya. Link repo: [backend](https://github.com/ristekoss/susunjadwal-backend) dan [frontend](https://github.com/ristekoss/susunjadwal-frontend)
 
