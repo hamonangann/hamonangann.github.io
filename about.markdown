@@ -5,12 +5,17 @@ permalink: /halo/
 ---
 **Halo!** 👋 
  
-Saya **B. Hamonangan**. Saya membangun beberapa rumah Minecraft sederhana dan juga perangkat lunak, seperti situs ini!
+Saya **B. Hamonangan**. Saya membangun rumah Minecraft sederhana dan juga perangkat lunak.
 
 ### Tools
 
-- Cukup familiar: GNU/Linux, MySQL, Python 3, Go
-- Sedang belajar: Apache2, MariaDB, PHP
+- Cukup familiar: GNU/Linux, MySQL Community, Python 3
+- Sedang belajar: Apache2, PHP
+
+### Buku-buku bagus (programmer dan non-programmer):
+
+- [Automate the Boring Stuff with Python](https://automatetheboringstuff.com/) karya AI Swegart. Hemat waktu dengan mengautomasi hal-hal yang repetitif dengan komputer.
+- [But How Do It Know—The Basic Principles of Computers For Everyone](https://openlibrary.org/books/OL26675175M/But_How_Do_It_Know) karya J. Clark Scott. Cara kerja komputer dijelaskan dengan sederhana sehingga semua kalangan dapat paham.
 
 ### Proyek
 
@@ -21,12 +26,6 @@ Saya **B. Hamonangan**. Saya membangun beberapa rumah Minecraft sederhana dan ju
 - **[Perkalian](https://perkalian.netlify.app)**: game belajar perkalian dengan konsep deliberate practice. Aplikasi ini open source dan Anda dapat memainkannnya secara offline atau self-hosting game ini. Link repo: [web](https://github.com/hamonangann/perkalian-web)
 
     ![Perkalian](/img/about-perkalian.png)
-
-### Link ini mungkin berguna
-
-- Coba GitHub flow untuk mengatur text file bersama rekan. [Tutorial Github Flow](https://ooloo.io/project/github-flow/git-workflows).
-- Coba bahasa pemrograman, misalnya Golang: ["A Tour of Go"](https://go.dev/tour/welcome/1).
-- Lihat [The (Software) Developer Roadmap](https://roadmap.sh/) oleh [Kamran, et al.](https://github.com/kamranahmedse) ini.
 
 ### Kontak
 
