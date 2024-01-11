@@ -16,7 +16,7 @@ Mau bertegur sapa? Kirim email ke [b.hamonangan.p@gmail.com](mailto:b.hamonangan
 
 ### Buku bagus
 
-- [Automate the Boring Stuff with Python](https://automatetheboringstuff.com/) karya AI Swegart. Memandu cara automasi hal-hal yang berulang di komputer dengan bahasa Python untuk semua OS.
+- [Automate the Boring Stuff with Python](https://automatetheboringstuff.com/) karya AI Swegart. Memandu cara automasi hal-hal yang berulang di komputer untuk programmer dan juga non-programmer.
 - [But How Do It Know—The Basic Principles of Computers For Everyone](https://openlibrary.org/books/OL26675175M/But_How_Do_It_Know) karya J. Clark Scott. Cara kerja komputer dijelaskan dengan sederhana untuk segala kalangan.
 
 ### Proyek
