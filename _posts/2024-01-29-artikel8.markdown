@@ -256,3 +256,5 @@ Untuk menghapus firewall rules, akses [firewall list](https://console.cloud.goog
 Akinosho, T. (2023, June 27). How to use GitHub Action to Run SSH Commands - Tosin Akinosho - Medium. Medium. [Link](https://medium.com/@tcij1013/how-to-use-github-action-to-run-ssh-commands-609df2a88ac3)
 
 [Stackoverflow Mengizinkan Password SSH](https://stackoverflow.com/questions/59533620/how-to-connect-to-gcp-vm-instance-with-password-using-ssh)
+
+Sumber kode contoh dapat diakses pada [GitHub repo ini](https://github.com/hamonangann/hands-on-env)
