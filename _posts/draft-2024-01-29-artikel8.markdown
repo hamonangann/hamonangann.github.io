@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "Cara Deploy Web yang Aman di GitHub"
+title:  "Cara Deploy Kode yang Aman di GitHub"
 categories: tips
 ---
 
@@ -26,9 +26,10 @@ Mari kita simpan .env tersebut dalam suatu folder, lalu buat git repository untu
 mkdir hands-on-env
 cd hands-on-env
 git init
+git branch -M main
 ```
 
-Lalu pada folder hands-on-env buatlah file berjudul `.env` dan copy-paste isi dari file env di atas.
+Kini kita berada pada branch main pada Git. Lalu pada folder hands-on-env buatlah file berjudul `.env` dan copy-paste isi dari file env di atas.
 
 Setelah kita melakukan save, jika di titik ini kita melakukan git add dan commit, file env ini akan terekspos. Untuk mencegah hal ini, mari kita gunakan gitignore. Mari buat file berjudul `.gitignore` dan isikan seperti ini
 
@@ -58,7 +59,27 @@ Kini baik `.env.example` maupun `.gitignore` sudah masuk repositori Git (lokal) 
 
 ## 2. Mengunggah environment ke GitHub
 
-WIP
+Untuk mengunggah ke GitHub, kita perlu membuat remote repository baru. Buat akun GitHub atau login ke akun yang dipunya, lalu ke https://github.com/new untuk buat repository baru.
+
+Ikuti panduan di bawah
+
+![Setup Github](/img/artikel8-setup-github.png)
+
+```Silakan buat repositori tanpa template, berikan nama 'hands-on-env' untuk repository dan setel sebagai Public. Tidak perlu mengubah konfigurasi lainnya```
+
+Kita akan diarahkan ke laman GitHub repository kita. Jalankan command yang berada pada '...or push an existing repository from the command line'
+
+```shell
+git remote add origin https://github.com/<nama-user>/hands-on-env.git
+git branch -M main
+git push -u origin main
+```
+
+Silakan refresh laman GitHub kita. Perhatikan bahwa kita hanya mengunggah 2 file, yaitu `.env.example` dan `.gitignore`. Jadi amanlah proyek kita!
+
+### 3. Membuat laman web sederhana
+
+### 4. Deploy otomatis secara aman dengan Github Action CI/CD Pipeline
 
 ## Referensi
 
