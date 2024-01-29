@@ -154,8 +154,8 @@ Dengan ini web sudah siap. Kita tinggal memasukkan `index.html` yang sudah kita 
 Sebelum itu, kita izinkan dulu baik `/var/www/html` maupun `index.html` untuk dapat ditulis melalui SSH. Untuk itu jalankan perintah berikut pada terminal VM
 
 ```shell
-sudo chmod 666 /var/www/html
-sudo chmod 666 /var/www/html/index.html
+sudo chmod 777 /var/www/html
+sudo chmod 777 /var/www/html/index.html
 ```
 
 Setelah langkah ini, kita dapat exit dari SSH VM.
