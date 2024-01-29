@@ -1,0 +1,258 @@
+---
+layout: post
+title:  "Cara Deploy Kode yang Aman di GitHub"
+categories: tips
+featured_image: /img/artikel8-env.png
+---
+
+Pada proyek-proyek pribadi atau berlevel 'iseng' yang diunggah ke GitHub, yang sering terjadi adalah proyek dibuat sebagai publik, tapi ada variabel yang harusnya tidak ketahuan siapapun. Misalnya ketika kita deploy kode sumber layanan web di GitHub, username dan password database disimpan dalam file bernama `.env`. Sayangnya value dari password tersebut juga ikut terunggah, sehingga database kita terekspos!
+
+Ada beberapa workaround untuk ini, mari kita bahas salah satunya!
+
+## 1. Menyimpan Environment Secara Lokal dengan Gitignore
+
+Salah satu fitur git yang membuat satu file di-ignore (sehingga hanya tersimpan pada file system, tapi tidak masuk ke dalam git repository) adalah gitignore. Mari kita coba
+
+Misalnya kita punya file `.env` seperti berikut.
+```shell
+username=budi123
+password=pyth0nsudars0n0
+```
+
+```Perhatikan bahwa di sebelah kiri dan kanan tanda sama dengan tidak boleh ada spasi```
+
+Mari kita simpan .env tersebut dalam suatu folder, lalu buat git repository untuk folder tersebut, dengan melakukan langkah-langkah di bawah ini
+
+```shell
+mkdir hands-on-env
+cd hands-on-env
+git init
+git branch -M main
+```
+
+Kini kita berada pada branch main pada Git. Lalu pada folder hands-on-env buatlah file berjudul `.env` dan copy-paste isi dari file env di atas.
+
+Setelah kita melakukan save, jika di titik ini kita melakukan git add dan commit, file env ini akan terekspos. Untuk mencegah hal ini, mari kita gunakan gitignore. Mari buat file berjudul `.gitignore` dan isikan seperti ini
+
+```shell
+.env
+```
+
+Save file ini dan kini kita sudah meng-exclude `.env`. Karena kita akan berbagi kode sumber di GitHub, kita perlu memberitahu bahwa file .env ini harus ada (dibuat di local oleh developer), TANPA mengekspos value yang kita gunakan. Developer bisa cukup peka terhadap hal ini jika ada file berjudul `.env.example` dengan isi sebagai berikut
+
+```shell
+username=
+password=
+```
+
+Mari buatkan `.env.example` ini di dalam folder yang sama dengan di mana kita menaruh `.env`
+
+```Nama file example ini sebenarnya boleh apa saja selama ia tidak di-ignore. Hanya saja, .env.example lazim dipakai sehingga orang lain bisa mengetahuinya secara langsung. Perhatikan bahwa kita hanya mengekspos nama variabel tanpa memberitahu value-nya apa. Ini sudah dianggap aman```
+
+Setelah kita menyimpan tiga file `.env`, `.env.example`, dan `.gitignore`, kita bisa unggah ke repositori git. Jalankan perintah berikut
+
+```shell
+git add -A
+git commit -m "initial commit"
+```
+
+Kini baik `.env.example` maupun `.gitignore` sudah masuk repositori Git (lokal) kita. Akan tetapi, file `.env` tidak termasuk.
+
+## 2. Mengunggah environment ke GitHub
+
+Untuk mengunggah ke GitHub, kita perlu membuat remote repository baru. Buat akun GitHub atau login ke akun yang dipunya, lalu ke https://github.com/new untuk buat repository baru.
+
+Ikuti panduan di bawah
+
+![Setup Github](/img/artikel8-setup-github.png)
+
+```Silakan buat repositori tanpa template, berikan nama 'hands-on-env' untuk repository dan setel sebagai Public. Tidak perlu mengubah konfigurasi lainnya```
+
+Kita akan diarahkan ke laman GitHub repository kita. Jalankan command yang berada pada '...or push an existing repository from the command line'
+
+```shell
+git remote add origin https://github.com/<nama-user>/hands-on-env.git
+git branch -M main
+git push -u origin main
+```
+
+Silakan refresh laman GitHub kita. Perhatikan bahwa kita hanya mengunggah 2 file, yaitu `.env.example` dan `.gitignore`. Jadi amanlah proyek kita!
+
+![Initial Proyek Github](/img/artikel8-init-github.png)
+
+### 3. Membuat laman web sederhana
+
+Kita akan membuat proyek yang fungsional dengan cara membuat laman web sederhana. Pada folder `hands-on-env` buatlah satu file berjudul `index.html` dengan isi sebagai berikut
+
+```html
+<html>
+<head>
+    <title>Hands on Web Deployment</title>
+</head>
+<body>
+    <h1>Deploy Web Aman dengan GitHub</h1>
+</body>
+</html>
+```
+
+Simpanlah file tersebut lalu unggah ke repositori Git
+
+```shell
+git add -A
+git commit -m "add html"
+```
+
+### 4. Membuat Web Server
+
+Kini kita akan melakukan deployment ke remote virtual machine yang berperan sebagai web server. Artikel ini akan menggunakan Google Compute Engine sebagai contoh, tapi silakan pakai hosting apa saja untuk membuat virtual machine.
+
+Barangkali pada Google Cloud kita perlu login dan membuat project terlebih dahulu. Nama project boleh apa saja.
+
+Pada Google Cloud, kita terlebih dahulu perlu mengizinkan akses SSH. Untuk hosting lainnya akses dapat diatur pada konfigurasi firewall atau dengan request ke Technical Support.
+
+Untuk mengizinkan SSH, buka [Google Cloud Firewall](https://console.cloud.google.com/net-security/firewall-manager/firewall-policies/add) lalu pastikan berada di laman "Create a Firewall Rule". Isikan name dengan `allowed-ssh`, targets dengan "Specified Target Tags", target tags dengan `allowed-ssh`, source filter dengan "IPv4 ranges", dan Source IPv4 ranges dengan `0.0.0.0/0`. Pada "Protocols and Ports", centang TCP dan isi P"ports" dengan `22`. Port 22 ini akan digunakan untuk SSH. Hasilnya bisa dilihat seperti di bawah.
+
+![GCP Firewall](/img/artikel8-gcp-firewall.png)
+
+Jika sudah, tekan tombol "Create"
+
+Selanjutnya kita akan membuat VM. Jika menggunakan Google Cloud, buka https://console.cloud.google.com/compute/instancesAdd untuk membuat VM. Silakan isi "Name" dengan `vm-hands-on-env`, kemudian pilih region `us-central1` dan zone `us-central1-a`
+
+Untuk machine configuration, silakan pilih "General Purpose" dan pilih "N1". Pada machine type pilih "Preset" dan pilihlah "f1-micro" sebagai presetnya. Jika sudah semestinya sama dengan contoh di bawah.
+
+![GCP VM Machine](/img/artikel8-gcp-vm-machine.png)
+
+```Web server contoh kita akan sangat ringan untuk dijalankan, jadi pada hosting apapun silakan pilih yang termurah.```
+
+Selanjutnya pastikan Boot Disk menggunakan Ubuntu atau Debian versi berapapun. Secara default Google Cloud memilih Debian sebagai distro. Kita akan menggunakan `apt` pada VM, namun jika VM-nya pakai distro lain, silakan sesuaikan package managernya.
+
+Hal yang tidak kalah penting adalah membuat VM kita mengizinkan SSH maupun HTTP. Untuk itu pada bagian Firewall centang "Allow HTTP traffic", "Allow HTTPS traffic". Kemudian buka tab "Advance Options" dan buka tab "Networking". Isilah network tags dengan `allowed-ssh` sesuai yang sudah kita buat tadi.
+
+![GCP VM Firewall](/img/artikel8-gcp-vm-firewall.png)
+
+Jika sudah, klik "Create". Tunggu beberapa saat hingga di-redirect ke daftar VM instances dan status untuk `vm-hands-on-env` menjadi centang. Kini kita bisa connect dengan tombol SSH yang berada di kolom "Connect" pada daftar VM. Klik tombol tersebut.
+
+Kita akan disuguhkan tab SSH baru dengan terminal dari VM kita. Sekarang kita akan menginstall web server Apache. Pertama-tama, jalankan perintah di bawah pada terminal
+
+```shell
+sudo apt update
+sudo apt install apache2
+```
+
+```Ketik 'Y' apabila muncul prompt untuk melanjutkan instalasi```
+
+Sampai sini web server sudah siap. Mari kembali ke tab daftar VM instances, lalu akses "External IP". Pada contoh di bawah, IP eksternalnya adalah http://34.42.75.139. Kita akan mendapatkan page Apache tanda sudah berhasil mengonfigurasi server.
+
+![GCP VM IP](/img/artikel8-gcp-vm-ip.png)
+
+![Apache Ready](/img/artikel8-apache.png)
+
+```Jika browser menampilkan not found, coba akses http://<ip-publik-anda> ketimbang mengakses https://<ip-publik-anda>```
+
+Dengan ini web sudah siap. Kita tinggal memasukkan `index.html` yang sudah kita buat pada `hands-on-env` git repo ke dalam VM. Letak dari laman web default Apache adalah pada `/var/www/html/index.html` di VM kita. Kita akan mengubah isi laman web tersebut secara otomatis pada langkah berikutnya.
+
+Sebelum itu, kita izinkan dulu baik `/var/www/html` maupun `index.html` untuk dapat ditulis melalui SSH. Untuk itu jalankan perintah berikut pada terminal VM
+
+```shell
+sudo chmod 666 /var/www/html
+sudo chmod 666 /var/www/html/index.html
+```
+
+Setelah langkah ini, kita dapat exit dari SSH VM.
+
+```shell
+exit
+```
+
+### 5. Deploy Web otomatis secara aman dengan GitHub Action CI/CD
+
+Setiap kali kita mengubah isi repositori `hands-on-env` kita perlu deploy perubahannya ke web server kita dengan SSH. Ini bisa dilakukan secara manual, tapi tentu sangat membosankan. Kita bisa mengautomasi ini dengan GitHub Action. Tapi hal ini perlu kita lakukan secara aman.
+
+Agar memudahkan proses SSH kita bisa menggunakan templat yang tersedia di marketplace. Kita akan menggunakan [SCP Action](https://github.com/marketplace/actions/scp-command-to-transfer-files), yaitu template untuk melakukan prosedur copy dari repositori ke VM melalui SSH.
+
+Kembali ke folder `hands-on-env` pada komputer kita, lalu buat folder `.github/workflows` dengan menjalankan command di bawah
+
+```shell
+mkdir .github/workflows
+```
+
+Pada folder `workflows` buatlah file berjudul `deploy.yml` dengan isi sebagai berikut
+
+```yaml
+name: deploy-vm
+on: [push]
+jobs:
+
+  build:
+    name: Deploy
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: copy file via ssh password
+      uses: appleboy/scp-action@v0.1.7
+      with:
+        host: 34.42.75.139
+        username: ${{ secrets.USERNAME }}
+        password: ${{ secrets.PASSWORD }}
+        source: "index.html"
+        target: "/var/www/html"
+```
+
+Silakan ganti "host" dengan IP publik VM Anda. Simpan file ini lalu kita akan mengatur nilai untuk `secrets.username` dan `secrets.password`.
+
+Kembali ke laman repositori GitHub lalu pilih "Settings". Pada sidebar "Security" pilih "Secrets and Variables" > "Actions". Kemudian klik "New Repository Secrets"
+
+![GitHub Secret](/img/artikel8-secret.png)
+
+Pada kolom "Name" isi dengan `username` lalu pada kolom "Secret" isi dengan username Google Cloud Anda (atau isi dengan username Anda ketika SSH pada VM). Klik Add Secret.
+
+```Jika bingung dengan username Anda, coba lakukan SSH lagi kemudian perhatikan nama disamping @ pada terminal. Itulah username yang bisa digunakan```
+
+![Cek Username SSH](/img/artikel8-username.png)
+
+Lakukan hal yang sama dengan password. Isi kolom "Name" dengan `password` dan isi kolom "Secret" dengan password apa saja. Ingatlah password yang dibuat sampai tutorial ini selesai.
+
+Setelah menyimpan password, kembali SSH ke VM Anda dan jalankan perintah berikut
+
+```shell
+sudo nano /etc/ssh/sshd_config
+```
+
+Akan muncul text editor. Cari line bertuliskan "PasswordAuthentication no" dan ganti menjadi "PasswordAuthentication yes". Simpan dengan menekan Ctrl+S dan Ctrl+X, kemudian jalankan command ini untuk restart SSH di terminal dan memasukkan password
+
+```shell
+sudo service ssh restart
+sudo passwd $USER
+```
+
+Pada prompt "New Password", masukkan password yang sudah disimpan di GitHub Secret sebelumnya. Sampai di sini kita sudah bisa SSH dengan password.
+
+```Pemilihan SSH dengan password untuk alasan kepraktisan tutorial. Akan lebih aman lagi jika Anda mengonfigurasi SSH public/private key```
+
+Kini kita sudah bisa mencoba CI/CD yang telah kita buat. Saatnya mencobanya dengan push ke GitHub repository. Kembali ke folder `hands-on-env` lalu eksekusi perintah
+
+```shell
+git add -A
+git commit -m "add CD pipeline"
+git push origin main
+```
+
+Setelah push kita dapat melihat proses GitHub Action dengan menuju ke laman repositori GitHub, lalu pilih tab "Action". Silakan klik workflow teratas dan perhatikan proses job "Deploy".
+
+![GitHub Action Job](/img/artikel8-job.png)
+
+Setelah pipeline sukses silakan akses lagi IP publik VM kita. Voila! Kita telah berhasil mendeploy web secara aman dan otomatis dengan GitHub!
+
+![Hasil Akhir](/img/artikel8-result.png)
+
+### Cleanup
+
+Jika menggunakan Google Cloud, jangan lupa hapus VM untuk menghindari tagihan yang tidak perlu. Akses https://console.cloud.google.com/compute/instances, centang pada baris `vm-hands-on-env` lalu klik tab "Delete" untuk menghapus VM.
+
+Untuk menghapus firewall rules, akses [firewall list](https://console.cloud.google.com/net-security/firewall-manager/firewall-policies/list) lalu centang pada baris `allowed-ssh` lalu klik tab "Delete" untuk menghapus izin SSH.
+
+## Referensi
+
+Akinosho, T. (2023, June 27). How to use GitHub Action to Run SSH Commands - Tosin Akinosho - Medium. Medium. [Link](https://medium.com/@tcij1013/how-to-use-github-action-to-run-ssh-commands-609df2a88ac3)
+
+[Stackoverflow Mengizinkan Password SSH](https://stackoverflow.com/questions/59533620/how-to-connect-to-gcp-vm-instance-with-password-using-ssh)
