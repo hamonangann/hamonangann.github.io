@@ -80,7 +80,7 @@ Silakan refresh laman GitHub kita. Perhatikan bahwa kita hanya mengunggah 2 file
 
 ![Initial Proyek Github](/img/artikel8-init-github.png)
 
-### 3. Membuat laman web sederhana
+## 3. Membuat laman web sederhana
 
 Kita akan membuat proyek yang fungsional dengan cara membuat laman web sederhana. Pada folder `hands-on-env` buatlah satu file berjudul `index.html` dengan isi sebagai berikut
 
@@ -102,7 +102,7 @@ git add -A
 git commit -m "add html"
 ```
 
-### 4. Membuat Web Server
+## 4. Membuat Web Server
 
 Kini kita akan melakukan deployment ke remote virtual machine yang berperan sebagai web server. Artikel ini akan menggunakan Google Compute Engine sebagai contoh, tapi silakan pakai hosting apa saja untuk membuat virtual machine.
 
@@ -164,7 +164,7 @@ Setelah langkah ini, kita dapat exit dari SSH VM.
 exit
 ```
 
-### 5. Deploy Web otomatis secara aman dengan GitHub Action CI/CD
+## 5. Deploy Web otomatis secara aman dengan GitHub Action CI/CD
 
 Setiap kali kita mengubah isi repositori `hands-on-env` kita perlu deploy perubahannya ke web server kita dengan SSH. Ini bisa dilakukan secara manual, tapi tentu sangat membosankan. Kita bisa mengautomasi ini dengan GitHub Action. Tapi hal ini perlu kita lakukan secara aman.
 
