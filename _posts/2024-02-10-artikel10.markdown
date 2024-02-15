@@ -366,10 +366,10 @@ Pastikan terdapat tulisan `active (running)`. Kini dependensi sudah siap, saatny
 ```shell
 docker login -u oauth2accesstoken https://us-central1-docker.pkg.dev
 cd ~
-docker pull us-central1-docker.pkg.dev/ir-ganjil-24/hands-on-django-docker
-docker create --name app us-central1-docker.pkg.dev/ir-ganjil-24/hands-on-django-docker/app
+docker pull <url-repo>/app
+docker create --name app <url-repo>/app
 docker cp app:/home/app/web/staticfiles ~
-docker run -d -p 8000:8000 --env-file ~/.env us-central1-docker.pkg.dev/ir-ganjil-24/hands-on-django-docker/app
+docker run -d -p 8000:8000 --env-file ~/.env <url-repo>/app
 ```
 
 Kini persiapan selesai! Kita bisa kembali ke console Google Cloud kita dan salin external IP pada instance kita. Lalu akseslah dengan browser `http://<external-ip>` dan voila! Kita telah berhasil menjalankan web kita.
