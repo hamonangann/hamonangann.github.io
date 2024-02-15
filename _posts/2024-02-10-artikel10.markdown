@@ -1,0 +1,399 @@
+---
+layout: post
+title:  "Cara Deploy Proyek Secara Aman dengan Django, Docker, dan Google Cloud"
+categories: tips
+featured_image: /img/artikel10-gcloud.png
+---
+
+Django adalah salah satu framework untuk web yang populer dan termasuk mudah di-setup. Setelah berhasil membuat proyek yang matang dan berjalan dengan lancar di local, langkah selanjutnya adalah menyebarkan keberhasilan kita dengan mendeploynya ke internet. Akan tetapi, kita perlu melakukannya dengan aman. Mari kita coba!
+
+Catatan: ada cukup banyak cara untuk deploy proyek Django ke Google Cloud. Ini bukan cara yang paling praktis, tapi ini cara yang mirip dengan deployment ke on-premise server sehingga harapannya tutorial ini mudah diadaptasikan pada vendor cloud apapun.
+
+## Prasyarat
+
+Python versi 3.6 ke atas, PIP, Docker
+
+## 1. Membuat Proyek Django Sederhana
+
+Kita akan fokus pada deployment, sehingga untuk development kita akan menggunakan proyek siap pakai. Kita dapat mengunduhnya dengan perintah berikut pada terminal.
+
+```shell
+git clone https://github.com/hamonangann/hands-on-django-docker.git
+cd hands-on-django-docker
+```
+
+atau kunjungi [Github ini](https://github.com/hamonangann/hands-on-django-docker.git) lalu klik tombol hijau tulisan 'Code' > download ZIP.
+
+Setelah proyek tersedia, kita akan menginstal dependensinya dengan package manager PIP. Untuk pertama kali, kita buat dulu virtual environment agar tidak konflik dengan yang sudah ada.
+
+```shell
+python -m venv venv
+```
+
+Jika sudah, maka akan muncul folder venv yang berperan untuk menyimpan dependensi yang diperlukan. Daftar dependensi sudah disediakan di file requirements.txt. Selanjutnya, kita install dependensi dan coba jalankan proyeknya
+
+```shell
+source venv/bin/activate
+pip install -r requirements.txt
+python manage.py makemigrations
+python manage.py migrate
+python manage.py runserver 8000
+```
+
+Akses http://127.0.0.1:8000 dan kita bisa mencoba memasukkan nama ke dalam form dan melihat hasilnya. Cara kerja program ini cukup sederhana, terdapat database yang menyimpan nama pengunjung, yang di-insert tiap kali pengunjung memasukkan namanya ke dalam formulir, dan di-query setelahnya untuk menampilkan seluruh pengunjung.
+
+![Proyek Django Sederhana](/img/artikel10-django.png)
+
+Catatan: Jika command runserver tidak bisa dilakukan, bisa jadi ada bug atau portnya sudah dipakai aplikasi lain. Kita dapat mengganti `8000` dengan bilangan berapapun di bawah 65535.
+
+
+## 2. Mengamankan Proyek dengan Setup Production Environment
+
+Sebelum melakukan deployment kita perlu membuat environment agar aman ketika di-setup ke production. Pertama-tama buka `demo/settings.py`, lalu ubah ketiga konfigurasi berikut
+
+```python
+SECRET_KEY = os.environ.get("SECRET_KEY", "test")
+
+DEBUG = bool(os.environ.get("DEBUG", 0))
+
+# 'DJANGO_ALLOWED_HOSTS' harus berupa string yang terdiri dari 1 atau lebih host yang dipisahkan spasi
+ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS", "localhost 127.0.0.1 [::1]").split(" ")
+```
+
+Ini akan membuat kita nantinya mengatur nilai yang berbeda dengan default pada SECRET_KEY, DEBUG, dan ALLOWED_HOSTS pada production, sehingga layanan web kita tidak bisa sembarangan di-debug atau dieksploitasi.
+
+Jangan lupa untuk mengimpor library. Pada baris awal tambahkan
+
+```shell
+import os
+```
+
+## 3. Build Docker Container dan Publish ke Artifact Registry
+
+Kini kita akan membungkus proyek ke dalam suatu kontainer. Untuk mengujinya, mari kita jalankan di local. Pertama-tama, perhatikan Dockerfile yang terdapat pada root folder proyek
+
+```shell
+# base image  
+FROM python:3.8-slim-bookworm
+
+# buat user dan working directory
+ENV APP_HOME=/home/app/web
+RUN mkdir -p $APP_HOME
+RUN addgroup --system app && adduser --system --group app
+WORKDIR $APP_HOME
+
+# upgrade package
+RUN apt-get update && apt-get install -y --no-install-recommends netcat
+RUN pip install --upgrade pip  
+
+# copy dari work directory lokal ke work directory docker
+COPY . $APP_HOME
+
+# berikan akses ke non-root user
+RUN chown -R app:app $APP_HOME
+USER app
+
+# install dependensi proyek
+RUN pip install -r requirements.txt 
+
+# ekspos port yang digunakan django 
+EXPOSE 8000
+
+# jalankan entrypoint.sh
+RUN sed -i 's/\r$//g'  $APP_HOME/entrypoint.sh
+RUN chmod +x  $APP_HOME/entrypoint.sh
+ENTRYPOINT ["/home/app/web/entrypoint.sh"]
+
+# start server  
+CMD ["gunicorn", "--workers=2", "demo.wsgi", "--bind", "0.0.0.0:8000"]
+```
+
+Nantinya kita akan melakukan `docker build` dan `docker run` untuk menjalankan web dalam kontainer. Seluruh tahapan build akan dilakukan secara berurutan, kecuali bagian CMD yang dijalankan ketika docker run.
+
+Secara singkat, kontainer kita akan menggunakan Python yang diinstal di distro Debian Bookworm. Aplikasi kita nantinya akan dijalankan berada di `/home/app/web` dan mendengar port 8000. Akses diberikan ke non-root user agar lebih aman (penyerang yang membobol container tidak akan punya akses root ke host). Skrip `entrypoint.sh` memastikan app baru dijalankan setelah database siap. 
+
+Terakhir, server dijalankan dengan gunicorn dan di-bind dengan host `0.0.0.0` dan port `8000`. Maksud dari `0.0.0.0` adalah server akan mendengar permintaan dari host manapun. Karena dijalankan di dalam docker container, localhost dari aplikasi Django kita nantinya adalah container itu sendiri. Agar bisa diakses container lain atau bahkan host (komputer atau VM kita), perlu mengizinkan seluruh host.
+
+Selanjutnya kita akan menggunakan Artifact Registry untuk menyimpan docker image kita. Image inilah yang nantinya akan dipakai docker di manapun ia diinstal untuk membangun container. Kita akan menggunakan layanan dari Google Cloud yaitu Artifact Registry.
+
+Login ke Google Cloud dan buka laman Artifact Registry > [Create Repository](https://console.cloud.google.com/artifacts/create-repo). Isilah form sebagai berikut
+
+```
+Name: hands-on-django-docker
+Format: Docker
+Mode: Standard
+Location type: Region
+Region: us-central1 (ini salah satu region murah, bahkan bisa free)
+Biarkan sisanya sebagai default
+```
+
+```Kita bisa ubah name sesuai kebutuhan nama image docker kita. Pada langkah-langkah selanjutnya, pastikan menggunakan image name yang sama dengan yang sudah didaftarkan```
+
+Klik Create. Setelah beberapa saat kita sudah memiliki repository untuk menyimpan docker image.
+
+![Artifact Registry](/img/artikel10-registry.png)
+
+Selanjutnya klik pada nama repository yang baru kita buat untuk melihat detailnya. Kemudian klik ikon copy di samping direktori repository untuk menyalin lokasi image. Kita boleh simpan di clipboard atau text editor untuk kita pakai lagi nantinya.
+
+![Copy Repo Artifact Registry](/img/artikel10-copy-repo.png)
+
+Kita kembali ke kode. Pertama-tama, buatlah docker image dengan perintah
+
+```shell
+docker build --pull -t "<url-repo>/app" .
+```
+
+```Isi <url-repo> dengan yang tadi sudah kita copy pada laman Artifact Registry. Formatnya kurang lebih sbb us-central1-docker.pkg.dev/<project-id>/<repo-name>. Setelahnya app sebagai nama image. Jangan lupa tambahkan tanda titik (.) di akhir perintah.```
+
+Sekarang kita akan coba publish di Artifact Registry. Sebelumnya, kita perlu login docker dengan akun Google Cloud kita. Best practicenya adalah dengan access token yang defaultnya hanya berlaku 1 jam saja sejak kita request. 
+
+Pertama-tama buka Cloud Shell dengan menekan tombol 'Activate Cloud Shell' pada pojok kanan atas Google Cloud kita
+
+![Activate Cloud Shell](/img/artikel10-cloudshell.png)
+
+Kemudian eksekusi perintah berikut
+
+```shell
+gcloud auth print-access-token
+```
+
+Nantinya akan muncul token untuk kita salin. Kembali ke terminal di direktori kode kita, lalu login dengan perintah berikut
+
+```shell
+docker login -u oauth2accesstoken https://us-central1-docker.pkg.dev
+```
+
+Pada saat ditanyakan password, salinlah token dari Cloud Shell tadi sebagai password, lalu tekan Enter. Jika benar, maka kita akan mendapat pesan `Login Succeeded!`. Selanjutnya kita push atau upload image dengan perintah
+
+```shell
+docker push "<url-repo>/app"
+```
+
+Jika berhasil, pada laman detail kita akan melihat image Docker bernama app, kira-kira seperti berikut
+
+![Docker Image Uploaded](/img/artikel10-imageuploaded.png)
+
+Selamat! Kita sudah berhasil mendeploy Docker Image pada Google Cloud Artifact Registry. Ngomong-ngomong, sebelum ke langkah berikutnya, kita bisa tes aplikasi kita di local dengan menjalankan perintah berikut
+
+```shell
+docker run -d -p 8000:8000 "<url-repo>/app"
+```
+
+Kemudian akses http://127.0.0.1:8000 pada browser dan kita akan mendapat tampilan web yang sudah kita buat sebelumnya.
+
+```Catatan: Terdapat sedikit perbedaan, kali ini static file berupa gambar Hello tidak muncul karena gunicorn tidak serving static file. Kita akan mengatasi itu di production dengan menggunakan nginx.```
+
+Terakhir, kita bisa eksekusi `docker logout` dari komputer lokal kita untuk menghapus token ke Artifact Registry.
+
+## 4. Deploy ke Google Compute Engine
+
+Selanjutnya kita akan mempersiapkan lingkungan production dengan cara membuat VM instance untuk menjalankan aplikasi kita. Agar memudahkan nantinya, kita perlu mengizinkan akses HTTP, HTTPS, dan SSH untuk instance kita.
+
+Pertama-tama, buka [Google Cloud Firewall](https://console.cloud.google.com/net-security/firewall-manager/firewall-policies/add). Pastikan berada di laman "Create a Firewall Rule". Isi dengan konfigurasi sebagai berikut
+
+```
+Name: allow-http-https-ssh
+Targets: Specified Target Tags, 
+Target tags: allow-http-https-ssh
+Source filter: IPv4 ranges
+Source IPv4 ranges: 0.0.0.0/0
+```
+
+Pada "Protocols and Ports", centang TCP dan isi "ports" dengan `22,80,443`, masing-masing untuk mengizinkan protokol SSH, HTTP, dan HTTPS. Sisanya biarkan saja default. Tekan tombol "Create"
+
+Persiapan selesai, selanjutnya kita akan membuat VM instance. Buka https://console.cloud.google.com/compute/instancesAdd untuk membuat VM. Isi "Name" dengan `vm-django-docker`, kemudian pilih region `us-central1` dan zone `us-central1-a`.
+
+Untuk machine configuration, silakan pilih "General Purpose" dan pilih "E2". Pada machine type pilih "Preset" dan pilihlah "e2-micro" sebagai preset
+
+![GCP VM Machine](/img/artikel10-e2micro.png)
+
+Selanjutnya pastikan Boot Disk menggunakan Debian. Kita akan menggunakan `apt` sebagai package manager.
+
+Berikutnya kita akan memasang firewall rule yang sudah kita buat. Kemudian buka tab "Advance Options" dan buka tab "Networking". Isilah network tags dengan `allow-http-https-ssh`.
+
+![GCP VM Firewall](/img/artikel10-custom-firewall.png)
+
+Setelah itu klik "Create" untuk membuat instance. Kita akan diredirect ke daftar VM instance yang kita punya. Mungkin diperlukan waktu beberapa saat sampai instance ready. Ketika sudah ready, langsung saja kita SSH ke `vm-django-docker`
+
+![SSH Instance](/img/artikel10-daftarinstance.png)
+
+Mari kita lakukan instalasi. Jalankan perintah berikut untuk menginstal PostgreSQL database dan Nginx.
+
+```shell
+sudo apt update
+sudo apt install -y nginx
+sudo apt install -y postgresql-15
+```
+
+Berikutnya, kita akan menginstal docker. Caranya akan sedikit beda. Pertama-tama, jalankan perintah berikut untuk mempersiapkan repository apt docker.
+
+```shell
+# Add Docker's official GPG key:
+sudo apt-get update
+sudo apt-get install ca-certificates curl
+sudo install -m 0755 -d /etc/apt/keyrings
+sudo curl -fsSL https://download.docker.com/linux/debian/gpg -o /etc/apt/keyrings/docker.asc
+sudo chmod a+r /etc/apt/keyrings/docker.asc
+
+# Add the repository to Apt sources:
+echo \
+  "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/debian \
+  $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
+  sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+sudo apt-get update
+```
+
+Kemudian install Docker dengan perintah
+
+```shell
+sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+```
+
+Terakhir, agar bisa menjalankan Docker dengan non-root, jalankan perintah berikut
+
+```shell
+sudo groupadd docker
+sudo usermod -aG docker $USER
+```
+
+Exit VM dan SSH ulang untuk merestart.
+
+Jika sudah mari kita setup satu per satu, dimulai dari database. Pertama-tama jalankan command berikut untuk masuk ke shell psql:
+
+```shell
+sudo -u postgres psql postgres
+```
+
+Selanjutnya, tentukan username, password, db name, lalu eksekusi command berikut dalam shell
+
+```shell
+CREATE ROLE contohusername LOGIN PASSWORD 'contohpassword';
+CREATE DATABASE contohdatabase WITH OWNER = contohusername;
+SHOW port;
+```
+
+Perintah terakhir lazimnya mengembalikan 5432 sebagai port. Inilah yang akan kita gunakan nantinya untuk koneksi DB ke Django. 
+
+Setelah itu, kita perlu mengizinkan selain localhost untuk mengakses DB. Ini karena kita akan konek DB dari dalam docker container yang dianggap beda host dengan VM kita langsung. Untuk itu, jalankan perintah berikut untuk mengubah konfigurasi PostgreSQL
+
+```shell
+sudo nano /etc/postgresql/15/main/postgresql.conf 
+```
+
+Lalu ubah line dengan `listen_addresses` menjadi seperti berikut
+
+```
+#listen_addresses = 'localhost'         # what IP address(es) to listen on;
+listen_addresses = '*'                  # comma-separated list of addresses;
+```
+
+Seperti biasa, tekan `Ctrl+S` lalu 'Ctrl+C` untuk save dan exit. Selanjutnya ubah juga konfigurasi hba
+
+```shell
+sudo nano /etc/postgresql/15/main/pg_hba.conf
+```
+
+Scroll ke bawah dan kita akan menemukan tabel. Ubah bagian awal tabel menjadi seperti di bawah
+
+```
+# TYPE  DATABASE        USER            ADDRESS                 METHOD
+host    all             all             0.0.0.0/0               scram-sha-256
+host    all             all             ::/0                    scram-sha-256
+# "local" is for Unix domain socket connections only
+local   all             all                                     trust
+```
+
+Ini akan mengizinkan semua host di dalam VM menggunakan PostgreSQL, berguna jika nanti kita perlu menambahkan aplikasi atau container baru. Tenang saja, selama port 5432 tidak di-expose ke publik (pada pengaturan Firewall Google Cloud), DB kita tidak akan bisa diakses dari luar VM instance menggunakan IP publik.
+
+Kini kita perlu membuat environment variable file untuk menampung nilai-nilai ini secara aman. Jalankan perintah berikut
+
+```shell
+cd ~
+nano .env
+```
+
+Dalam text editor ketikkan sebagai berikut
+
+```
+DEBUG=0
+SECRET_KEY=TolongGantiIni
+DJANGO_ALLOWED_HOSTS=localhost 127.0.0.1 [::1]
+SQL_ENGINE=django.db.backends.postgresql
+SQL_DATABASE=contohdatabase
+SQL_USER=contohusername
+SQL_PASSWORD=contohpassword
+SQL_HOST=localhost
+SQL_PORT=5432
+```
+
+Lalu simpan dengan `Ctrl+S` dan `Ctrl+C`. Kini database sudah siap. Selanjutnya konfigurasi nginx untuk serving static file. Kita akan kembali mengedit dengan nano.
+
+```shell
+nano /etc/nginx/sites-available/default
+```
+
+Pertama-tama, cari baris yang terdapat `root /var...`. Silakan hapus baris tersebut karena tidak akan kita pakai.
+
+Selanjutnya carilah bagian yang terdapat `location / {}` lalu hapus semua barisnya, termasuk yang berada dalam tanda kurung kurawal. Gantikan dengan teks berikut
+
+```shell
+        location / {
+                proxy_pass http://127.0.0.1:8000;
+                proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+                proxy_set_header Host $host;
+                proxy_set_header X-Forwarded-Proto https;
+                proxy_redirect off;
+        }
+
+        location /static/ {
+                alias /home/<nama_user>/staticfiles/;
+        }
+```
+
+```Silakan ganti nama_user dengan nama user yang sedang SSH. Jika tidak yakin, kembali ke terminal lalu jalankan `echo $USER` untuk mengetahui nama user```
+
+Di sini kita akan melakukan proxy pass ke port 8000 yang nantinya untuk menjalankan aplikasi. Location `/static/` akan mengarahkan request static file ke direktori yang sesuai nantinya.
+
+Tekan `Ctrl+S` lalu `Ctrl+C` untuk menyimpan. Kita bisa cek apakah sintaks nginx kita sudah aman dengan `sudo nginx -t`. Selanjutnya, eksekusi perintah berikut
+
+```shell
+sudo systemctl restart nginx
+sudo systemctl status nginx
+```
+
+Pastikan terdapat tulisan `active (running)`. Kini dependensi sudah siap, saatnya menarik dokumen Docker dengan semua persiapan yang ada. 
+
+```shell
+docker login -u oauth2accesstoken https://us-central1-docker.pkg.dev
+cd ~
+docker pull us-central1-docker.pkg.dev/ir-ganjil-24/hands-on-django-docker
+docker create --name app us-central1-docker.pkg.dev/ir-ganjil-24/hands-on-django-docker/app
+docker cp app:/home/app/web/staticfiles ~
+docker run -d -p 8000:8000 --env-file ~/.env us-central1-docker.pkg.dev/ir-ganjil-24/hands-on-django-docker/app
+```
+
+Kini persiapan selesai! Kita bisa kembali ke console Google Cloud kita dan salin external IP pada instance kita. Lalu akseslah dengan browser `http://<external-ip>` dan voila! Kita telah berhasil menjalankan web kita.
+
+![Akses external IP](/img/artikel10-daftarinstance.png)
+
+![Django Homepage](/img/artikel10-django.png)
+
+Coba isi dengan nama kita lalu tekan Submit. Jika berhasil, harusnya kita akan menemukan gambar bertuliskan hello (static file served) dan nama kita pada "List of Visitors" (db query successful)
+
+![Hasil Akhir](/img/artikel10-result.png)
+
+
+### Cleanup
+
+Untuk menghapus VM instance, akses https://console.cloud.google.com/compute/instances, centang pada baris `vm-django-docker` lalu klik tab "Delete" untuk menghapus VM.
+
+Untuk menghapus firewall rules, akses [firewall list](https://console.cloud.google.com/net-security/firewall-manager/firewall-policies/list) lalu centang pada baris `allow-http-https-ssh`.
+
+Untuk menghapus Docker image dari Artifact Registry, buka [list of repository](https://console.cloud.google.com/artifacts) lalu centang `hands-on-django-docker` dan klik Delete.
+
+## Referensi
+
+Sangat banyak, tapi terutama dari [Blog TestDriven Dockerize Django](https://testdriven.io/blog/dockerizing-django-with-postgres-gunicorn-and-nginx/) dengan pengubahan
+
+
+Sumber kode contoh dapat diakses pada [GitHub repo ini](https://github.com/hamonangann/hands-on-django-docker)
