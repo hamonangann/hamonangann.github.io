@@ -2,7 +2,7 @@
 layout: post
 title:  "Cara Deploy Proyek Secara Aman dengan Django, Docker, dan Google Cloud"
 categories: tips
-featured_image: /img/artikel10-gcloud.png
+featured_image: /img/artikel10-gcloud.jpeg
 ---
 
 Django adalah salah satu framework untuk web yang populer dan termasuk mudah di-setup. Setelah berhasil membuat proyek yang matang dan berjalan dengan lancar di local, langkah selanjutnya adalah menyebarkan keberhasilan kita dengan mendeploynya ke internet. Akan tetapi, kita perlu melakukannya dengan aman. Mari kita coba!
