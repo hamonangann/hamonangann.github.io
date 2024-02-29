@@ -51,7 +51,7 @@ Karena Anda perlu mengakses SSH atau SCP dengan kredensial pribadi, penggunaan S
 
 ### Panduan _publish_ Docker _image_ ke Gitlab Container Registry
 
-[Gitlab.com](https://gitlab.com) menyediakan fitur Docker _registry_ dengan keamanan yang memadai. Sebagai prasyarat, Anda harus terlebih dahulu _dockerize_ aplikasi Anda dengan cara membuat `Dockerfile` dan menjalankan `docker build`. Sebagai contoh, Anda bisa membaca tutorial [Dockerize Django berikut](https://dockerize.io/guides/python-django-guide). Setelah itu, Anda perlu menyiapkan satu _private project_ apapun (bisa _blank project_) di Gitlab.com (pada waktu artikel ini ditulis, Gitlab CS belum mendukung _container registry_).
+[Gitlab.com](https://gitlab.com) menyediakan fitur Docker _registry_ dengan keamanan yang memadai. Sebagai prasyarat, Anda harus terlebih dahulu _dockerize_ aplikasi Anda dengan cara membuat `Dockerfile` dan menjalankan `docker build`. Sebagai contoh, Anda bisa membaca tutorial [Dockerize Django](https://dockerize.io/guides/python-django-guide) atau [dokumentasi Dockerfile](https://docs.docker.com/reference/dockerfile/). Setelah itu, Anda perlu menyiapkan satu _private project_ apapun (bisa _blank project_) di Gitlab.com (pada waktu artikel ini ditulis, Gitlab CS belum mendukung _container registry_).
 
 Pertama-tama, buatlah [_deploy token_](https://docs.gitlab.com/ee/user/project/deploy_tokens/index.html#create-a-deploy-token) di Gitlab dengan cara membuka _project_ Anda di Gitlab.com, lalu pada _sidebar_ kiri, pilih Settings > Repository. _Expand_ bagian _Deploy Token_ lalu klik _Add Token_. Isikan _Name_ dengan sebuah nama unik dan centang _read registry_ dan _write registry_ pada _Scopes_. Klik _Create Deploy Token_ dan Anda akan mendapatkan pasangan _username_ dengan token. Salin lalu simpan dengan aman karena ini akan kita gunakan untuk mengakses _registry_. Kredensial _deploy token_ ini nantinya dapat diserahkan ke _maintainer_ aplikasi.
 
@@ -101,9 +101,9 @@ Sebagai alternatif, Anda dapat menggunakan beberapa _container_ sekaligus. Anda 
 
 # Static Files
 
-Yang termasuk dalam _static files_ dalam sebuah aplikasi web adalah **file-file seperti gambar, audio, video, dokumen PDF, HTML, atau CSS**. Terdapat dua jenis _static files_, yaitu yang dihasilkan oleh proses _build_ aplikasi, maupun yang di-generate pada saat aplikasi dijalankan atau diunggah oleh end-user. Anda perlu memperlakukan aplikasi yang Anda deploy sebagai _stateless_. Nantinya _maintainer_ mungkin perlu menambahkan, menghentikan, atau bahkan menghapus _container_ aplikasi, tapi _file-file_ tidak boleh hilang.
+Yang termasuk dalam _static files_ dalam sebuah aplikasi web adalah **file-file seperti gambar, audio, video, dokumen PDF, HTML, CSS, JS** (Javascript untuk manipulasi DOM, bukan kode node.js), dan sebagainya. Terdapat dua jenis _static files_, yaitu yang dihasilkan oleh proses _build_ aplikasi, maupun yang di-generate pada saat aplikasi dijalankan atau diunggah oleh end-user. Anda perlu memperlakukan aplikasi yang Anda deploy sebagai _stateless_. Nantinya _maintainer_ mungkin perlu menambahkan, menghentikan, atau bahkan menghapus _container_ aplikasi, tapi _file-file_ tidak boleh hilang.
 
-Selain itu, Anda perlu mempertimbangkan bahwa di lingkungan _production_, barangkali aplikasi Anda tidak melakukan _serving static file_. Sebagai contoh, Gunicorn pada Python yang digunakan untuk menjalankan _application_ server tidak bisa menyediakan _static file_. Hal ini dapat diatasi dengan penggunaan _reverse proxy_ yang akan dibahas pada bagian selanjutnya. Akan tetapi, langkah-langkah berikut ini tetap perlu Anda lakukan.
+Selain itu, Anda perlu mempertimbangkan bahwa di lingkungan _production_, barangkali aplikasi Anda tidak melakukan _serving static file_. Sebagai contoh, Gunicorn pada Python yang digunakan untuk menjalankan _application server_ tidak bisa menyediakan _static file_. Hal ini dapat diatasi dengan penggunaan _reverse proxy_ yang akan dibahas pada bagian selanjutnya. Akan tetapi, langkah-langkah berikut ini tetap perlu Anda lakukan.
 
 Untuk melakukan hal ini, pertama-tama Anda perlu memastikan aplikasi Anda telah memiliki URL untuk mengunduh _static file_ serta lokasi untuk mengunduh dan mengunggah _static files_. Sebagai contoh, pengaturan lokasi _static files_ pada Django terletak pada variabel `STATIC_URL` dan `STATIC_ROOT` pada `settings.py`. Yang perlu Anda lakukan adalah **membuat suatu _persistent volume_ untuk menyimpan file** pada host (VM). Dengan demikian, baik _container_ aplikasi maupun _host_ dapat mengakses _static file_ Anda. Caranya, Anda dapat melakukan ini dengan fitur Docker _volume_. Sebagai contoh, untuk membuat Docker _volume_ bernama `static_volume`, Anda dapat menjalankan `docker volume create static_volume` 
 
@@ -124,7 +124,7 @@ Pada server Fasilkom berbasis Linux, lokasi _default_ untuk Docker _volume_ adal
 
 # Reverse Proxy
 
-Secara default, server di VM Anda menggunakan **NGINX sebagai _reverse proxy_**. Anda dapat memastikannya dengan `nginx -V`. Ini bisa Anda manfaatkan untuk dua hal
+Secara default, server di VM Anda menggunakan **NGINX sebagai _reverse proxy_**. Anda dapat memastikannya dengan `nginx -V`. Ini bisa Anda manfaatkan untuk dua hal:
 
 - Melakukan _proxy pass_ ke host dan port aplikasi
 - Secara langsung _serving static files_
@@ -140,15 +140,15 @@ server {
 
 	location / {
 		proxy_pass http://127.0.0.1:8000;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header Host $host;
-        proxy_set_header X-Forwarded-Proto https;
-        proxy_redirect off;
+	        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+	        proxy_set_header Host $host;
+	        proxy_set_header X-Forwarded-Proto https;
+	        proxy_redirect off;
 	}
-
-    location /static/ {
-        alias /var/lib/docker/volumes/static_volume/_data;
-    }
+	
+	location /static/ {
+	        alias /var/lib/docker/volumes/static_volume/_data;
+	}
 }
 ```
 
