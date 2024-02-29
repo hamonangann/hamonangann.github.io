@@ -2,17 +2,23 @@
 layout: post
 title: "Panduan Deployment ke Server Fasilkom UI"
 categories: tips
-feature_image: "/img/artikel10-featured.jpeg"
+---
 
 summary: "Panduan instalasi aplikasi, static files, reverse proxy, dan database pada server on-premise dalam jaringan Fasilkom UI."
+
 url: "N/A"
+
 category: "DevOps"
+
 status: "Published"
+
 author: "Bornyto Hamonangan <bornyto.hamonangan@ui.ac.id>"
-version: 1.4
+
+version: 1.0
+
 license: "Creative Commons Attribution-ShareAlike 4.0 International ([CC-BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/))."
+
 revision_history: "N/A"
----
 
 # Pengantar
 
@@ -41,18 +47,54 @@ Setidaknya ada 4 hal yang perlu dikonfigurasi pada _deployment_ Anda:
 
 # Aplikasi
 
-Karena Anda perlu mengakses SSH atau SCP dengan kredensial pribadi, penggunaan SSH atau SCP untuk _deployment_, baik secara manual maupun lewat CI/CD Pipeline akan menjadi cukup rumit. Sebagai solusi, Anda dapat **membungkus _build artifact_ aplikasi sebagai Docker _image_**, lalu _publish_ ke sebuah Docker _registry_. Nantinya, _image_ tersebut dapat diunduh (_pull_) di VM Anda.
+Karena Anda perlu mengakses SSH atau SCP dengan kredensial pribadi, penggunaan SSH atau SCP untuk _deployment_, baik secara manual maupun lewat CI/CD Pipeline akan menjadi cukup rumit. Sebagai solusi, Anda dapat **membungkus _build artifact_ aplikasi sebagai Docker _image_**, lalu _publish_ ke sebuah Docker _registry_ seperti Gitlab Container Registry, Docker Hub, dan sebagainya. Nantinya, _image_ tersebut dapat diunduh (_pull_) di VM Anda.
 
-<!-- TODO buat panduan GitLab Registry-->
+### Panduan _publish_ Docker _image_ ke Gitlab Container Registry
 
-Untuk mengunduh Docker _image_ setelah di-_publish_ ke _registry_, SSH ke VM. Sebelum berinteraksi dengan _container_, lakukan instalasi Docker pada VM terlebih dahulu. Untuk itu, Anda dapat merujuk [Panduan Instalasi Docker di Debian](https://docs.docker.com/engine/install/debian/).
+[Gitlab.com](https://gitlab.com) menyediakan fitur Docker _registry_ dengan keamanan yang memadai. Sebagai prasyarat, Anda harus terlebih dahulu _dockerize_ aplikasi Anda dengan cara membuat `Dockerfile` dan menjalankan `docker build`. Sebagai contoh, Anda bisa membaca tutorial [Dockerize Django berikut](https://dockerize.io/guides/python-django-guide). Setelah itu, Anda perlu menyiapkan satu _private project_ apapun (bisa _blank project_) di Gitlab.com (pada waktu artikel ini ditulis, Gitlab CS belum mendukung _container registry_).
+
+Pertama-tama, buatlah [_deploy token_](https://docs.gitlab.com/ee/user/project/deploy_tokens/index.html#create-a-deploy-token) di Gitlab dengan cara membuka _project_ Anda di Gitlab.com, lalu pada _sidebar_ kiri, pilih Settings > Repository. _Expand_ bagian _Deploy Token_ lalu klik _Add Token_. Isikan _Name_ dengan sebuah nama unik dan centang _read registry_ dan _write registry_ pada _Scopes_. Klik _Create Deploy Token_ dan Anda akan mendapatkan pasangan _username_ dengan token. Salin lalu simpan dengan aman karena ini akan kita gunakan untuk mengakses _registry_. Kredensial _deploy token_ ini nantinya dapat diserahkan ke _maintainer_ aplikasi.
+
+![Deploy Token](/img/artikel11-deploytoken.png)
+
+Kembali ke _terminal_, jalankan perintah ini pada Docker:
+
+```shell
+docker login registry.gitlab.com -u <your_username>
+```
+
+Kemudian masukkan _password_ dengan _token_ yang Anda dapatkan sebelumnya. Jika berhasil, Anda akan mendapatkan pesan Login Succeeded. Sekarang, masuk ke _project directory_ dimana Dockerfile Anda tersimpan, lalu Anda bisa _publish image_ dengan langkah berikut
+
+```shell
+docker build --pull -t registry.gitlab.com/<username_gitlab>/<nama_project>/<nama_image> .
+docker push registry.gitlab.com/<username_gitlab>/<nama_project>/<nama_image> .
+```
+
+### Panduan _run_ Docker _container_ di VM
+
+Kini Docker _image_ Anda telah terpublish. Untuk mengunduh Docker _image_ setelah di-_publish_ ke _registry_, SSH ke VM. Sebelum berinteraksi dengan _container_, lakukan instalasi Docker pada VM terlebih dahulu. Untuk itu, Anda dapat merujuk [Panduan Instalasi Docker di Debian](https://docs.docker.com/engine/install/debian/).
+
+Pertama-tama, login di VM terlebih dahulu.
+
+```shell
+docker login registry.gitlab.com -u <your_username>
+```
+
+Berikut adalah contoh untuk mengunduh _image_ dan menjalankan _container_ di VM pada port `8000` dengan nama `app` pada VM. Catatan: isikan `url_image` dengan format `registry.gitlab.com/<username_gitlab>/<nama_project>/<nama_image>`
+
+```shell
+docker create -p 8000:8000 --name app <url_image>
+docker start app
+```
+
+Dengan demikian, Anda telah berhasil _publish artifact_ dan _run_ aplikasi Anda pada sebuah Docker _container_. Anda dapat melihat tentang Gitlab Container Registry selengkapnya pada [dokumentasi Gitlab Container Registry](https://docs.gitlab.com/ee/user/packages/container_registry/).
 
 ### _Action items_:
 
-- _Setup_ repositori _Docker registry_
-- Ggunakan _docker-in-docker_ (dind) pada CI/CD pipeline untuk _publish image_ otomatis
-- Instalasi Docker di VM. Jalankan `docker version` untuk memastikan
-- Unduh _image_ dan jalankan _container_ di VM
+- _Setup_ repositori _Docker registry_.
+- Ggunakan _docker-in-docker_ (dind) pada CI/CD pipeline untuk _publish image_ otomatis.
+- Instalasi Docker di VM. Jalankan `docker version` untuk memastikan Docker terinstal.
+- Unduh _image_ dan jalankan _container_ di VM.
 
 Sebagai alternatif, Anda dapat menggunakan beberapa _container_ sekaligus. Anda dapat mengeksplorasi docker-compose, Docker Swarm, atau Kubernetes untuk mempermudah instalasi lebih dari satu _container_.
 
@@ -72,12 +114,12 @@ docker create -p 8000:8000 --name app <url_image> --volume static_volume:<lokasi
 docker start app
 ```
 
-Pada server Fasilkom berbasis Linux, lokasi _default_ untuk Docker volume adalah pada `/var/lib/docker/volumes/`.
+Pada server Fasilkom berbasis Linux, lokasi _default_ untuk Docker _volume_ adalah pada `/var/lib/docker/volumes/`. Untuk mengetahui lebih lanjut konsep _volume_ pada Docker, Anda dapat membaca [dokumentasi Docker _volume_](https://docs.docker.com/storage/volumes/).
 
 ### _Action items_:
 
-- _Setup_ URL dan lokasi _static file_ pada aplikasi
-- Buat sebuah _persistent volume_ di luar _container_ dan pasangkan dengan _container_
+- _Setup_ URL dan lokasi _static file_ pada aplikasi.
+- Buat sebuah _persistent volume_ di luar _container_ dan pasangkan dengan _container_.
 
 
 # Reverse Proxy
@@ -132,7 +174,7 @@ Sama seperti _static files_, pada lingkungan _production_, _database_, _cache_, 
 - [Instalasi MySQL](https://dev.mysql.com/doc/mysql-apt-repo-quick-guide/en/#apt-repo-fresh-install)
 - [Instalasi Redis](https://redis.io/docs/install/install-redis/install-redis-on-linux/)
 
-Setelah melakukan instalasi, jangan lupa untuk meng-_update_ kredensial _database_ (host, port, username, password) Anda pada aplikasi. Anda dapat membuat suatu `.env` file pada VM Anda (di luar aplikasi dengan akses root), lalu membuat _container_ dengan perintah seperti contoh berikut. 
+Setelah melakukan instalasi, jangan lupa untuk meng-_update_ kredensial _database_ (host, port, username, password) Anda pada aplikasi. Anda dapat membuat suatu `.env` file pada VM Anda (di luar aplikasi, hanya izinkan akses root), lalu membuat _container_ dengan perintah seperti contoh berikut. 
 
 ```shell
 chmod 440 .env
