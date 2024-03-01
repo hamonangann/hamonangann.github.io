@@ -1,0 +1,116 @@
+---
+layout: post
+title: "Gitlab Container Registry - Hidden Gem Alternatif Docker Hub yang Menjanjikan"
+categories: tips
+---
+
+Gitlab memiliki berbagai fitur yang saya sukai. Contohnya adalah [Kanban Board](https://hamonangann.github.io/tips/2023/03/03/artikel1.html) yang sangat praktis. Saya baru saja menemukan _hidden gem_ dari Gitlab yaitu fitur _artifact registry_ yang rupanya cukup lengkap. Namun pada artikel kali ini kita akan fokus pada fitur _container registry_ untuk mengunggah dan mengunduh _private Docker image_.
+
+## Perbandingan dengan Registry Lain
+
+Docker Hub yang menjadi default dan registry terpopuler hanya mengizinkan akun gratisan untuk punya 1 _private repo_. Sisanya harus berupa public repo. Google Cloud punya registri terbaru bernama Artifact Registry dan tidak punya batasan jumlah repo publik maupun privat, tapi pada saat ini ditulis _free tier_-nya hanya sebesar 500MB, jadi kurang cocok untuk menyimpan lebih dari 1 image.
+
+GitHub yang merupakan saingannya Gitlab juga punya Github Packages yang terhubung dengan akun atau organisasi. Ia memiliki batasan yang kurang lebih sama dengan Google untuk repo privat. Selain itu, sejauh ini GitHub hanya menyediakan opsi otentikasi yang kurang lebih adalah personal token (meskipun bisa dikustomisasi aksesnya). 
+
+Di sinilah Gitlab bersinar. Pertama-tama, ia punya batasan yang lebih longgar. Kita mengunggah image di dalam project atau group, bukan akun personal. Tiap project punya [storage 10GB](https://docs.gitlab.com/ee/user/usage_quotas.html), mau itu berupa publik atau privat. Ini artinya jika kita membuat satu blank project untuk sebuah _image_, kita bisa simpan image privat hingga 10GB.
+
+Selain itu otentikasi (docker login) ke Gitlab juga bisa memakai [_deploy token_](https://docs.gitlab.com/ee/user/project/deploy_tokens/index.html#create-a-deploy-token). Ini membuat kita bisa menerapkan _least privilege principle_ dengan hanya mengizinkan read/write atau read only ke tepat satu repo image.
+
+Inilah sebabnya, saya menyebutnya sebagai _hidden gem_
+
+
+## Prasyarat
+
+- Aplikasi yang telah di-[dockerize](https://docs.docker.com/reference/dockerfile/). Jika tidak ada, Anda dapat mengeksekusi `docker pull nginx:1-alpine` lalu salin image id yang didapat dari `docker images`. Kita akan pakai ini untuk _tagging_. Jika aplikasinya ada, silakan lakukan perintah `docker build .` pada direktori dengan Dockerfile.
+
+- Sebuah project Gitlab (boleh kosongan)
+
+- Akun Gitlab
+
+- Docker Engine dan CLI (tidak perlu _credential helper_)
+
+## Persiapan
+
+Pada artikel kali ini kita akan menggunakan metode [_deploy token_](https://docs.gitlab.com/ee/user/project/deploy_tokens/index.html#create-a-deploy-token) untuk otentikasi. Buka _project_, lalu pada _sidebar_ kiri, pilih Settings > Repository. Setelah itu, _expand_ bagian _Deploy Token_ lalu klik _Add Token_. 
+
+Isikan _Name_ dengan sebuah nama unik. Pada kali ini, kita akan membuat token dengan akses read dan write (karena akan kita pakai untuk docker push nantinya). Jadi, centang _read registry_ dan _write registry_ pada _Scopes_. Sebagai tips, sebaiknya _username_ dikosongkan saja. Kalau diisi malah menyulitkan proses `docker login` nantinya (sepertinya Gitlab tidak validasi apakah username yang kita masukkan unik atau tidak sebagai kredentsial docker).
+
+![Deploy Token](/img/artikel11-deploytoken.png)
+
+ Klik _Create Deploy Token_. Kita akan mendapatkan pasangan _username_ dengan token untuk disalin dan simpan.
+
+## Push Image ke Repositori 
+
+Mari kita kembali ke _terminal_ lalu jalankan perintah ini pada Docker:
+
+```shell
+docker login registry.gitlab.com -u <username_deploy_token>
+```
+
+Silakan masukkan dengan username deploy token. Pada prompt, masukkan _password_ dengan _token_ yang Anda dapatkan sebelumnya. Jika berhasil, Anda akan mendapatkan pesan Login Succeeded. 
+
+Sebelum melakukan push kita perlu melakukan _tagging_ untuk mengikuti format penamaan di Gitlab Container Registry. Pada situs Gitlab.com, formatnya adalah sebagai berikut
+
+```shell
+registry.gitlab.com/<username_gitlab>/<project_name>/<image_name>:<image_version>
+```
+
+Isi `username_gitlab` dengan username akun Gitlab, bukan username deploy token. Image name tidak wajib diisi, tapi baiknya diberi nama bebas (kalau tidak, nantinya Gitlab akan memberikan name yang random). Di sisi lain, `image_version` defaultnya adalah `latest` atau yang terakhir kali diupload.
+
+Jika sudah, eksekusi `docker images` lalu cari image ID yang sudah kita build atau pull sebelumnya. Kemudian, jalankan perintah ini.
+
+```shell
+docker tag <image_id>:latest registry.gitlab.com/<username_gitlab>/<project_name>/<gitlab_image_name>:<gitlab_image_version>
+```
+
+Jika sudah, kita tinggal melakukan push 
+
+```shell
+docker push <registry.gitlab.com/<username_gitlab>/<project_name>/<gitlab_image_name>:<gitlab_image_version>
+```
+
+Kalau sudah sukses, kita bisa ke sidebar lalu klik Deploy > Container Registry dan menemukan sebuah image telah terupload seperti ini.
+
+![Daftar images](/img/artikel12-daftarrepo.png)
+
+## Pull image yang sudah diunggah
+
+Image yang telah kita publish tersimpan dalam repo privat. Dengan demikian, kita perlu `docker login` terlebih dahulu pada tempat kita melakukan pull, misalnya pada VM atau bahkan komputer yang sama.
+
+```shell
+docker login registry.gitlab.com -u <username_deploy_token>
+```
+
+Pada prompt password silakan masukkan deploy token yang sudah dibuat. Setelah itu kita bisa melakukan `docker pull` atau `docker create` atau `docker run` untuk mengunduh atau menjalankan image sebagai container.
+
+Jika menggunakan image NGINX, setelah menjalankan kontainer dengan `docker run -p 80:80 -d nginx` kemudian membuka `http://127.0.0.0:80`, kita akan menemukan laman web khas NGINX berikut.
+
+![NGINX Default](/img/artikel12_nginx.png)
+
+## Cleanup
+
+Kita dapat menghapus akses ke image dengan menghapus (revoke) deploy token. Ke project lalu klik Settings > Repository dan expand Deploy Tokens. Kita akan menemukan tombol revoke untuk menghapus token tertentu.
+
+![Revoke Token](/img/artikel12-revoketoken.png)
+
+Kita juga bisa menghapus image dari Gitlab Container Registry dengan mudah. Ke project lalu klik Deploy > Container Registry, lalu klik tombol tempat sampah di sisi kanan image yang hendak dihapus.
+
+![Delete Image](/img/artikel12-daftarrepo.png)
+
+Untuk menghapus tag tertentu saja, klik judul image lalu akan muncul daftar tag. Pada titik tiga vertikal di ujung kanan, klik lalu klik Delete Tag seperti contoh di bawah. Kita juga bisa memanfaatkan checkbox lalu klik Delete Selected untuk menghapus beberapa tag sekaligus
+
+![Delete Tag](/img/artikel12-deletetag.png)
+
+## Referensi
+
+[Gitlab Storage Quota](https://docs.gitlab.com/ee/user/usage_quotas.html)
+
+[Gitlab Container Registry Authentication](https://docs.gitlab.com/ee/user/packages/container_registry/authenticate_with_container_registry.html)
+
+[Authentication Github Packages](https://docs.github.com/en/packages/learn-github-packages/introduction-to-github-packages#authenticating-to-github-packages)
+
+[Pricing Github Packages](https://docs.github.com/en/billing/managing-billing-for-github-packages/about-billing-for-github-packages)
+
+[Pricing Google Artifact Registry](https://cloud.google.com/artifact-registry/pricing)
+
+[Docker Pricing](https://www.docker.com/pricing/)
