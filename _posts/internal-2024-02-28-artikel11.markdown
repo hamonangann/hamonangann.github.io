@@ -53,7 +53,7 @@ Karena Anda perlu mengakses SSH atau SCP dengan kredensial pribadi, penggunaan S
 
 [Gitlab.com](https://gitlab.com) menyediakan fitur Docker _registry_ dengan keamanan yang memadai. Sebagai prasyarat, Anda harus terlebih dahulu _dockerize_ aplikasi Anda dengan cara membuat `Dockerfile` dan menjalankan `docker build`. Sebagai contoh, Anda bisa membaca tutorial [Dockerize Django](https://dockerize.io/guides/python-django-guide) atau [dokumentasi Dockerfile](https://docs.docker.com/reference/dockerfile/). Setelah itu, Anda perlu menyiapkan satu _private project_ apapun (bisa _blank project_) di Gitlab.com (pada waktu artikel ini ditulis, Gitlab CS belum mendukung _container registry_).
 
-Pertama-tama, buatlah [_deploy token_](https://docs.gitlab.com/ee/user/project/deploy_tokens/index.html#create-a-deploy-token) di Gitlab dengan cara membuka _project_ Anda di Gitlab.com, lalu pada _sidebar_ kiri, pilih Settings > Repository. _Expand_ bagian _Deploy Token_ lalu klik _Add Token_. Isikan _Name_ dengan sebuah nama unik dan centang _read registry_ dan _write registry_ pada _Scopes_. Klik _Create Deploy Token_ dan Anda akan mendapatkan pasangan _username_ dengan token. Salin lalu simpan dengan aman karena ini akan kita gunakan untuk mengakses _registry_. Kredensial _deploy token_ ini nantinya dapat diserahkan ke _maintainer_ aplikasi.
+Pertama-tama, buatlah [_deploy token_](https://docs.gitlab.com/ee/user/project/deploy_tokens/index.html#create-a-deploy-token) di Gitlab dengan cara membuka _project_ Anda di Gitlab.com, lalu pada _sidebar_ kiri, pilih Settings > Repository. _Expand_ bagian _Deploy Token_ lalu klik _Add Token_. Isikan _Name_ dengan sebuah nama unik dan centang _read registry_ dan _write registry_ pada _Scopes_. Klik _Create Deploy Token_ dan Anda akan mendapatkan pasangan _username_ dengan token. Salin lalu simpan dengan aman karena ini akan digunakan untuk mengakses _registry_. Kredensial _deploy token_ ini nantinya dapat diserahkan ke _maintainer_ aplikasi.
 
 ![Deploy Token](/img/artikel11-deploytoken.png)
 
@@ -168,7 +168,7 @@ Anda dapat membaca dokumentasi terkait NGINX berikut
 
 # Database
 
-Sama seperti _static files_, pada lingkungan _production_, _database_, _cache_, _message queue_ dan sebagainya **seharusnya diletakkan di luar aplikasi** atau _container_ aplikasi Anda dan tidak diekspos portnya pada NGINX proxy VM Anda. Ini penting demi keamanan data Anda. Anda dapat menginstalasi _database_ secara langsung di dalam VM dengan port standar atau membungkusnya sebagai _container_. Anda dapat merujuk pada tutorial berikut sesuai kebutuhan aplikasi Anda:
+Sama seperti _static files_, pada lingkungan _production_, seharusnya _database_, _cache server_, _message queue_ dan sebagainya **diletakkan di luar aplikasi** atau _container_ aplikasi Anda dan tidak diekspos portnya pada NGINX proxy VM Anda. Ini penting demi keamanan data Anda. Anda dapat menginstalasi _database_ secara langsung di dalam VM dengan port standar atau membungkusnya sebagai _container_. Anda dapat merujuk pada tutorial berikut sesuai kebutuhan aplikasi Anda:
 
 - [Instalasi PostgreSQL](https://www.postgresql.org/download/linux/debian/)
 - [Instalasi MySQL](https://dev.mysql.com/doc/mysql-apt-repo-quick-guide/en/#apt-repo-fresh-install)
