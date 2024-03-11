@@ -14,11 +14,11 @@ status: "Published"
 
 author: "Bornyto Hamonangan <bornyto.hamonangan@ui.ac.id>"
 
-version: 1.0
+version: 1.1
 
 license: "Creative Commons Attribution-ShareAlike 4.0 International ([CC-BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/))."
 
-revision_history: "N/A"
+revision_history: "1. Mengganti <your_username> pada perintah docker login dengan <your_deploy_username>" agar lebih jelas maksudnya. 2. Menambahkan panduan deploy otomatis 3. Menambahkan panduan observability
 
 # Pengantar
 
@@ -60,7 +60,7 @@ Pertama-tama, buatlah [_deploy token_](https://docs.gitlab.com/ee/user/project/d
 Kembali ke _terminal_, jalankan perintah ini pada Docker:
 
 ```shell
-docker login registry.gitlab.com -u <your_username>
+docker login registry.gitlab.com -u <your_deploy_username>
 ```
 
 Kemudian masukkan _password_ dengan _token_ yang Anda dapatkan sebelumnya. Jika berhasil, Anda akan mendapatkan pesan Login Succeeded. Sekarang, masuk ke _project directory_ dimana Dockerfile Anda tersimpan, lalu Anda bisa _publish image_ dengan langkah berikut
@@ -77,7 +77,7 @@ Kini Docker _image_ Anda telah terpublish. Untuk mengunduh Docker _image_ setela
 Pertama-tama, login di VM terlebih dahulu.
 
 ```shell
-docker login registry.gitlab.com -u <your_username>
+docker login registry.gitlab.com -u <your_deploy_username>
 ```
 
 Berikut adalah contoh untuk mengunduh _image_ dan menjalankan _container_ di VM pada port `8000` dengan nama `app` pada VM. Catatan: isikan `url_image` dengan format `registry.gitlab.com/<username_gitlab>/<nama_project>/<nama_image>`
@@ -88,6 +88,21 @@ docker start app
 ```
 
 Dengan demikian, Anda telah berhasil _publish artifact_ dan _run_ aplikasi Anda pada sebuah Docker _container_. Anda dapat melihat tentang Gitlab Container Registry selengkapnya pada [dokumentasi Gitlab Container Registry](https://docs.gitlab.com/ee/user/packages/container_registry/).
+
+### Panduan automasi _deployment_ aplikasi
+
+Bila Anda menggunakan prinsip _Continuous Deployment_, proses `docker push` dapat dilakukan secara otomatis pada CI/CD _pipeline Anda_. Akan tetapi, jika Anda menganut prinsip _Continuous Delivery_, Anda perlu membuat _manual trigger/manual approval_ pada job yang mengandung proses `docker push`.
+
+Anda juga dapat mengautomasi _image pull_ di server Fasilkom dengan menginstalasi kontainer PyOuroboros pada Docker.
+
+```shell
+docker run -d --name ouroboros \
+  -e MONITOR="<container_name>" -e REPO_USER="<your_deploy_username>" -e REPO_PASS="<your_deploy_token>"\
+  -v /var/run/docker.sock:/var/run/docker.sock \
+  pyouroboros/ouroboros
+```
+
+PyOuroboros akan memantau versi Docker _container_ di mesin Anda dan melakukan _update_ apabila terdapat image yang terbaru. Selengkapnya dapat dibaca di [dokumentasi PyOuroboros](https://github.com/pyouroboros/ouroboros)
 
 ### _Action items_:
 
