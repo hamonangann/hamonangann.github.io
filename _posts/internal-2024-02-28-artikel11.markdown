@@ -18,7 +18,7 @@ version: 1.1
 
 license: "Creative Commons Attribution-ShareAlike 4.0 International ([CC-BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/))."
 
-revision_history: "1. Mengganti <your_username> pada perintah docker login dengan <your_deploy_username>" agar lebih jelas maksudnya. 2. Menambahkan panduan deploy otomatis 3. Menambahkan panduan observability
+revision_history: "1. Mengganti <your_username> pada perintah docker login dengan <your_deploy_username>" agar lebih jelas maksudnya. 2. Menambahkan panduan deploy aplikasi otomatis dan observability"
 
 # Pengantar
 
@@ -102,7 +102,9 @@ docker run -d --name ouroboros \
   pyouroboros/ouroboros
 ```
 
-PyOuroboros akan memantau versi Docker _container_ di mesin Anda dan melakukan _update_ apabila terdapat image yang terbaru. Selengkapnya dapat dibaca di [dokumentasi PyOuroboros](https://github.com/pyouroboros/ouroboros)
+PyOuroboros akan memantau versi Docker _container_ di mesin Anda dan melakukan _update_ apabila terdapat image yang terbaru. Selengkapnya dapat dibaca di [dokumentasi PyOuroboros](https://github.com/pyouroboros/ouroboros).
+
+Aplikasi Anda juga perlu dipantau, yaitu dengan tools yang dapat mengekspor _metrics_ dan _logs_ dari interaksi aplikasi Anda dengan _end-user_. Strateginya, Anda dapat _deploy frontend_ terkait (misalnya dasbor Grafana atau Sentry) pada layanan _cloud_ (di luar VM) dan mengekspor _metrics_ dan _logs_-nya ke Prometheus. Anda dapat merujuk ke [Panduan Monitoring & Observability](https://wiki.ppl.cs.ui.ac.id/doc/panduan-monitoring-observability-TfHHrdoFg8)
 
 ### _Action items_:
 
