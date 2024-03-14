@@ -18,7 +18,7 @@ version: 1.1
 
 license: "Creative Commons Attribution-ShareAlike 4.0 International ([CC-BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/))."
 
-revision_history: "1. Mengganti <your_username> pada perintah docker login dengan <your_deploy_username>" agar lebih jelas maksudnya. 2. Menambahkan panduan deploy aplikasi otomatis dan observability"
+revision_history: "1. Mengganti <your_username> pada perintah docker login dengan <your_deploy_username>" agar lebih jelas maksudnya. 2. Menambahkan panduan deploy aplikasi otomatis. 3. Menambahkan panduan monitoring aplikasi di server. 4. Mengubah konfigurasi Nginx dan menambahkan keterangan terkait teknik whitelisting."
 
 # Pengantar
 
@@ -104,7 +104,12 @@ docker run -d --name ouroboros \
 
 PyOuroboros akan memantau versi Docker _container_ di mesin Anda dan melakukan _update_ apabila terdapat image yang terbaru. Selengkapnya dapat dibaca di [dokumentasi PyOuroboros](https://github.com/pyouroboros/ouroboros).
 
-Aplikasi Anda juga perlu dipantau, yaitu dengan tools yang dapat mengekspor _metrics_ dan _logs_ dari interaksi aplikasi Anda dengan _end-user_. Strateginya, Anda dapat _deploy frontend_ terkait (misalnya dasbor Grafana atau Sentry) pada layanan _cloud_ (di luar VM) dan mengekspor _metrics_ dan _logs_-nya ke Prometheus. Anda dapat merujuk ke [Panduan Monitoring & Observability](https://wiki.ppl.cs.ui.ac.id/doc/panduan-monitoring-observability-TfHHrdoFg8)
+### Panduan monitoring aplikasi di server 
+
+Aplikasi Anda juga perlu dipantau dengan bantuan tools yang dapat mengekspor _metrics_ dan _logs_ dari interaksi aplikasi Anda dengan _end-user_. Sebagai langkah awal, Anda dapat merujuk ke [Panduan Monitoring & Observability](https://wiki.ppl.cs.ui.ac.id/doc/panduan-monitoring-observability-TfHHrdoFg8).
+
+Pada sisi aplikasi pada VM, Anda mungkin perlu memasang _metrics exporter_ pada aplikasi, contohnya seperti Spring Boot Actuator, Node Exporter, dan Django Prometheus. Exporter ini dapat memiliki _endpoints_ tertentu yang mengembalikan daftar _metrics_. Ini dapat dilakukan dengan Endpoint inilah yang akan di-_scrape_ setiap interval tertentu (biasanya beberapa detik sekali) oleh _monitoring agent_ seperti Netdata, Newrelic, dan Prometheus.
+
 
 ### _Action items_:
 
@@ -157,17 +162,26 @@ server {
 
 	location / {
 		proxy_pass http://127.0.0.1:8000;
-	        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-	        proxy_set_header Host $host;
-	        proxy_set_header X-Forwarded-Proto https;
-	        proxy_redirect off;
+		proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+		proxy_set_header Host $host;
+		proxy_set_header X-Forwarded-Proto https;
+		proxy_redirect off;
 	}
-	
+
 	location /static/ {
-	        alias /var/lib/docker/volumes/static_volume/_data;
+	    alias /var/lib/docker/volumes/static_volume/_data;
+	}
+
+	location /metrics {
+		proxy_pass http://127.0.0.1:8000;
+		allow 10.119.0.0/16;
+		allow 127.0.0.1;
+		deny all;
 	}
 }
 ```
+
+Perhatikan bahwa _endpoint_ terkait _metrics_ diatur agar hanya bisa diakses melalui _private network_ dan _localhost_. Anda bisa menambahkan alamat IP atau subnet yang diizinkan mengakses _endpoint_ dengan menambahkan `allow IP/range;` sebelum `deny all`. Teknik ini biasa disebut sebagai [_whitelisting_](https://en.wikipedia.org/wiki/Whitelist#Network_whitelists).
 
 Setelah mengubah file konfigurasi, _restart_ NGINX dengan `sudo systemctl restart nginx`. Anda dapat mencoba mengakses situs Anda dan juga URL _endpoint_ yang Anda tetapkan untuk _serving static file_.
 
