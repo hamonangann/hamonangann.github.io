@@ -1,0 +1,242 @@
+---
+layout: post
+title: "Automasi Deployment Klaster Kubernetes dengan K3s dan Terraform"
+categories: tips
+---
+
+Zaman sekarang, kontainer adalah alternatif dari mesin virtual (VM) yang lebih ringan, sehingga bisa di-launch dengan cepat. Di pangsa pasar _open source_, Kubernetes adalah pilihan yang paling mainstream.
+
+Yang sering jadi kendala dari adopsi Kubernetes adalah learning curvenya yang cukup tajam. Setup klaster Kubernetes terbilang cukup rumit, sehingga automasi akan sangat berguna di sini.
+
+Dari sekian banyak distribusi Kubernetes, saya paling menyukai K3s untuk belajar, dengan beberapa alasan
+
+- Enteng! Cuma sekitar 60MB-an, sehingga proses deploy lebih cepat dan bisa dideploy di mana saja.
+
+- Tidak memerlukan virtualization layer (minikube yang gampang dideploy adalah yang di balik Docker, yang polosan jauh lebih susah dideploy).
+
+- Production ready. Bisa diakses secara remote, bisa multi node, dsb.
+
+Pada artikel kali ini, deployment K3s akan coba dibuat se-simple mungkin dengan bootstrapper K3sup (Ketchup), sedangkan infrastrukturnya (VM Node) dideploy secara otomatis dengan Terraform. Sebagai contoh, kita akan menggunakan Google Compute Engine.
+
+
+## Setup Infrastruktur dengan Terraform
+
+Sebagai prasyarat, komputer yang melakukan instalasi harus punya Terraform dan Google Cloud SDK. Alternatif gampangnya, pakai [Cloud Shell](https://console.cloud.google.com/?cloudshell=true) saja!
+
+Pertama-tama bikin beberapa file, dimulai dengan `variables.tf` dengan isi sebagai berikut:
+
+```
+variable "project" {}
+
+variable "zone" {
+  default = "us-west1-a"
+}
+```
+
+Ini digunakan untuk menandakan lokasi project Google Cloud kita. Selanjutnya, buat `providers.tf`
+
+```
+provider "google" {
+  project = var.project
+  zone    = var.zone
+}
+```
+
+Ini untuk memberitahu Terraform bahwa kita akan menggunakan Google Cloud. Terakhir, ini yang jadi definisi dari infrastruktur kita. Buatlah `main.tf` dengan isi sebagai berikut:
+
+```
+esource "google_compute_firewall" "allow-k3s" {
+  name    = "allow-k3s"
+  network = "default"
+  allow {
+    protocol = "tcp"
+    ports    = ["6443"]
+  }
+  source_ranges = ["0.0.0.0/0"]
+  target_tags   = ["k3s"]
+}
+
+resource "google_compute_instance" "gce-master-node" {
+  name         = "gce-master-node"
+  machine_type = "e2-standard-4"
+  tags         = ["k3s"]
+
+  boot_disk {
+    initialize_params {
+      image = "debian-12"
+    }
+  }
+
+  network_interface {
+    network = "default"
+
+    access_config {}
+  }
+
+  depends_on = [
+    google_compute_firewall.allow-k3s,
+  ]
+}
+
+resource "google_compute_instance" "gce-worker-node-1" {
+  name         = "gce-worker-node-1"
+  machine_type = "e2-standard-4"
+  tags         = ["k3s"]
+
+  boot_disk {
+    initialize_params {
+      image = "debian-12"
+    }
+  }
+
+  network_interface {
+    network = "default"
+
+    access_config {}
+  }
+
+  depends_on = [
+    google_compute_firewall.allow-k3s,
+    google_compute_instance.gce-master-node,
+  ]
+}
+
+resource "google_compute_instance" "gce-worker-node-2" {
+  name         = "gce-worker-node-2"
+  machine_type = "e2-standard-4"
+  tags         = ["k3s"]
+
+  boot_disk {
+    initialize_params {
+      image = "debian-12"
+    }
+  }
+
+  network_interface {
+    network = "default"
+
+    access_config {}
+  }
+
+  depends_on = [
+    google_compute_firewall.allow-k3s,
+    google_compute_instance.gce-master-node,
+  ]
+}
+
+resource "google_compute_instance" "client" {
+  name         = "client"
+  machine_type = "e2-standard-4"
+
+  boot_disk {
+    initialize_params {
+      image = "debian-12"
+    }
+  }
+
+  network_interface {
+    network = "default"
+
+    access_config {}
+  }
+
+  metadata_startup_script = "sudo apt update & sudo apt install -y kubectl"
+
+}
+
+provider "google" {
+  project = var.project
+  zone    = var.zone
+}
+```
+
+Dengan ini, kita akan membuat infrastruktur dengan spesifikasi sebagai berikut:
+
+- 1 Client VM: terinstal kubectl, tapi bukan bagian dari klaster. Kubectl
+
+- 1 Master Node VM: bagian dari klaster yang menjadi inti (kube-scheduler, etcd, dkk) diinstal di sini. Tapi pod-pod aplikasi tidak akan terinstal di sini.
+
+- 2 Worker Node VM: bagian dari klaster tempat pod-pod aplikasi dideploy.
+
+Keempat VM tersebut memiliki spesifikasi mesin e2-standard-4 (4 vCPU, 16GB memory). Selain itu, terdapat firewall rule untuk mengizinkan remote setup.
+
+Setelah ketiga file disimpan, pada direktori yang sama dengan ketiga file, jalankan `terraform plan` dan seharusnya akan ada **5 resources created**. Jika sudah yakin, jalankan 
+
+```terraform apply -var "project=$(gcloud config get-value project)" -var "zone=$(gcloud config get-value compute/zone)"```. 
+
+Catatan: pada prompt ketikkan `yes` untuk melanjutkan.
+
+Setelah infrastruktur siap, kita lanjutkan dengan instalasi klaster.
+
+
+## Instalasi Klaster dengan K3s
+
+Pertama-tama, kita buat dulu berkas konfigurasi ssh
+
+```
+gcloud config ssh
+```
+
+Selanjutnya, kita melakukan instalasi K3sup
+
+```
+curl -sLS https://get.k3sup.dev | sh
+sudo install k3sup /usr/local/bin/
+```
+
+Setelah K3sup terinstal, kita akan melakukannya untuk menginstalasi K3s pada sistem, dimulai dari master node:
+
+```
+MASTER_IP=$(gcloud compute instances describe gce-master-node | grep -oP "natIP: \K.*")
+k3sup install --ip $MASTER_IP --context k3s --ssh-key ~/.ssh/google_compute_engine --user $(whoami)
+```
+
+Dengan demikian, kita telah berhasil mendeploy 1 klaster sederhana! Ini sudah fully functional, tapi mari kita kembangkan lebih lanjut dengan worker nodes
+
+```
+WORKER_1_IP=$(gcloud compute instances describe gce-worker-node-1 | grep -oP "natIP: \K.*")
+k3sup join --ip $WORKER_1_IP --server-ip $MASTER_IP --ssh-key ~/.ssh/google_compute_engine --user $(whoami)
+
+WORKER_2_IP=$(gcloud compute instances describe gce-worker-node-2 | grep -oP "natIP: \K.*")
+k3sup join --ip $WORKER_2_IP --server-ip $MASTER_IP --ssh-key ~/.ssh/google_compute_engine --user $(whoami)
+```
+
+Sebagai tambahan, kita taint master node agar pod-pod aplikasi di-schedule di worker nodes saja, tidak di master node
+
+```
+kubectl taint node $(kubectl get nodes | grep "master" | awk '{print $1}') node-role.kubernetes.io/master:NoSchedule
+```
+
+Terakhir, kita buat client kita dapat mengakses klaster dengan menyalin berkas kubeconfig ke client VM.
+
+```
+export KUBECONFIG=`pwd`/kubeconfig
+
+gcloud compute scp kubeconfig $(whoami)@client:/tmp
+gcloud compute ssh client --command='sudo sh -c "echo export KUBECONFIG=/tmp/kubeconfig >> /etc/profile"'
+```
+
+Voila! Kita telah memiliki sistem yang ready. Untuk menjalankannya, SSH ke client VM, lalu jalankan perintah `kubectl get nodes`. Akan terdapat 1 master node dan 2 worker nodes, yang menandakan bahwa klaster telah siap.
+
+
+## Cleanup
+
+Untuk cleanup, Terraform membuat semuanya jadi sangat sederhana. Gunakan Cloud Shell lalu ketikkan perintah berikut
+
+```
+terraform destroy -var "project=$(gcloud config get-value project)" --var "zone=$(gcloud config get-value compute/zone)"
+```
+
+Demikianlah panduan instalasi klaster Kubernetes otomatis dengan K3s dan Terraform.
+
+
+## Referensi
+
+https://k3s.io/
+
+Sumber kode dari hands-on ini telah dikompilasi pada ![Github Repo](https://github.com/hamonangann/k3s-terraform/tree/main/google-compute-engine) berikut. Kita dapat menjalankan deployment hanya dengan menjalankan `start.sh` dan `stop.sh`
+
+
+
+
+
