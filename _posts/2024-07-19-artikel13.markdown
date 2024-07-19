@@ -232,9 +232,9 @@ Demikianlah panduan instalasi klaster Kubernetes otomatis dengan K3s dan Terrafo
 
 ## Referensi
 
-https://k3s.io/
+[https://k3s.io/](https://k3s.io/)
 
-Sumber kode dari hands-on ini telah dikompilasi pada ![Github Repo](https://github.com/hamonangann/k3s-terraform/tree/main/google-compute-engine) berikut. Kita dapat menjalankan deployment hanya dengan menjalankan `start.sh` dan `stop.sh`
+Sumber kode dari hands-on ini telah dikompilasi pada [Github Repo](https://github.com/hamonangann/k3s-terraform/tree/main/google-compute-engine) berikut. Kita dapat menjalankan deployment hanya dengan menjalankan `start.sh` dan `stop.sh`
 
 
 
