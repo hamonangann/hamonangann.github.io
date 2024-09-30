@@ -1,0 +1,228 @@
+---
+layout: post
+title: "Memahami Konsep Pointer pada Bahasa Pemrograman Go"
+categories: tips
+---
+
+Buat programmer yang belum familiar dengan bahasa Go (atau bahasa C sejenisnya), pointer menjadi barang baru yang konsepnya cukup tricky. Oleh karena itu, mari kita eksplorasi pointer di Go!
+
+## Pointer dan Memori
+
+Pada dasarnya setiap kita menjalankan aplikasi Go, nilai-nilai dari variabel yang kita buat disimpan di memori. Ada banyak tempat di memori, sehingga untuk mengetahui letak di mana nilai variabel kita disimpan, program kita mencatat dan mengingat alamatnya di memori.
+
+Mantapnya, pada bahasa Go, alamat tersebut dapat juga kita ketahui dengan memanfaatkan pointer. Singkatnya, pointer adalah tipe data yang menyimpan alamat dari sebuah variabel di memori.
+
+Nah untuk membuktikannya langsung saja kita koding seperti berikut. Supaya praktis, kita bisa pakai [Go Playground](https://go.dev/play) untuk praktik.
+
+## 1. Alamat memori dari suatu variabel
+
+Mari jalankan program berikut (klik Run pada Go Playground)
+
+```go
+package main
+
+import "fmt"
+
+func main() {
+    var x int
+    x = 5
+	fmt.Println(x, &x)
+}
+```
+
+Di sini kita membuat satu variabel x dengan tipe integer. Hasilnya adalah sebagai berikut
+
+
+```shell
+5 0xc000012070
+```
+
+Terlihat bahwa di samping kita bisa mengetahui nilai variabel, pada bahasa Go kita juga bisa tahu alamatnya di memori. Untuk membongkar letak alamatnya, kita dapat menambahkan operator **reference** (&) di depan variabel.
+
+```
+*Catatan*: bisa jadi alamat memori yang tercetak di komputer dengan yang ada di tutorial ini berbeda. Ini wajar. Kalau kita jalankan ulang programnya, boleh jadi kita akan dapat hasil yang berbeda juga. 
+```
+
+## 2. Menampung alamat dengan pointer
+
+Jalankan kode berikut
+
+```go
+package main
+
+import "fmt"
+
+func main() {
+    var x int
+    var y *int
+    x = 5
+    y = &x
+	fmt.Println(x, y)
+}
+```
+
+Hasilnya sebagai berikut
+
+```
+5 0xc000012070
+```
+
+Kita akan mendapatkan hasil serupa dengan (1). Ini menandakan bahwa kita bisa membuat variabel untuk menampung alamat memori dari variabel lainnya. Variabel yang seperti inilah yang disebut sebagai **pointer**.
+
+Untuk menginisiasi (membuat baru) variabel pointer, kita menggunakan operator **dereference** (*) di depan nama variabelnya.
+
+
+## 3. Mendapatkan value yang ditunjuk pointer
+
+Operator dereference (*) juga dapat digunakan untuk mendapatkan value dari variabel yang ditunjuk pointer. Caranya seperti berikut
+
+```go
+package main
+
+import "fmt"
+
+func main() {
+	var x int
+	var y *int
+	x = 5
+	y = &x
+	fmt.Println(y, *y)
+}
+```
+
+Jika dijalankan maka output dari y adalah alamat memori x sedangkan output *y adalah nilai dari x.
+
+## 4. Pass by value
+
+Function di Go menganut pass-by-value. Artinya, yang dioper oleh pemanggil ke sebuah function adalah nilainya saja, sedangkan alamat memorinya berbeda.
+
+```go
+package main
+
+import "fmt"
+
+func passByValue(x int) {
+	fmt.Printf("Inside function %d %p \n", x, &x)
+}
+
+func main() {
+	x := 5
+	passByValue(x)
+	fmt.Printf("Outside function %d %p \n", x, &x)
+}
+```
+
+Jika dijalankan outputnya adalah seperti berikut
+
+```shell
+Inside function 5 0xc000012078 
+Outside function 5 0xc000012070
+```
+
+Value (nilai) dari x di dalam dan di luar fungsi tentu sama, tapi disimpan dalam alamat yang berbeda. 
+
+Salah satu efeknya, modifikasi nilai x di dalam fungsi tidak mempengaruhi x di luar fungsi.
+
+```go
+package main
+
+import "fmt"
+
+func passByValue(x int) {
+	x = 10
+	fmt.Printf("Inside function %d %p \n", x, &x)
+}
+
+func main() {
+	x := 5
+	passByValue(x)
+	fmt.Printf("Outside function %d %p \n", x, &x)
+}
+```
+
+Jika dijalankan, nilai x di dalam fungsi adalah 10, sedangkan nilai x di luarnya tetaplah 5.
+
+Di balik layar, yang dilakukan Go adalah membuat variabel lokal baru x (yang hanya berlaku di dalam fungsi) yang nilainya di-copy dari nilai x pemanggilnya, tetapi karena dibuat baru maka alamatnya berbeda.
+
+## 5. Pass by value dengan pointer
+
+Kalau demikian, adakah cara mengubah nilai di luar fungsi? Dengan Go, kita bisa mengoper nilai pointer (menggunakan operator dereference) sehingga kita dapat memodifikasi nilai di luar fungsi.
+
+```go
+package main
+
+import "fmt"
+
+func passByReference(x *int) {
+	*x = 10
+	fmt.Printf("Inside function %d %p \n", *x, x)
+}
+
+func main() {
+	x := 5
+	passByReference(&x)
+	fmt.Printf("Outside function %d %p \n", x, &x)
+}
+```
+
+Pada fungsi passByReference, kita mengubah nilai underlying dari pointer x, yang tadinya 5 menjadi 10 dengan operator dereference (*). Setelah itu kita print nilai yang telah kita ubah (yaitu *x) dan pointernya (x). 
+
+Ini sedikit berbeda dengan x di luar function yang bukan berupa pointer. Selain itu, untuk mengoper pointer kita menggunakan operator reference (&x) dalam pemanggilan fungsi passByReference.
+
+Jika program dijalankan maka hasilnya sebagai berikut
+
+```shell
+Inside function 10 0xc000012070 
+Outside function 10 0xc000012070 
+```
+
+Sekarang nilai di luar fungsi ikut berubah menjadi 10, karena yang kita modifikasi adalah pointernya.
+
+Perlu diingat bahwa x dalam fungsi tidak sama dengan pointer &x di luar fungsi. Yang dilakukan Go adalah membuat pointer lokal baru x yang nilainya di-copy dari pointer &x (di luar fungsi) yang digunakan untuk memanggil fungsi tersebut.
+
+## 6. Setter dan getter
+
+Salah satu penerapan pointer yang paling umum adalah setter dan getter method pada suatu struct.
+
+```go
+package main
+
+import "fmt"
+
+type Person struct {
+	name string
+}
+
+func NewPerson(name string) Person {
+	return Person{name}
+}
+
+func (p Person) Name() string {
+	return p.name
+}
+
+func (p *Person) SetName(name string) {
+	p.name = name
+}
+
+func main() {
+	p := NewPerson("Andy")
+	fmt.Println(p.Name())
+	p.SetName("Handy")
+	fmt.Println(p.Name())
+}
+```
+
+Jika dijalankan maka nama berubah dari Andy menjadi Handy. 
+
+Ada hal yang unik di sini. Untuk mengubah p.name tidak diperlukan operator dereference `(*p).name = name` karena compiler Go dapat mendeteksi hal ini.
+
+```
+*Catatan*: dalam Go, best practicenya adalah method-method yang memiliki side effect atau mengubah nilai di luar fungsi harus menggunakan receiver argument atau parameter berupa pointer, sedangkan method-method yang hanya membaca nilai menggunakan recevier argument atau parameter biasa
+```
+
+## Referensi
+
+[Pointers Explained](https://yourbasic.org/golang/pointers-explained/)
+
+[Go Pointer](https://wahyu-ehs.medium.com/go-pointer-47f1ed099682)
