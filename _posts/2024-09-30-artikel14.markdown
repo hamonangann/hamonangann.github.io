@@ -221,7 +221,69 @@ Ada hal yang unik di sini. Untuk mengubah p.name tidak diperlukan operator deref
 *Catatan*: dalam Go, best practicenya adalah method-method yang memiliki side effect atau mengubah nilai di luar fungsi harus menggunakan receiver argument atau parameter berupa pointer, sedangkan method-method yang hanya membaca nilai menggunakan recevier argument atau parameter biasa
 ```
 
-## 7. Pointer nil
+## 7. List/Map of Struct
+
+Untuk membuat list yang dapat memodifikasi struct secara global, kita dapat memanfaatkan pointer. 
+
+Sebagai contoh, mari lihat dan jalankan kode berikut
+
+```go
+package main
+
+import "fmt"
+
+type Person struct {
+	FirstName string
+	LastName  string
+}
+
+func main() {
+	p0 := Person{"Andy", "Timmons"}
+	p1 := Person{"Ardy", "Putra"}
+
+	persons := []Person{p0, p1}
+
+	persons[0].LastName = "Caroll"
+
+	fmt.Println(p0.LastName)
+}
+```
+
+Pada saat dijalankan, LastName tidak berubah dari Timmons menjadi Caroll. Ini terjadi karena persons[0] berbeda dengan p0. 
+
+Pada saat membuat list, nilai dari p0 di-copy, dan copy-nya dijadikan persons[0]. Karena berupa copy, maka alamat keduanya di memori berbeda. Karena alamatnya berbeda, perubahan pada salah satu variabel tidak mempengaruhi yang lainnya.
+
+Ini dapat diatasi dengan mudah dengan pointer.
+
+```go
+package main
+
+import "fmt"
+
+type Person struct {
+	FirstName string
+	LastName  string
+}
+
+func main() {
+	p0 := Person{"Andy", "Timmons"}
+	p1 := Person{"Ardy", "Putra"}
+
+	persons := []*Person{&p0, &p1}
+
+	persons[0].LastName = "Caroll"
+
+	fmt.Println(p0.LastName)
+}
+```
+
+Setelah dijalankan ulang, outputnya menjadi Caroll.
+
+Ini karena p0 dan persons[0] berupa pointer (yang menunjuk ke alamat yang sama), sekarang perubahan value yang ditunjuk persons[0] ikut mengubah value yang ditunjuk p0.
+
+Hal yang serupa dapat juga diterapkan untuk value dari map.
+
+## 8. Pointer nil
 
 Sebuah pointer bisa jadi dibuat tidak menunjuk variabel apapun. Dalam hal ini, nilai dari pointer bukanlah alamat memori, melainkan nilai kosong yang disebut dengan **nil**.
 
@@ -264,7 +326,7 @@ main.main()
 Program exited.
 ```
 
-## 8. Error object
+## 9. Error object
 
 Penerapan umum pointer lainnya adalah pada error object. Pada bahasa Go, tidak terdapat stack trace atau fungsionalitas try-catch untuk menangkap error. Dengan demikian, sejatinya objek error di Go adalah struct biasa.
 
