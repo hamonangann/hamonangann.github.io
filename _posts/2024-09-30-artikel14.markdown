@@ -375,6 +375,80 @@ Di sini terlihat bahwa error dioper dari fungsi firstChar sebagai pointer. Kemud
 
 Jika program di atas dijalankan, maka outputnya adalah `Empty input certainly don't have first character`.
 
+## 10. Pointer dan Interface
+
+Pointer (misalnya pointer ke suatu struct) juga bisa digunakan sebagai implementasi dari interface. Sebagai contoh, kita dapat membuat kode sebagai berikut.
+
+```go
+package main
+
+import "fmt"
+
+type Vehicle interface {
+	Start()
+	Stop()
+}
+
+type Car struct {
+	Power string
+}
+
+func (c *Car) Start() {
+	c.Power = "On"
+}
+
+func (c *Car) Stop() {
+	c.Power = "Off"
+}
+
+func main() {
+	var jaguar Vehicle = &Car{}
+	jaguar.Start()
+	fmt.Println(jaguar.(*Car).Power)
+}
+```
+
+Ketika dijalankan, kita membuat sebuah variabel jaguar yang merupakan pointer ke suatu Car. Di sini, pointer &Car-lah yang mengimplementasi interface Vehicle (bukan Car itu sendiri).
+
+Salah satu kesalahan umum adalah menggunakan pointer to interface untuk mewakili fungsionalitas suatu pointer. Sebagai contoh, kode berikut menghasilkan error.
+
+```go
+package main
+
+type Vehicle interface {
+	Start()
+	Stop()
+}
+
+type Car struct {
+	Power string
+}
+
+func (c *Car) Start() {
+	c.Power = "On"
+}
+
+func (c *Car) Stop() {
+	c.Power = "Off"
+}
+
+func main() {
+	var jaguar *Vehicle = &Car{}
+}
+```
+
+Pesan errornya berbunyi seperti demikian
+
+```shell
+./prog.go:21:24: cannot use &Car{} (value of type *Car) as *Vehicle value in variable declaration: *Car does not implement *Vehicle (type *Vehicle is pointer to interface, not interface)
+```
+
+Perlu dicatat bahwa pointer ke interface **bukanlah** interface. Ia adalah concrete type yang menyimpan alamat dari suatu interface, dan ini tidak umum digunakan.
+
+Untuk memperbaiki error di atas, cukup deklarasikan `jaguar` sebagai `Vehicle`, bukan `*Vehicle`.
+
+
+
 ## Referensi
 
 [Pointers Explained](https://yourbasic.org/golang/pointers-explained/)
