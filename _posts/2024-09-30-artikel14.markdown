@@ -69,12 +69,12 @@ Hasilnya sebagai berikut
 
 Kita akan mendapatkan hasil serupa dengan (1). Ini menandakan bahwa kita bisa membuat variabel untuk menampung alamat memori dari variabel lainnya. Variabel yang seperti inilah yang disebut sebagai **pointer**.
 
-Untuk menginisiasi (membuat baru) variabel pointer, kita menggunakan operator **dereference** (*) di depan nama variabelnya.
+Untuk menginisiasi (membuat baru) variabel pointer, kita menggunakan tanda (*) di depan nama variabelnya.
 
 
 ## 3. Mendapatkan value yang ditunjuk pointer
 
-Operator dereference (*) juga dapat digunakan untuk mendapatkan value dari variabel yang ditunjuk pointer. Caranya seperti berikut
+Tanda (*) juga dapat digunakan untuk mendapatkan value dari variabel yang ditunjuk pointer. Ini disebut operator dereference. Caranya seperti berikut
 
 ```go
 package main
@@ -144,7 +144,7 @@ Jika dijalankan, nilai x di dalam fungsi adalah 10, sedangkan nilai x di luarnya
 
 Di balik layar, yang dilakukan Go adalah membuat variabel lokal baru x (yang hanya berlaku di dalam fungsi) yang nilainya di-copy dari nilai x pemanggilnya, tetapi karena dibuat baru maka alamatnya berbeda.
 
-## 5. Pass by value dengan pointer
+## 5. Pass pointer ke fungsi
 
 Kalau demikian, adakah cara mengubah nilai di luar fungsi? Dengan Go, kita bisa mengoper nilai pointer (menggunakan operator dereference) sehingga kita dapat memodifikasi nilai di luar fungsi.
 
@@ -218,7 +218,7 @@ Jika dijalankan maka nama berubah dari Andy menjadi Handy.
 Ada hal yang unik di sini. Untuk mengubah p.name tidak diperlukan operator dereference `(*p).name = name` karena compiler Go dapat mendeteksi hal ini.
 
 ```
-*Catatan*: dalam Go, best practicenya adalah method-method yang memiliki side effect atau mengubah nilai di luar fungsi harus menggunakan receiver argument atau parameter berupa pointer, sedangkan method-method yang hanya membaca nilai menggunakan recevier argument atau parameter biasa
+*Catatan*: dalam Go, best practicenya adalah method-method yang memiliki side effect atau mengubah nilai di luar fungsi harus menggunakan pointer receiver atau parameter berupa pointer, sedangkan method-method yang hanya membaca nilai menggunakan value recevier atau parameter biasa. Ada juga yang menyarankan untuk selalu memakai pointer untuk menunjuk struct yang menyimpan data berukuran besar.
 ```
 
 ## 7. List/Map of Struct
@@ -408,7 +408,7 @@ func main() {
 }
 ```
 
-Ketika dijalankan, kita membuat sebuah variabel jaguar yang merupakan pointer ke suatu Car. Di sini, pointer &Car-lah yang mengimplementasi interface Vehicle (bukan Car itu sendiri).
+Ketika dijalankan, kita membuat sebuah variabel jaguar yang merupakan pointer ke suatu Car. Di sini, pointer &Car-lah yang dianggap mengimplementasi interface Vehicle (bukan Car itu sendiri).
 
 Salah satu kesalahan umum adalah menggunakan pointer to interface untuk mewakili fungsionalitas suatu pointer. Sebagai contoh, kode berikut menghasilkan error.
 
@@ -454,3 +454,5 @@ Untuk memperbaiki error di atas, cukup deklarasikan `jaguar` sebagai `Vehicle`, 
 [Pointers Explained](https://yourbasic.org/golang/pointers-explained/)
 
 [Go Pointer](https://wahyu-ehs.medium.com/go-pointer-47f1ed099682)
+
+[Menggunakan Pointer di Golang dengan Mudah](https://husniadil.com/menggunakan-pointer-di-golang-dengan-mudah/)
