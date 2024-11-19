@@ -1,0 +1,222 @@
+---
+layout: post
+title:  "Implementing Interface in Python"
+categories: tips
+featured_image: /img/artikel7-logo-python.png
+---
+
+An interface serves as a blueprint for classes in object-oriented programming. A formal interface defines a list of methods for classes to implement.
+
+Unlike Java or even Go, until this article is posted, Python doesn't have a straightforward interface type or keyword. However, we can imitate the behavior of interfaces using various ways. Of course, we will explore this in this article.
+
+## The not-so-correct-way
+
+Like most object-oriented languages, we can implement the concept of inheritance in Python. This means we can define an interface as a parent class for classes implementing the methods defined in the interface.
+
+Let's take a look at this example.
+
+```python
+class Bird():
+    @classmethod
+    def walk(self) -> str:
+        raise NotImplementedError
+
+    @classmethod
+    def fly(self) -> str:
+        raise NotImplementedError
+
+class Ostrich(Bird):
+    @classmethod
+    def walk(self) -> str:
+        return "I can walk!"
+
+class Pigeon(Bird):
+    @classmethod
+    def walk(self) -> str:
+        return "I can walk"
+
+    @classmethod
+    def fly(self) -> str:
+        return "I can fly too!"
+
+def walking(b: Bird):
+    print(b.walk())
+
+def flying(b: Bird):
+    print(b.fly())
+
+def main():
+    my_ostrich = Ostrich()
+    walking(my_ostrich)
+
+if __name__ == "__main__":
+    main()
+```
+
+We define class `Bird` which is supposed to be an interface. It has two methods: `walk` and `fly`. Then there are two classes (`Ostrich` and `Pigeon`) trying to use `Bird` as their parent class.
+
+Ostrich doesn't have `fly` method, and will return NotImplementedError when function flying() is called. However, if we run the program above, we won't have any errors.
+
+There are better ways. Let's move on.
+
+`No doubt, Python is an object-oriented language. All of the types in Python are defined as objects, and we can implement four of its pillars (encapsulation, polymorphism, inheritance, and abstraction). The thing is, we are demonstrating the abstraction part in this article.`
+
+## The good-enough way
+
+To improve our work, we may introduce abstract methods to our supposed interface. It will make all the subclasses to implement the methods defined in the interface because concrete classes cannot be instantiated with abstract methods.
+
+All we need to do is import standard library `abc`. We can change our `Bird` class as follows.
+
+```python
+from abc import abstractmethod, ABCMeta
+
+class Bird(metaclass=ABCMeta):
+    @classmethod
+    @abstractmethod
+    def walk(self) -> str:
+        ...
+
+    @classmethod
+    @abstractmethod
+    def fly(self) -> str:
+        ...
+```
+
+Please note that besides importing `abc` in the first line, we need to add `abc.ABCMeta` as Bird's metaclass. On the other hand, we don't have to raise errors in our abstract methods.
+
+Now the code will look like this.
+
+```python
+from abc import abstractmethod, ABCMeta
+
+class Bird(metaclass=ABCMeta):
+    @classmethod
+    @abstractmethod
+    def walk(self) -> str:
+        ...
+
+    @classmethod
+    @abstractmethod
+    def fly(self) -> str:
+        ...
+
+class Ostrich(Bird):
+    @classmethod
+    def walk(self) -> str:
+        return "I can walk!"
+
+class Pigeon(Bird):
+    @classmethod
+    def walk(self) -> str:
+        return "I can walk"
+
+    @classmethod
+    def fly(self) -> str:
+        return "I can fly too!"
+
+def walking(b: Bird):
+    print(b.walk())
+
+def flying(b: Bird):
+    print(b.fly())
+
+def main():
+    my_ostrich = Ostrich()
+    walking(my_ostrich)
+
+if __name__ == "__main__":
+    main()
+```
+
+Try running the code above and here will happen.
+
+```shell
+$ python3 bird.py
+Traceback (most recent call last):
+  File "/home/user1/Documents/python/test.py", line 39, in <module>
+    main()
+  File "/home/user1/Documents/python/test.py", line 35, in main
+    my_ostrich = Ostrich()
+TypeError: Can't instantiate abstract class Ostrich with abstract method fly
+```
+
+Now we improve the code by not allowing class objects to be instantiated if the class doesn't implement methods provided by the interface they inherit.
+
+## The more-strict way
+
+With more efforts, we can extend our interface to detect incomplete methods even earlier. However, this solution requires a third-party library called `python-interface`
+
+To start, install the library with `pip`.
+
+```shell
+$ python3 -m pip install python-interface
+```
+
+We need to patch several parts. First, import the library.
+
+```python
+from interface import implements, Interface
+```
+
+Next, we need to make our `Bird` interface inherit `Interface`.
+
+```python
+class Bird(Interface):
+    @classmethod
+    def walk(self) -> str:
+        ...
+
+    @classmethod
+    def fly(self) -> str:
+        ...
+```
+
+Last, we adjust our `Ostrich` and `Pigeon` by wrapping `Bird` into `implements`.
+
+```python
+class Ostrich(implements(Bird)):
+    @classmethod
+    def walk(self) -> str:
+        return "I can walk!"
+
+class Pigeon(implements(Pigeon)):
+    @classmethod
+    def walk(self) -> str:
+        return "I can walk"
+
+    @classmethod
+    def fly(self) -> str:
+        return "I can fly too!"
+```
+
+Now we can run our program and here will happen.
+
+```shell
+$ python3 bird.py
+Traceback (most recent call last):
+  File "/home/bornyto.hamonangan/Documents/python/test.py", line 12, in <module>
+    class Ostrich(implements(Bird)):
+  File "/home/bornyto.hamonangan/.local/lib/python3.10/site-packages/interface/interface.py", line 456, in __new__
+    raise errors[0]
+  File "/home/bornyto.hamonangan/.local/lib/python3.10/site-packages/interface/interface.py", line 436, in __new__
+    defaults_from_iface = iface.verify(newtype)
+  File "/home/bornyto.hamonangan/.local/lib/python3.10/site-packages/interface/interface.py", line 228, in verify
+    raise self._invalid_implementation(type_, missing, mistyped, mismatched)
+interface.interface.InvalidImplementation: 
+class Ostrich failed to implement interface Bird:
+
+The following methods of Bird were not implemented:
+  - fly(self) -> str
+```
+
+Even better, now the program detects the problem in the class creation, not instantiation. To test this further, we can try to change our `main` function to `def main(): pass` and see what happens.
+
+## Opinion
+
+This article provides examples of interface implementation in Python. Each method has its own advantages and disadvantages. In my opinion, usage of the standard library `abc` is sufficient to tackle unintentional errors during programming. However, if strictness is more important, `python-interface` provides a wonderful implementation of interfaces.
+
+## References
+
+- https://realpython.com/python-interface/
+
+- https://python-interface.readthedocs.io/en/latest/index.html
