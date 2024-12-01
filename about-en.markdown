@@ -7,12 +7,12 @@ permalink: /about/
  
 This is B. Hamonangan. I have been learning programming since high school, and I later attended both formal (Computer Science major) and informal (coding boot camp) education to dive deeper. Through these learning processes, I acquired special skills such as talking to [Python](https://en.wikipedia.org/wiki/Python_(programming_language)) (using an interpreter).
 
-After freelancing for 2+ years living and coding in [Java](https://en.wikipedia.org/wiki/Java), I want to explore overseas and do more programming there.
+After freelancing for 2+ years coding in [Java](https://en.wikipedia.org/wiki/Java), I want to explore overseas and do more programming there.
 
 Mail me at [b.hamonangan.p@gmail.com
 ](mailto:b.hamonangan.p@gmail.com) 📬
 
-### Useful books for everyone!
+### Useful for everyone!
 
 - [Automate the Boring Stuff with Python](https://automatetheboringstuff.com/) by AI Swegart. It's about practical programming for everyone in front of a computer to make things easier.
 
