@@ -9,7 +9,8 @@ This is B. Hamonangan. I have been learning programming since high school, and I
 
 After freelancing for 2+ years living and coding in [Java](https://en.wikipedia.org/wiki/Java), I want to explore overseas and do more programming there.
 
-Mail me at b.hamonangan.p@gmail.com 📬
+Mail me at [b.hamonangan.p@gmail.com
+](mailto:b.hamonangan.p@gmail.com) 📬
 
 ### Useful books for everyone!
 
@@ -17,7 +18,7 @@ Mail me at b.hamonangan.p@gmail.com 📬
 
 - [But How Do It Know—The Basic Principles of Computers For Everyone](https://openlibrary.org/books/OL26675175M/But_How_Do_It_Know) by J. Clark Scott. It's about demystifying computers in the simplest way possible.
 
-### Projects
+### My projects
 
 - **[Polygon](https://pkg.go.dev/github.com/hamonangann/polygon)**, a Go library for constructing polygonal shapes (triangles, rectangles, free-form polygons with 100 sides if needed) and measuring the properties of the polygon (area, perimeter, etc). It is quite simple, though. However, I made it because I could not find any Go libraries tackling these issues. [Repo](https://github.com/hamonangann/polygon).
 
