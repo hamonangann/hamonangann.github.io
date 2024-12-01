@@ -5,20 +5,20 @@ permalink: /about/
 ---
 **Greetings!** 👋 
  
-This is B. Hamonangan. I have been learning programming since high school, and I later attended both formal (Computer Science major) and informal (coding boot camp) education to dive deeper. Through these learning processes, I acquired special skills such as talking to [Python](https://en.wikipedia.org/wiki/Python_(programming_language)) (using an interpreter).
+This is B. Hamonangan. I have been learning programming since high school, and I later attended both formal (Computer Science major) and informal (coding boot camp) education to dive deeper. Through these learning processes, I acquired special skills such as talking to [Python](https://en.wikipedia.org/wiki/Python_(programming_language)) just like Harry Potter.
 
 After freelancing for 2+ years coding in [Java](https://en.wikipedia.org/wiki/Java), I want to explore overseas and do more programming there.
 
 Mail me at [b.hamonangan.p@gmail.com
 ](mailto:b.hamonangan.p@gmail.com) 📬
 
-### Useful for everyone!
+### Useful books for everyone!
 
 - [Automate the Boring Stuff with Python](https://automatetheboringstuff.com/) by AI Swegart. It's about practical programming for everyone in front of a computer to make things easier.
 
 - [But How Do It Know—The Basic Principles of Computers For Everyone](https://openlibrary.org/books/OL26675175M/But_How_Do_It_Know) by J. Clark Scott. It's about demystifying computers in the simplest way possible.
 
-### My projects
+### My free software projects
 
 - **[Polygon](https://pkg.go.dev/github.com/hamonangann/polygon)**, a Go library for constructing polygonal shapes (triangles, rectangles, free-form polygons with 100 sides if needed) and measuring the properties of the polygon (area, perimeter, etc). It is quite simple, though. However, I made it because I could not find any Go libraries tackling these issues. [Repo](https://github.com/hamonangann/polygon).
 
