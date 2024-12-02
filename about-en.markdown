@@ -10,11 +10,11 @@ After freelancing for 2+ years coding in [Java](https://en.wikipedia.org/wiki/Ja
 Mail me at [b.hamonangan.p@gmail.com
 ](mailto:b.hamonangan.p@gmail.com) 📬
 
-### Useful books for everyone!
+### Useful readings
 
-- [Automate the Boring Stuff with Python](https://automatetheboringstuff.com/) by AI Swegart. It's about practical programming for everyone in front of a computer to make things easier.
+- [Automate the Boring Stuff with Python](https://automatetheboringstuff.com/) by AI Swegart. It tells everyone in front of a computer how to get things done quicker and easier with programming.
 
-- [But How Do It Know—The Basic Principles of Computers For Everyone](https://openlibrary.org/books/OL26675175M/But_How_Do_It_Know) by J. Clark Scott. It's about demystifying computers in the simplest way possible.
+- [But How Do It Know—The Basic Principles of Computers For Everyone](https://openlibrary.org/books/OL26675175M/But_How_Do_It_Know) by J. Clark Scott. It explains to everyone how computer parts work in the simplest way possible.
 
 ### My free software projects
 
