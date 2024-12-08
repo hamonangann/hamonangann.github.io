@@ -3,7 +3,7 @@ layout: page
 title: About
 permalink: /about/
 ---
-Tired of trying to be a pro gamer, I decided to move to something else: programmer. So I started learning programming in high school, and I later attended both formal (Computer Science major) and informal (coding boot camp) education to dive deeper. Through these learning processes, I acquired special skills such as talking to [Python](https://en.wikipedia.org/wiki/Python_(programming_language)) just like Harry Potter.
+**B. Hamonangan:** Tired of trying to be a pro gamer, I decided to move to something else: programmer. So I started learning programming in high school, and I later attended both formal (Computer Science major) and informal (coding boot camp) education to dive deeper. Through these learning processes, I acquired special skills such as talking to [Python](https://en.wikipedia.org/wiki/Python_(programming_language)) just like Harry Potter.
 
 After freelancing for 2+ years coding in [Java](https://en.wikipedia.org/wiki/Java), I want to explore overseas and do more programming there.
 
