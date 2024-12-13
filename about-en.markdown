@@ -20,6 +20,10 @@ Mail me at [b.hamonangan.p@gmail.com
 
 - **[Polygon](https://pkg.go.dev/github.com/hamonangann/polygon)**, a Go library for constructing polygonal shapes (triangles, rectangles, free-form polygons with 100 sides if needed) and measuring the properties of the polygon (area, perimeter, etc). It is quite a simple library, though. However, I made it because I could not find any Go libraries tackling these issues. [Repo](https://github.com/hamonangann/polygon).
 
+- **[Perkalian Web](https://perkalian.netlify.app)**, a web-based game of multiplying 2 numbers in a very short time. This game purpose is educational and serves as an alternative for table memorization method. [Repo](https://github.com/hamonangann/perkalian-web).
+
+    ![Perkalian](/img/about-perkalian.png)
+
 - **[SusunJadwal](https://susunjadwal.cs.ui.ac.id)** by [RISTEK Open Source Software](https://oss.ristek.cs.ui.ac.id/): a course planning web application developed back in my college days. [Backend Repo](https://github.com/ristekoss/susunjadwal-backend), [Frontend Repo](https://github.com/ristekoss/susunjadwal-frontend).
 
     ![SusunJadwal](/img/about-sunjad.png)
