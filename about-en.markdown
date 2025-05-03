@@ -5,7 +5,7 @@ permalink: /about/
 ---
 **B. Hamonangan:** I don't exactly remember at what age I started learning programming, but later, I attended both formal (Computer Science major) and informal (coding boot camp) education to dive deeper. Now I can talk to [Python](https://en.wikipedia.org/wiki/Python_(programming_language)) just like Harry Potter...
 
-After freelancing for 2+ years coding in [Java](https://en.wikipedia.org/wiki/Java), I am now exploring overseas while doing my programming!
+After freelancing for 2+ years coding in [Java](https://en.wikipedia.org/wiki/Java), I am now exploring overseas!
 
 Mail me at [b.hamonangan.p@gmail.com
 ](mailto:b.hamonangan.p@gmail.com) 📬
