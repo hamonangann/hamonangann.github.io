@@ -3,7 +3,7 @@ layout: page
 title: About
 permalink: /about/
 ---
-**B. Hamonangan:** I don't exactly remember at what age I started learning programming, but later, I attended both formal (Computer Science major) and informal (coding boot camp) education to dive deeper. Now I can talk to [Python](https://en.wikipedia.org/wiki/Python_(programming_language)) just like Harry Potter...
+**B. Hamonangan:** I don't exactly remember at what age I started learning programming, but later, I attended both formal education (Computer Science at [University of Indonesia](https://en.m.wikipedia.org/wiki/University_of_Indonesia) and informal education (coding boot camp by [Sea Ltd](https://en.m.wikipedia.org/wiki/Sea_Ltd) to dive deeper. Now I can talk to [Python](https://en.wikipedia.org/wiki/Python_(programming_language)) just like Harry Potter...
 
 After freelancing for 2+ years coding in [Java](https://en.wikipedia.org/wiki/Java), I am now exploring overseas!
 
