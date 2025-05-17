@@ -3,9 +3,9 @@ layout: page
 title: About
 permalink: /about/
 ---
-**B. Hamonangan:** I don't exactly remember at what age I started learning programming, but later, I attended both formal education (Computer Science at [University of Indonesia](https://en.m.wikipedia.org/wiki/University_of_Indonesia)) and informal education (coding boot camp by [Sea Ltd](https://en.m.wikipedia.org/wiki/Sea_Ltd)) to dive deeper. Now I can talk to [Python](https://en.wikipedia.org/wiki/Python_(programming_language)) just like Harry Potter...
+**B. Hamonangan:** I was born in [Java](https://en.wikipedia.org/wiki/Java) as the firstborn of three siblings with a hobby of breaking and fixing things, mainly computers. I was exposed to programming languages from elementary school, but I started learning them seriously at the University of Indonesia, where I took my Computer Science bachelor's degree. My education blends with the 6-month informal coding bootcamp from Sea Ltd, resulting in a Harry Potter-like ability to talk to [Python](https://en.wikipedia.org/wiki/Python_(programming_language)) and other stuff.
 
-After freelancing for 2+ years coding in [Java](https://en.wikipedia.org/wiki/Java), I am now exploring overseas!
+After working for a year in my home country, I am now exploring overseas!
 
 Mail me at [b.hamonangan.p@gmail.com
 ](mailto:b.hamonangan.p@gmail.com) 📬
