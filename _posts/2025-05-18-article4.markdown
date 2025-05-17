@@ -1,0 +1,228 @@
+---
+layout: post
+title: "When to use Go Pointers?"
+categories: tips
+---
+
+In the Go programming language, a pointer is a variable for storing a memory address. For programmers not familiar with Go (or C/C++ kind of language), deciding to use (or not to use) pointers may be quite tricky. In this article, we will discuss things to consider for Go pointers.
+
+## Nullable data
+
+Sometimes we want to distinguish between a zero/default value and null/absence.
+
+```
+package main
+
+import "fmt"
+
+type CreditAccount struct {
+	HolderName string
+	Score      int
+}
+
+func NewCreditAccount(name string) *CreditAccount {
+	newAccount := CreditAccount{}
+	newAccount.HolderName = name
+	return &newAccount
+}
+
+func main() {
+	fmt.Println(NewCreditAccount("Alice").Score)
+}
+```
+
+It will definitely return `0`, because it is the default `int` value.
+
+But the business rule might not be like this. New accounts can have **no** credit score, because their initial score has not been decided yet. So, we should distinguish it with **zero** credit score.
+
+A simple solution for this is to use a pointer to wrap the `int`
+
+```
+package main
+
+import "fmt"
+
+type CreditAccount struct {
+	HolderName string
+	Score      *int
+}
+
+func NewCreditAccount(name string) *CreditAccount {
+	newAccount := CreditAccount{}
+	newAccount.HolderName = name
+	return &newAccount
+}
+
+func main() {
+	fmt.Println(NewCreditAccount("Alice").Score)
+}
+```
+
+Now it returns `nil` instead.
+
+`This solution works with structs too, as nil structs can be easily understood as the absence of data`
+
+
+## Mutable data
+
+The only way to mutate data outside its function is to wrap it in a pointer. This is because every function argument in Go is a **copy** from the original caller.
+
+```
+package main
+
+import "fmt"
+
+type Person struct {
+	Name string
+	Age  int
+}
+
+func (p Person) TryToChangeName(name string) {
+	p.Name = name
+	fmt.Println("Name changed to", p.Name, "here")
+}
+
+func main() {
+	p := Person{"Alice", 20}
+	p.TryToChangeName("Bob")
+	fmt.Println("But the name remains", p.Name, "here")
+}
+```
+
+So the only way here is using `*Person` pointer receiver.
+
+It is best practice to use a consistent receiver for all methods of a type (either value or pointer receiver), so all mutable data methods should receive a pointer.
+
+```
+package main
+
+import "fmt"
+
+type Exam struct {
+	Subject      string
+	PassingScore int
+}
+
+func NewExam(subject string, passingScore int) *Exam {
+	return &Exam{subject, passingScore}
+}
+
+func (e *Exam) SetSubject(s string) {
+	e.Subject = s
+}
+
+func (e *Exam) SetPassingScore(ps int) {
+	e.PassingScore = ps
+}
+
+func (e *Exam) GetSubject() string {
+	return e.Subject
+}
+
+func (e *Exam) GetPassingScore() int {
+	return e.PassingScore
+}
+
+func main() {
+	e := NewExam("Math", 70)
+	fmt.Println(e.GetPassingScore())
+}
+```
+
+`Because of the copying behavior of Go functions, we generally must pass things we don't want to be copied (e.g mutex) by using pointer receivers as well.`
+
+## Protocol Buffers
+
+We should use pointers when declaring a protocol buffer (`protobuf`) type for several reasons. First, it makes the data mutable and nullable. Second, only pointer receivers satisfy `proto.Message`, so we can compare the data with `proto.Equal` or `proto.Marshal`.
+
+Suppose a `.proto` file.
+
+```
+package pb;
+
+option go_package = "./pb";
+
+service UserService {
+    rpc GetUser(GetUserRequest) returns (User);
+}
+
+message GetUserRequest {
+    required string id = 1;
+}
+
+message User {
+    required string id = 1;
+    optional string name = 2;
+}
+```
+
+The program uses pointers and compares them.
+
+```
+package main
+
+import (
+	"fmt"
+	pb "protob/pb"
+	proto "google.golang.org/protobuf/proto"
+)
+
+func main() {
+	alice := new(pb.User)
+	bob := &pb.User{}
+	fmt.Println(proto.Equal(alice, bob))
+}
+```
+
+## Errors
+
+Generally, we should return an error object as a pointer, so it can be compared later using `errors.As` or `errors.Is`
+
+```
+package main
+
+import (
+	"errors"
+	"fmt"
+)
+
+type CharError struct {
+	Message string
+}
+
+func (e *CharError) Error() string {
+	return e.Message
+}
+
+func firstChar(s string) (string, error) {
+	if len(s) == 0 {
+		return "", &CharError{"Length of string s is zero"}
+	}
+	return s[:1], nil
+
+}
+
+func main() {
+	first, err := firstChar("")
+	if err != nil {
+		var charError *CharError
+
+		if errors.As(err, &charError) {
+			fmt.Println("Empty input certainly don't have first character")
+			return
+		}
+
+		fmt.Println("Unexpected error: ", err.Error())
+		return
+	}
+	fmt.Println("The first character of the input is", first)
+}
+```
+
+## Reference
+
+[Effective Go](https://go.dev/doc/effective_go)
+
+[Google Go Style Gude](https://google.github.io/styleguide/go/)
+
+[Pointer vs Value Receiver](https://yourbasic.org/golang/pointer-vs-value-receiver/)
