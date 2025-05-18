@@ -4,7 +4,7 @@ title: "When to use Go Pointers?"
 categories: tips
 ---
 
-In the Go programming language, a pointer is a variable for storing a memory address. For programmers not familiar with Go (or C/C++ kind of language), deciding to use (or not to use) pointers may be quite tricky. In this article, we will discuss things to consider for Go pointers.
+In the Go programming language, a pointer is a variable for storing a memory address. For programmers not familiar with Go (or C/C++ kind of language), deciding to use (or not to use) pointers may be quite tricky. In this article, we will discuss the use cases for Go pointers.
 
 ## Nullable data
 
@@ -129,13 +129,13 @@ func main() {
 }
 ```
 
-`Because of the copying behavior of Go functions, we generally must pass things we don't want to be copied (e.g mutex) by using pointer receivers as well.`
+`Because of the copying behavior of Go functions, we generally must pass things we don't want to be copied (e.g struct with mutex fields) by using pointer receivers as well.`
 
 ## Protocol Buffers
 
 We should use pointers when declaring a protocol buffer (`protobuf`) type for several reasons. First, it makes the data mutable and nullable. Second, only pointer receivers satisfy `proto.Message`, so we can compare the data with `proto.Equal` or `proto.Marshal`.
 
-Suppose a `.proto` file.
+Given a `.proto` file.
 
 ```
 package pb;
@@ -163,7 +163,7 @@ package main
 
 import (
 	"fmt"
-	pb "protob/pb"
+	pb "example/pb"
 	proto "google.golang.org/protobuf/proto"
 )
 
@@ -176,7 +176,7 @@ func main() {
 
 ## Errors
 
-Generally, we should return an error object as a pointer, so it can be compared later using `errors.As` or `errors.Is`
+Generally, we should return an error object as a pointer, so it can be compared later using `errors.As` or `errors.Is`.
 
 ```
 package main
