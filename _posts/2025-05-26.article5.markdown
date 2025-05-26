@@ -1,0 +1,145 @@
+---
+layout: post
+title: "Do We Really Need Go Generics?"
+categories: tips
+featured_image: /img/article3-golang-logo.png
+---
+
+Generics is the most anticipated feature in Go starting from v1.18, but its power is often misunderstood. In this article, we will discuss a good use case for Go.
+
+## Not-so-good example
+
+Given two identical types: `Apple` and `Pie`.
+
+```
+package main
+
+import "fmt"
+
+type Apple struct {
+	Origin string
+	Price  int
+}
+
+func (a Apple) PurchaseAmount(qty int) int {
+	return a.Price * qty
+}
+```
+
+```
+package main
+
+import "fmt"
+
+type Pie struct {
+	Origin string
+	Price  int
+	Tax    int
+}
+
+func (p Pie) PurchaseAmount(qty int) int {
+	return (a.Price + a.Tax) * qty
+}
+```
+
+We are using both types and defining a generic function to avoid repetition.
+
+```
+package main
+
+import "fmt"
+
+type Purchasable interface {
+	PurchaseAmount(int) int
+}
+
+func Purchase[T Purchasable](p T, qty int) {
+	fmt.Printf("You have spent %d JPY for %d items\n", p.PurchaseAmount(qty), qty)
+}
+```
+
+
+This function works, but it is not idiomatic. Passing interface type as a parameter is simpler.
+
+
+```
+func Purchase(p Purchasable, qty int) {
+	fmt.Printf("You have spent %d JPY for %d items\n", p.PurchaseAmount(qty), qty)
+}
+```
+
+We can test the code [here](https://go.dev/play/p/hgNT74KWAki).
+
+This principle also works for interface types defined by the standard packages.
+
+```
+func Log(str fmt.Stringer) {
+	fmt.Printf("%v: %s", time.Now(), str)
+}
+```
+
+In my opinion, nearly every problem that can be solved with generics can be solved either by using existing interfaces in Go standard packages or by defining a new interface that satisfies multiple types.
+
+## So, when should we use it?
+
+Generally, we need generic functions for the common or utility library. It can be sorting, mapping, or even any generic data structure such as `LinkedList` or `Tree`.
+
+But there is one more case when generics are useful. Let's say we want to compare `Apple` price and `Pie` price, but we only want to compare `Apple` with `Apple` (or `Pie` with `Pie`). In this case, functions with `Purchasable` wouldn't work.
+
+```
+func Cheaper(a Purchasable, b Purchasable) Purchasable {
+    if a.PurchaseAmount(1) < b.PurchaseAmount(1) {
+        return a
+    }
+    return b
+}
+
+// Cheaper(Apple{}, Pie{}) wouldn't raise compilation errors.
+```
+
+Before a generic type was introduced, all we could do was define `Cheaper` functions (or methods) for `Apple`, `Pie`, and any `Purchasable` types.
+
+```
+func CheaperApple(a Apple, b Apple) Apple {
+	if a.PurchaseAmount(1) < b.PurchaseAmount(1) {
+        return a
+    }
+    return b
+}
+
+func CheaperPie(p Pie, q Pie) Pie {
+	if p.PurchaseAmount(1) < q.PurchaseAmount(1) {
+        return p
+    }
+    return q
+}
+
+// or
+
+func (a Apple) IsCheaper(b Apple) bool {
+    return a.PurchaseAmount(1) < b.PurchaseAmount(1)
+}
+
+func (p Pie) IsCheaper(q Pie) bool {
+    return p.PurchaseAmount(1) < q.PurchaseAmount(1)
+}
+```
+
+But, defining the same logic for many types can be cumbersome. Therefore, we can utilize the type checking defined by generics to create a single function.
+
+```
+func Cheaper[T Purchasable](a T, b T) T {
+	if a.PurchaseAmount(1) < b.PurchaseAmount(1) {
+		return a
+	}
+	return b
+}
+```
+
+Check the code out [here](https://go.dev/play/p/ahLlg3HwliD) and try to compare `Apple` object with `Pie` object. It will result in a compilation time error.
+
+## Reference
+
+[Google Go Style Guide Decisions](https://google.github.io/styleguide/go/decisions)
+
+[When to Use Generics?](https://go.dev/blog/when-generics)
