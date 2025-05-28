@@ -3,9 +3,7 @@ layout: page
 title: About
 permalink: /about/
 ---
-**B. Hamonangan:** I was born in [Java](https://en.wikipedia.org/wiki/Java) with a hobby of breaking and fixing things, mainly computers. I studied Computer Science at the University of Indonesia. Following graduation, I took a coding boot camp at Sea Ltd, making my education a blend of formal and informal. Now I can talk to [Python](https://en.wikipedia.org/wiki/Python_(programming_language)), just like Harry Potter. 
-
-After twenty-three years living in my home country, I moved to Japan for work.
+**B. Hamonangan:** I was born in [Java](https://en.wikipedia.org/wiki/Java) with a hobby of breaking and fixing things, mainly computers. I studied Computer Science at the University of Indonesia. Following graduation, I attended a coding boot camp at Sea Ltd, making my education a blend of formal and informal. I learned how to talk to [Python](https://en.wikipedia.org/wiki/Python_(programming_language)), just like Harry Potter. Later, I moved to Japan to work as a programmer.
 
 Mail me at [b.hamonangan.p@gmail.com
 ](mailto:b.hamonangan.p@gmail.com) 📬
