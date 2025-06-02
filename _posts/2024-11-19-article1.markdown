@@ -2,7 +2,7 @@
 layout: post
 title:  "Implementing Interface in Python"
 categories: tips
-featured_image: /img/artikel7-logo-python.png
+featured_image: /img/article1-python-logo.png
 ---
 
 An interface serves as a blueprint for classes in object-oriented programming. A formal interface defines a list of methods for classes to implement.
