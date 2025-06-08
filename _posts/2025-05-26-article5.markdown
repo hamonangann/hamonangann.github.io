@@ -2,7 +2,6 @@
 layout: post
 title: "Do We Really Need Go Generics?"
 categories: tips
-featured_image: /img/article3-golang-logo.png
 ---
 
 Generics is the most anticipated feature in Go starting from v1.18, but its power is often misunderstood. In this article, we will discuss a good use case for Go.
