@@ -1,0 +1,190 @@
+---
+layout: post
+title: "Implementing Optional in Go"
+categories: tips
+---
+
+Optional is a type of data that can handle a true absence. For example, in a survey form, we may want to distinguish between agree, disagree, or no answer. If we represent such data using a boolean, we should differentiate between `false` and `null` values.
+
+## Use Cases
+
+Perhaps the most common use case for optional is an API, whether it is for fetching data from the database (e.g `sql.Scanner.Scan`) or processing data from client's POST request (e.g `json.Marshal` or `json.Unmarshal`)
+
+Unlike Java or other languages, Go doesn't have a straightforward optional type. Instead, developers rely on either `nil` (along with null checking) or an extra `boolean` to check absence.
+
+## Approach 1: Pointer
+
+This is the simplest approach because all we need is initializing a pointer which can hold a `nil`.
+
+```go
+package main
+
+import "fmt"
+
+type CreditAccount struct {
+	HolderName string
+	Score      *int
+}
+
+func NewCreditAccount(name string) *CreditAccount {
+	newAccount := CreditAccount{}
+	newAccount.HolderName = name
+	return &newAccount
+}
+
+func main() {
+	fmt.Println(NewCreditAccount("Alice").Score)
+}
+```
+
+Because `score` is a pointer to int, it defaults to `nil` instead of zero value `0` if not defined.
+
+This approach can be applied to any data type, such as `bool`, `int`, `string`, or any `struct`.
+
+One thing to note about this approach is that `nil` checking is important to avoid panic before dereferencing or exposing a pointer's value. If not done carefully, this can lead to problems (for example on a web server).
+
+## Approach 2: Presence Flag
+
+Given a simple struct as an example
+
+```go
+type OptionalInt struct {
+	Value int
+	Valid bool
+}
+```
+
+We can check for the equality of two variables as follows.
+
+```go
+package main
+
+import "fmt"
+
+type OptionalInt struct {
+	Value int
+	Valid bool
+}
+
+func main() {
+	foo := OptionalInt{Value: 0, Valid: true}
+	bar := OptionalInt{}
+
+	if foo.Valid == bar.Valid && foo.Value == bar.Value {
+		fmt.Println("Equal")
+		return
+	}
+
+	fmt.Println("Not Equal")
+}
+```
+
+Although `bar.Value` returns the same zero value `0` as `foo`, it is meant to be different.
+
+This approach is somehow idiomatic for basic data types that the `sql` package has a lot of wrapper types such as `sql.NullString`, `sql.NullInt32`, and so on. Go also has a nice feature to represent this kind of wrapper.
+
+Let's make a "getter" for our "OptionalInt" type...
+
+```go
+func (o OptionalInt) Get() (int, bool) {
+	return o.Value, o.Valid
+}
+```
+
+...and it's caller.
+
+```go
+func main() {
+    foo := OptionalInt{Value: 0, Valid: true}
+
+    if val, ok := foo.Get(); ok {
+        fmt.Println(val)
+    }
+
+    // ...
+}
+```
+
+With this approach, we won't encounter `nil` panic but we still can check for absence.
+
+## Approach 3: Generics
+
+Since [generics](https://hamonangann.github.io/tips/2025/05/26/article5.html) was introduced in Golang, a handful of data structures and generic functions can be implemented in a breeze. One of the most interesting uses of Go generics is an optional type.
+
+For example, we can refactor our `OptionalInt` type into a generic type...
+
+```go
+type Optional[T any] struct {
+	Value T
+	Valid bool
+}
+
+func (o Optional[T]) Get() (T, bool) {
+	return o.Value, o.Valid
+}
+```
+
+...and instantiate it.
+
+```go
+func main() {
+    foo := Optional[int]{Value: 0, Valid: true}
+	bar := Optional[string]{Value: "asd", Valid: true}
+
+	if val, ok := foo.Get(); ok {
+		fmt.Println(val)
+	}
+
+    // ...
+}
+```
+
+Some Go packages such as [mo.Option](https://github.com/samber/mo/blob/master/option.go) even implement the interfaces related to `optional` use case such as `sql.Scanner.Scan` and `json.Marshal`, so we don't need to construct the type manually.
+
+## Best Practices
+
+Surprisingly, one of the widely accepted practices in Go is just **omitting** absence. That means that we leave the absent value as blank/zero, insert that blank value into the database, and return it as null when fetched. To make the last thing happen, we can use [struct tags](https://go.dev/wiki/Well-known-struct-tags).
+
+For instance, we can have a name struct with optional middle and last names as follows.
+
+```
+type Name struct {
+	First  string `json:"first"`
+	Middle string `json:"middle,omitempty"`
+	Last   string `json:"last,omitempty"`
+}
+```
+
+If we create a `Name` of John Doe (no middle name), we can return a `json` with no middle name as follows.
+
+```go
+package main
+
+import (
+	"encoding/json"
+	"fmt"
+)
+
+type Name struct {
+	First  string `json:"first"`
+	Middle string `json:"middle,omitempty"`
+	Last   string `json:"last,omitempty"`
+}
+
+func main() {
+	a := Name{
+		First: "John",
+		Last:  "Doe",
+	}
+
+	out, _ := json.Marshal(&a)
+
+	fmt.Println(string(out))
+}
+```
+
+This program returns `{"first":"John","last":"Doe"}`, omitting the middle name column. That means we can support no absent data to users although it is not explicitly defined as absent in our codebase.
+
+In a bigger struct, we may want to not expose all the attributes to reduce complexity. Therefore, we can implement an [WithOptions](https://golang.cafe/blog/golang-functional-options-pattern.html) pattern to make our constructor simple yet customizable.
+
+Lastly, any approach to handle true absence at Go basic data type is fine, but I found that presence flag (explicitly defined or generic) to be safer in general. This can be said for complex structs as well. To avoid `nil` struct instantiation, we can make a constructor that returns a pointer to struct, but never a `nil` one. If no data is provided to that struct we can return a default struct, but it can be extended using `WithOptions` pattern.
