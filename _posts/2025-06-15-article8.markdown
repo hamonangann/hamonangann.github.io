@@ -4,7 +4,7 @@ title: "Implementing Optional in Go"
 categories: tips
 ---
 
-Optional is a type of data that can handle a true absence. For example, in a survey form, we may want to distinguish between agree, disagree, or no answer. If we represent such data using a boolean, we should differentiate between `false` and `null` values.
+Optional is a type of data that can handle a true absence. For example, in a survey form, we may want to distinguish between agree, disagree, or no answer. If we represent such data using a boolean, we should differentiate between `false` and `null` values. In this article, we will discuss common patterns of optional impelementation in Go.
 
 ## Use Cases
 

@@ -1,17 +1,15 @@
 ---
 layout: post
-title: "Making Use of Go Channels #1: Indefinite Process, Graceful Shutdown"
+title: "Basic Use of Go Channel #1: Indefinite Process"
 categories: tips
 featured_image: /img/article3-golang-logo.png
 ---
 
-Concurrency in Go is quite tricky. We have `channel`, a simple type that can be used for sending and receiving data concurrently. We also have `goroutines`, a lightweight thread managed by Go runtime to make concurrent operations possible.
+In Go, `channel` is a simple type that can be used for sending and receiving data concurrently. We also have `goroutines`, a lightweight thread managed by Go runtime. In this series of articles, we will discuss fundamental patterns of Go channels that are implemented by more complex concurrency patterns.
 
-Fortunately, there are many implementations `sync.WaitGroup` such as `sync.Mutex` to make things related to concurrency easier. Nowadays, developers don't need to set channels and goroutines manually really often. However, there are several fundamental things that are common and can be done with simple `channel` implementation. In this article, we will discuss these cases.
+## Indefinite process
 
-## Make an indefinite process
-
-The most basic use case for the unbuffered channel is blocking a process until data is supplied to the channel.
+An unbuffered channel receiver blocks a process until data is supplied to the channel.
 
 ```go
 package main
@@ -32,7 +30,7 @@ func main() {
 }
 ```
 
-In the code above, `ch` makes sure that the goroutine function will not exit before it finishes the loop. This is because the `main` goroutine waits for channel send/receive, which happens after the loop.
+In the code above, `ch` makes sure that the goroutine function will not exit before it finishes the loop. This is because the `main` goroutine waits for channel receive, which happens after the loop.
 
 If the channel never receives any data, the program will run indefinitely until the user closes the program.
 
@@ -60,7 +58,7 @@ func main() {
 
 This program prints `ping` every second indefinitely and will only exit with interrupts such as `Ctrl+C`. To be exact, the program runs until `SIGINT` or `SIGTERM` is sent by the operating system.
 
-## Graceful shutdown
+## Case study: Graceful shutdown
 
 Furthermore, our program can respond to interrupts instead of directly exiting. Usually, it is related to cleanup or `defer` operations, making graceful shutdown possible.
 
