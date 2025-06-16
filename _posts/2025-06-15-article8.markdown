@@ -143,7 +143,26 @@ Some Go packages such as [mo.Option](https://github.com/samber/mo/blob/master/op
 
 ## Best Practices
 
-Surprisingly, one of the widely accepted practices in Go is just **omitting** absence. That means that we leave the absent value as blank/zero, insert that blank value into the database, and return it as null when fetched. To make the last thing happen, we can use [struct tags](https://go.dev/wiki/Well-known-struct-tags).
+Absence of complex structs is usually represented by `nil` and delivered along with an error or boolean flag.
+
+```go
+// func FetchObject() (*Object, error)
+
+obj, err := FetchObject()
+if err != nil {
+	fmt.Println("Error: ", err)
+	return
+}
+
+fmt.Println(obj)
+}
+```
+
+It is good practice to return an error when a function returns an absent or `nil` value, so it doesn't confuse the user.
+
+For basic data types like `int` or `bool`, distinguishing zero/false from nil can be tricky. In my opinion, all approaches we discussed above are fine, but I like the generics approach more although it requires a recent version of Go.
+
+Lastly, there are widely accepted practice to just **omit** absence whenever possible. That means that we leave the absent value as blank/zero, insert that blank value into the database, and return it as null when fetched. To make the last thing happen, we can use [struct tags](https://go.dev/wiki/Well-known-struct-tags).
 
 For instance, we can have a name struct with optional middle and last names as follows.
 
@@ -183,8 +202,6 @@ func main() {
 }
 ```
 
-This program returns `{"first":"John","last":"Doe"}`, omitting the middle name column. That means we can support no absent data to users although it is not explicitly defined as absent in our codebase.
+This program returns `{"first":"John","last":"Doe"}`, omitting the middle name column. That means we can return no absent data to users although it is not explicitly defined as absent in our codebase.
 
 In a bigger struct, we may want to not expose all the attributes to reduce complexity. Therefore, we can implement an [WithOptions](https://golang.cafe/blog/golang-functional-options-pattern.html) pattern to make our constructor simple yet customizable.
-
-Lastly, any approach to handle true absence at Go basic data type is fine, but I found that presence flag (explicitly defined or generic) to be safer in general. This can be said for complex structs as well. To avoid `nil` struct instantiation, we can make a constructor that returns a pointer to struct, but never a `nil` one. If no data is provided to that struct we can return a default struct, but it can be extended using `WithOptions` pattern.
