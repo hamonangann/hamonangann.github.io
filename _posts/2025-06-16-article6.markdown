@@ -1,8 +1,7 @@
 ---
 layout: post
-title: "Basic Use of Go Channel #1: Indefinite Process"
+title: "Basic Pattern of Go Channel #1: Indefinite Process"
 categories: tips
-featured_image: /img/article3-golang-logo.png
 ---
 
 In Go, `channel` is a simple type that can be used for sending and receiving data concurrently. We also have `goroutines`, a lightweight thread managed by Go runtime. In this series of articles, we will discuss fundamental patterns of Go channels that are implemented by more complex concurrency patterns.
@@ -145,7 +144,7 @@ func main() {
 }
 ```
 
-Continue to part 2...
+Continue to [Part 2](https://hamonangann.github.io/tips/2025/06/19/article7.html)
 
 ## Reference
 

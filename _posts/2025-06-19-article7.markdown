@@ -1,0 +1,122 @@
+---
+layout: post
+title: "Basic Pattern of Go Channels #2: First-Response-Wins"
+categories: tips
+featured_image: /img/article3-golang-logo.png
+---
+
+In [Part 1](https://hamonangann.github.io/tips/2025/06/09/article6.html) we have already discussed how Go channels are used to create indefinite processes. Now, we will discuss another basic pattern for Go channels.
+
+## First-Response-Wins
+
+In JavaScript, there is a famous `Promise` type, which represents the state of an asynchronous operation. It can either be resolved or rejected. However, in Go, we need to adjust our approach slightly. Go doesn't have a built-in type for asynchronous event states, but we can control the data we receive.
+
+To do that, we need to combine channel receive with `select/case`.
+
+```go
+package main
+
+import (
+	"fmt"
+	"math/rand/v2"
+	"time"
+)
+
+func longProcess(ch chan int) {
+	waitTime := 1 + rand.IntN(5)
+	duration := time.Duration(waitTime)
+	time.Sleep(duration * time.Second)
+	ch <- waitTime
+}
+
+func main() {
+	ch := make(chan int)
+
+	go longProcess(ch)
+	go longProcess(ch)
+
+	select {
+	case result := <-ch:
+		fmt.Printf("First response arrived in %d second(s)", result)
+	}
+}
+```
+
+In the example above, we spawn 2 goroutines and display the result of the one who finishes first.
+
+## Case Study: Context and Select
+
+The most popular use case for First-Response-Wins is `context.Context`. This type supports information transfer between APIs, along with cancellation and timeout.
+
+In a client API, we can add a context to our request and use `select` to intercept that request in case of timeout.
+
+```go
+// You can edit this code!
+// Click here and start typing.
+package main
+
+import (
+	"context"
+	"fmt"
+	"math/rand/v2"
+	"time"
+)
+
+func longProcess(ch chan int) {
+	waitTime := 1 + rand.IntN(5)
+	duration := time.Duration(waitTime)
+	time.Sleep(duration * time.Second)
+	ch <- waitTime
+}
+
+func main() {
+	ch := make(chan int)
+
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	go longProcess(ch)
+
+	select {
+	case <-ctx.Done():
+		fmt.Println("Timeout. No response after 3 seconds")
+	case result := <-ch:
+		fmt.Printf("First response arrived in %d second(s)", result)
+	}
+}
+```
+
+Try to run the program above multiple times. There will be occasions when `longProcess` finishes quickly enough and we log the result, but sometimes it is cancelled by the context.
+
+## Refactoring graceful shutdown example
+
+In [part 1](https://hamonangann.github.io/tips/2025/06/09/article6.html) we have already implemented graceful shutdown with context cancellation, in case of delay or failure on shutdown. We can modify our end of `main()`
+
+```go
+    // ... 
+    ctx, cancel := context.WithTimeout(context.Background(), 2*time.Second)
+	defer cancel()
+
+	errCh := make(chan error)
+
+	go func() {
+		if err := srv.Shutdown(ctx); err != nil {
+			errCh <- err
+		}
+	}
+
+	select {
+	case err := <- errCh:
+		log.Printf("server shutdown error: %v", err)
+    case <- ctx.Done():
+		log.Println("Server exited gracefully")
+	}
+```
+
+With this first-response-wins approach, our logging attempt on server shutdown error won't be interrupted by timeout.
+
+## Reference
+
+[Channel Use Cases](https://go101.org/article/channel-use-cases.html)
+
+[Context](https://go.dev/blog/context)
