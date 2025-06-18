@@ -44,6 +44,40 @@ func main() {
 
 In the example above, we spawn 2 goroutines and display the result of the one who finishes first.
 
+We can use multiple channels, one for each `case`, to indicate which goroutine responds first.
+
+```
+package main
+
+import (
+	"fmt"
+	"math/rand/v2"
+	"time"
+)
+
+func longProcess(ch chan int) {
+	waitTime := 1 + rand.IntN(5)
+	duration := time.Duration(waitTime)
+	time.Sleep(duration * time.Second)
+	ch <- waitTime
+}
+
+func main() {
+	ch1 := make(chan int)
+	ch2 := make(chan int)
+
+	go longProcess(ch1)
+	go longProcess(ch2)
+
+	select {
+	case result := <-ch1:
+		fmt.Printf("First response ch1 arrived in %d second(s)", result)
+	case result := <-ch2:
+		fmt.Printf("First response ch2 arrived in %d second(s)", result)
+	}
+}
+```
+
 ## Case Study: Context and Select
 
 The most popular use case for First-Response-Wins is `context.Context`. This type supports information transfer between APIs, along with cancellation and timeout.
