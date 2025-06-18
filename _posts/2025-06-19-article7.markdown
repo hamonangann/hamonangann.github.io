@@ -1,11 +1,11 @@
 ---
 layout: post
-title: "Basic Pattern of Go Channels #2: First-Response-Wins"
+title: "Go Channels Fundamental Pattern #2: First-Response-Wins"
 categories: tips
 featured_image: /img/article3-golang-logo.png
 ---
 
-In [Part 1](https://hamonangann.github.io/tips/2025/06/09/article6.html) we have already discussed how Go channels are used to create indefinite processes. Now, we will discuss another basic pattern for Go channels.
+In [Part 1](https://hamonangann.github.io/tips/2025/06/16/article6.html) we have already discussed how Go channels are used to create indefinite processes. Now, we will discuss another fundamental pattern for Go channels.
 
 ## First-Response-Wins
 
@@ -124,7 +124,7 @@ Try to run the program above multiple times. There will be occasions when `longP
 
 ## Refactoring graceful shutdown example
 
-In [part 1](https://hamonangann.github.io/tips/2025/06/09/article6.html) we have already implemented graceful shutdown with context cancellation, in case of delay or failure on shutdown. We can modify our end of `main()`
+In [part 1](https://hamonangann.github.io/tips/2025/06/16/article6.html) we have already implemented graceful shutdown with context cancellation, in case of delay or failure on shutdown. We can modify our end of `main()`
 
 ```go
 	// ... 

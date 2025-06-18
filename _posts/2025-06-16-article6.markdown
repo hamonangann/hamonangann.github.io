@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Basic Pattern of Go Channel #1: Indefinite Process"
+title: "Go Channels Fundamental Pattern #1: Indefinite Process"
 categories: tips
 ---
 
