@@ -46,7 +46,7 @@ In the example above, we spawn 2 goroutines and display the result of the one wh
 
 We can use multiple channels, one for each `case`, to indicate which goroutine responds first.
 
-```
+```go
 package main
 
 import (
@@ -127,8 +127,8 @@ Try to run the program above multiple times. There will be occasions when `longP
 In [part 1](https://hamonangann.github.io/tips/2025/06/09/article6.html) we have already implemented graceful shutdown with context cancellation, in case of delay or failure on shutdown. We can modify our end of `main()`
 
 ```go
-    // ... 
-    ctx, cancel := context.WithTimeout(context.Background(), 2*time.Second)
+	// ... 
+	ctx, cancel := context.WithTimeout(context.Background(), 2*time.Second)
 	defer cancel()
 
 	errCh := make(chan error)
@@ -142,7 +142,7 @@ In [part 1](https://hamonangann.github.io/tips/2025/06/09/article6.html) we have
 	select {
 	case err := <- errCh:
 		log.Printf("server shutdown error: %v", err)
-    case <- ctx.Done():
+	case <- ctx.Done():
 		log.Println("Server exited gracefully")
 	}
 ```
