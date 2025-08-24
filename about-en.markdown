@@ -11,16 +11,14 @@ Mail me at [b.hamonangan.p@gmail.com
 
 ### Links
 
-- **Programming**: [Teach Yourself Programming in Ten Years](https://www.norvig.com/21-days.html) by Peter Norvig. This is one of my long-term goals. It may sound exhausting, but it is highly feasible if you do programming as your career or studies.
+- **Programming**: [Teach Yourself Programming in Ten Years](https://www.norvig.com/21-days.html) by Peter Norvig. One of my long-term goals. It may sound exhausting, but it is highly feasible if you do programming as your career or studies.
 
-- **Programming/WebDev**: [Eric Murphy](https://ericmurphy.xyz/) is my favorite 
-YouTuber, who also has a blog. He covers wide topics on web development and internet culture overall.
-
-- **Free Software**: [Free Software Free Society](https://www.gnu.org/philosophy/fsfs/rms-essays.pdf) by Richard M. Stallman. This collection of essays portrays the background of the Free Software movement, straight from the mind of its founder.
+- **Programming**: [Eric Murphy](https://ericmurphy.xyz/) is my favorite 
+YouTuber, who also has a blog. He covers a wide range of topics on web development and internet culture overall.
 
 - **Literature**: [Aesop's Fables](https://www.aesopfables.com/randfabl.html), which I enjoy exploring in my spare time.
 
-- **Theology**: [Martin Luther's Small Catechism](https://www.gutenberg.org/ebooks/1670). A must-read starter book for everyone to understand Protestant Christianity. It explains the tenets of the earliest Protestant.
+- **Theology**: [Martin Luther's Small Catechism](https://www.gutenberg.org/ebooks/1670), which is my starting point for learning the tenets of Protestant tradition.
 
 <!-- ### Useful readings
 
