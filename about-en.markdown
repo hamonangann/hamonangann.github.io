@@ -13,6 +13,8 @@ Mail me at [b.hamonangan.p@gmail.com
 
 - **Programming**: [Teach Yourself Programming in Ten Years](https://www.norvig.com/21-days.html) by Peter Norvig. One of my long-term goals. It may sound exhausting, but it is highly feasible if you do programming as your career or studies.
 
+- **Programming**: [Prof. Onno Purbo](http://onnocenter.or.id/), the best programming educator I know. He also promotes low-cost, free-software-based computer networks (RT/RW Net, Offline Internet). He has a [wiki](https://onnocenter.or.id/wiki/index.php/Main_Page), mostly in Indonesian.
+
 - **Programming**: [Eric Murphy](https://ericmurphy.xyz/) is my favorite 
 YouTuber, who also has a blog. He covers a wide range of topics on web development and internet culture overall.
 
