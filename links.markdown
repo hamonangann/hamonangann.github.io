@@ -4,8 +4,6 @@ title: Links
 permalink: /links/
 ---
 
-### Links
-
 It is worth mentioning that some of this blog's content is heavily inspired by them.
 
 - [Teach Yourself Programming in Ten Years](https://www.norvig.com/21-days.html) by Peter Norvig. The best blog essay about programming. One of my long-term goals.
