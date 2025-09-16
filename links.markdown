@@ -10,6 +10,6 @@ It is worth mentioning that some of this blog's content is heavily inspired by t
 
 - [Dave Cheney](https://dave.cheney.net/), one of the best Go programming blogs. Lots of in-depth insights.
 
-- [Stefan Nillson](https://yourbasic.org/about/), covers Go and algorithms. Always concise and straightforward.
+- [Stefan Nillson](https://yourbasic.org/), covers Go and algorithms. Always concise and straightforward.
 
-- [Eric Murphy](https://ericmurphy.xyz/) my favorite YouTuber, who also has a blog. Covers Linux, WebDev, and privacy.
+- [Eric Murphy](https://ericmurphy.xyz/), my favorite YouTuber, who also has a blog. Covers Linux, WebDev, and privacy.
