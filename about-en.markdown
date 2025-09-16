@@ -9,18 +9,6 @@ permalink: /about/
 Mail me at [b.hamonangan.p@gmail.com
 ](mailto:b.hamonangan.p@gmail.com) 📬
 
-### Links
-
-- [Teach Yourself Programming in Ten Years](https://www.norvig.com/21-days.html) by Peter Norvig. One of my long-term goals. It may sound exhausting, but it is highly feasible if you do programming as your career or studies.
-
-- [Prof. Onno Purbo](http://onnocenter.or.id/), the best programming educator I know. He also promotes low-cost, free-software-based computer networks (RT/RW Net, Offline Internet). He has a [wiki](https://onnocenter.or.id/wiki/index.php/Main_Page), mostly in Indonesian.
-
-- [Eric Murphy](https://ericmurphy.xyz/) is my favorite 
-YouTuber, who also has a blog. He covers a wide range of topics on web development and internet culture overall.
-
-- [Aesop's Fables](https://www.aesopfables.com/randfabl.html), which I enjoy exploring in my spare time.
-
-- [Martin Luther's Small Catechism](https://www.gutenberg.org/ebooks/1670), which is my starting point for learning the tenets of Protestant tradition.
 
 <!-- ### Useful readings
 
@@ -30,14 +18,14 @@ YouTuber, who also has a blog. He covers a wide range of topics on web developme
 
 ### Projects
 
-All the software listed below are released with free software licenses. I authored or significantly contributed to these projects:
+All are released with free software licenses.
 
-- **[Polygon](https://pkg.go.dev/github.com/hamonangann/polygon)**, a Go library for constructing polygonal shapes (triangles, rectangles, free-form polygons with 100 sides if needed) and measuring the properties of the polygon (area, perimeter, etc). [Repo](https://github.com/hamonangann/polygon).
+- **[Polygon](https://pkg.go.dev/github.com/hamonangann/polygon)**: I developed a Go library to measure the area of a 100-sided polygon that exists in my dream. [Repo](https://github.com/hamonangann/polygon).
 
-- **[Perkalian Web](https://perkalian.netlify.app)**, a web-based game of multiplying 2 numbers in a very short time. This game is educational and serves as an alternative for table memorization method. [Repo](https://github.com/hamonangann/perkalian-web).
+- **[Perkalian Web](https://perkalian.netlify.app)**: I made deliberate practice less boring by adding a timer and 3 lives. This game is educational and serves as a method to teach multiplication concepts. [Repo](https://github.com/hamonangann/perkalian-web).
 
     ![Perkalian](/img/about-perkalian.png)
 
-- **[SusunJadwal](https://susunjadwal.cs.ui.ac.id)** by [RISTEK Open Source Software](https://oss.ristek.cs.ui.ac.id/): a course planning web application developed back in my college days. [Backend Repo](https://github.com/ristekoss/susunjadwal-backend), [Frontend Repo](https://github.com/ristekoss/susunjadwal-frontend).
+- **[SusunJadwal](https://susunjadwal.cs.ui.ac.id)** by [RISTEK Open Source Software](https://oss.ristek.cs.ui.ac.id/): a hacky web scraper with React frontend developed during my study to prepare study plans. [Backend Repo](https://github.com/ristekoss/susunjadwal-backend), [Frontend Repo](https://github.com/ristekoss/susunjadwal-frontend).
 
     ![SusunJadwal](/img/about-sunjad.png)
