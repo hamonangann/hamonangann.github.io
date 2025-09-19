@@ -17,4 +17,8 @@ It is worth mentioning that some of this blog's content is heavily inspired by t
 \
 \
 \
-[![Links](/img/gophers.png)](https://github.com/ashleymcnamara/gophers)
+\
+\
+\
+\
+[![Links](/img/gophers.png)](https://github.com/egonelbre/gophers)
