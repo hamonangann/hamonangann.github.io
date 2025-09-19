@@ -13,3 +13,7 @@ It is worth mentioning that some of this blog's content is heavily inspired by t
 - [Stefan Nillson](https://yourbasic.org/), covers Go and algorithms. Always concise and straightforward.
 
 - [Eric Murphy](https://ericmurphy.xyz/), my favorite YouTuber, who also has a blog. Covers Linux, WebDev, and privacy.
+
+
+![Links](/img/gophers.png)
+Illustration CC-BY-NC-SA 4.0 from [Ashley McNamara](https://github.com/ashleymcnamara).
