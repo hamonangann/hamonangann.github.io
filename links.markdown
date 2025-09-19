@@ -16,6 +16,7 @@ It is worth mentioning that some of this blog's content is heavily inspired by t
 
 \
 \
-![Links](/img/gophers.png)[^']
+\
+![Links](/img/gophers.png)[^1]
 
-[^']: Illustration CC-BY-NC-SA 4.0 from [Ashley McNamara](https://github.com/ashleymcnamara).
+[^1]: Illustration CC-BY-NC-SA 4.0 from [Ashley McNamara](https://github.com/ashleymcnamara).
