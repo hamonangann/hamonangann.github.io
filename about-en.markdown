@@ -25,19 +25,19 @@ All are released with free software licenses.
 - **[Perkalian Web](https://perkalian.netlify.app)**: I made deliberate practice less boring by adding a timer and 3 lives. This game is educational and serves as a method to teach multiplication concepts. [Repo](https://github.com/hamonangann/perkalian-web).
 
     <div class="img-dark" markdown="1">
-    ![Perkalian](/img/about-perkalian-dark.png)
+        ![Perkalian](/img/about-perkalian-dark.png)
     </div>
-    
+
     <div class="img-light" markdown="1">
-    ![Perkalian](/img/about-perkalian-light.png)
+        ![Perkalian](/img/about-perkalian-light.png)
     </div>
 
 - **[SusunJadwal](https://susunjadwal.cs.ui.ac.id)** by [RISTEK Open Source Software](https://oss.ristek.cs.ui.ac.id/): a hacky web scraper with React frontend developed during my study to prepare study plans. [Backend Repo](https://github.com/ristekoss/susunjadwal-backend), [Frontend Repo](https://github.com/ristekoss/susunjadwal-frontend).
 
     <div class="img-dark" markdown="1">
-    ![SusunJadwal](/img/about-sunjad-dark.png)
+        ![SusunJadwal](/img/about-sunjad-dark.png)
     </div>
 
     <div class="img-light" markdown="1">
-    ![SusunJadwal](/img/about-sunjad-light.png)
+        ![SusunJadwal](/img/about-sunjad-light.png)
     </div>
