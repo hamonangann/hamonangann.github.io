@@ -51,23 +51,15 @@ layout: base
     </div>
 
      <script>
-      const commentsDark = document.getElementById('comments-dark')
-      commentsDark.onload = () => {
-        if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-          commentsDark.style.display = 'block'
+      window.matchMedia('(prefers-color-scheme: dark)').addEventListener('load', event => {
+        if (event.matches) {
+          document.getElementById('comments-dark').style.display = 'block'
+          document.getElementById('comments-light').style.display = 'none'
         } else {
-          commentsDark.style.display = 'none'
+          document.getElementById('comments-dark').style.display = 'none'
+          document.getElementById('comments-light').style.display = 'block'
         }
-      }
-
-      const commentsLight = document.getElementById('comments-light')
-      commentsLight.onload = () => {
-        if (window.matchMedia('(prefers-color-scheme: light)').matches) {
-          commentsLight.style.display = 'block'
-        } else {
-          commentsLight.style.display = 'none'
-        }
-      }
+      });
     </script>
 
     {%- if site.disqus.shortname -%}
