@@ -39,6 +39,9 @@ future: true
 minima:
   skin: auto
   social_links:
+    - title: Email
+      icon: envelope
+      url: "mailto:b.hamonangan.p@gmail.com"
     - title: GitHub Profile
       icon: github
       url: "https://github.com/hamonangann"
