@@ -40,7 +40,7 @@ layout: base
       </script>
     </div>
     
-    <div id="comments-light">
+    <div id="comments-light" style="display: none">
       <script src="https://utteranc.es/client.js"
         repo="hamonangann/hamonangann.github.io"
         issue-term="title"
@@ -51,13 +51,17 @@ layout: base
     </div>
 
      <script>
-      document.addEventListener('DOMContentLoaded', function() {
+      const commentsDark = document.getElementById('comments-dark')
+      commentsDark.onload = () => {
         if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-          document.getElementById('comments-dark').style.display = 'block'
-          document.getElementById('comments-light').style.display = 'none'
-        } else {
-          document.getElementById('comments-dark').style.display = 'none'
-          document.getElementById('comments-light').style.display = 'block'
+          commentsDark.style.display = 'block'
+        }
+      }
+
+      const commentsLight = document.getElementById('comments-light')
+      commentsLight.onload = () => {
+        if (window.matchMedia('(prefers-color-scheme: light)').matches) {
+          commentsLight.style.display = 'block'
         }
       }
     </script>
