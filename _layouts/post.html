@@ -30,13 +30,29 @@ layout: base
     <h2>Comments</h2>
     <p>Use a GitHub account to create a comment. <a href="https://github.com/hamonangann/hamonangann.github.io/issues?q=author%3Autterances-bot+{{ page.title }}">This page</a> can be used to edit or delete comments.</p>
 
-    <script src="https://utteranc.es/client.js"
-      repo="hamonangann/hamonangann.github.io"
-      issue-term="title"
-      theme="github-light"
-      crossorigin="anonymous"
-      async>
+    <script>
+      window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
+        const colorScheme = event.matches ? "dark" : "light";
+      });
     </script>
+    
+    {%- if colorScheme === "dark" -%}
+      <script src="https://utteranc.es/client.js"
+        repo="hamonangann/hamonangann.github.io"
+        issue-term="title"
+        theme="github-dark"
+        crossorigin="anonymous"
+        async>
+      </script>
+    {%- else -%}
+      <script src="https://utteranc.es/client.js"
+        repo="hamonangann/hamonangann.github.io"
+        issue-term="title"
+        theme="github-light"
+        crossorigin="anonymous"
+        async>
+      </script>
+    {%- endif -%}
 
     {%- if site.disqus.shortname -%}
       {%- include disqus_comments.html -%}
