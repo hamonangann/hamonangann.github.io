@@ -51,12 +51,14 @@ layout: base
     </div>
 
      <script>
-      if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-        document.getElementById('comments-dark').style.display = 'block'
-        document.getElementById('comments-light').style.display = 'none'
-      } else {
-        document.getElementById('comments-dark').style.display = 'none'
-        document.getElementById('comments-light').style.display = 'block'
+      document.addEventListener('window.onload', function() {
+        if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+          document.getElementById('comments-dark').style.display = 'block'
+          document.getElementById('comments-light').style.display = 'none'
+        } else {
+          document.getElementById('comments-dark').style.display = 'none'
+          document.getElementById('comments-light').style.display = 'block'
+        }
       }
     </script>
 
