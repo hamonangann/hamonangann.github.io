@@ -11,4 +11,27 @@ layout: base
     {{ content }}
   </div>
 
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      const colorScheme = window.matchMedia('(prefers-color-scheme: dark)')
+
+      const handleTheme = event => {
+        const darkImages = [...document.getElementsByClassName('img-dark')]
+        const lightImages = [...document.getElementsByClassName('img-light')]
+
+        if (event.matches) {
+          darkImages.map((img) => img.style.display = 'block')
+          lightImages.map((img) => img.style.display = 'none')
+        } else {
+          darkImages.map((img) => img.style.display = 'none')
+          lightImages.map((img) => img.style.display = 'block')
+        }
+      }
+
+      colorScheme.addEventListener("change", event => handleTheme(event))
+
+      handleTheme(colorScheme)
+    });
+  </script>
+
 </article>
