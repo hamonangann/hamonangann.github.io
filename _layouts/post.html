@@ -51,7 +51,7 @@ layout: base
     </div>
 
      <script>
-      window.matchMedia('(prefers-color-scheme: dark)').addEventListener('load', event => {
+      window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
         if (event.matches) {
           document.getElementById('comments-dark').style.display = 'block'
           document.getElementById('comments-light').style.display = 'none'
