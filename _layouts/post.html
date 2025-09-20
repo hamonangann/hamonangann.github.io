@@ -55,6 +55,8 @@ layout: base
       commentsDark.onload = () => {
         if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
           commentsDark.style.display = 'block'
+        } else {
+          commentsDark.style.display = 'none'
         }
       }
 
@@ -62,6 +64,8 @@ layout: base
       commentsLight.onload = () => {
         if (window.matchMedia('(prefers-color-scheme: light)').matches) {
           commentsLight.style.display = 'block'
+        } else {
+          commentsLight.style.display = 'none'
         }
       }
     </script>
