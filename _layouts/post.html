@@ -56,25 +56,11 @@ layout: base
 
         const handleTheme = event => {
           if (event.matches) {
-            console.log('Dark mode')
-            const commentsDark = document.getElementById('comments-dark')
-            commentsDark.onload = () => {
-              commentsDark.style.display = 'block'
-            }
-            const commentsLight = document.getElementById('comments-light')
-            commentsLight.onload = () => {
-              commentsLight.style.display = 'none'
-            }
+            document.getElementById('comments-dark').style.display = 'block'
+            document.getElementById('comments-light').style.display = 'none'
           } else {
-            console.log('Light mode')
-            const commentsDark = document.getElementById('comments-dark')
-            commentsDark.onload = () => {
-              commentsDark.style.display = 'none'
-            }
-            const commentsLight = document.getElementById('comments-light')
-            commentsLight.onload = () => {
-              commentsLight.style.display = 'block'
-            }
+            document.getElementById('comments-dark').style.display = 'none'
+            document.getElementById('comments-light').style.display = 'block'
           }
         }
 
