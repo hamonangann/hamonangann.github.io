@@ -51,16 +51,30 @@ layout: base
     </div>
 
      <script>
-      window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
-        if (event.matches) {
-          const commentsDark = document.getElementById('comments-dark')
-          commentsDark.onload = () => {
-            commentsDark.style.display = 'block'
-          }
-        } else {
-          const commentsLight = document.getElementById('comments-light')
-          commentsLight.onload = () => {
-            commentsLight.style.display = 'block'
+      document.addEventListener("DOMContentLoaded", function() {
+        const colorScheme = window.matchMedia('(prefers-color-scheme: dark)')
+
+        const handleTheme = event => {
+          if (event.matches) {
+            console.log('Dark mode')
+            const commentsDark = document.getElementById('comments-dark')
+            commentsDark.onload = () => {
+              commentsDark.style.display = 'block'
+            }
+            const commentsLight = document.getElementById('comments-light')
+            commentsLight.onload = () => {
+              commentsLight.style.display = 'none'
+            }
+          } else {
+            console.log('Light mode')
+            const commentsDark = document.getElementById('comments-dark')
+            commentsDark.onload = () => {
+              commentsDark.style.display = 'none'
+            }
+            const commentsLight = document.getElementById('comments-light')
+            commentsLight.onload = () => {
+              commentsLight.style.display = 'block'
+            }
           }
         }
       });
