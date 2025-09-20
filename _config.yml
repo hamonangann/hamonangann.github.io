@@ -31,6 +31,7 @@ url: "https://hamonangann.github.io" # the base hostname & protocol for your sit
 # theme: minima
 plugins:
   - jekyll-feed
+  - jekyll-seo-tag
   - jekyll-remote-theme
 remote_theme: jekyll/minima@1fe0fbf
 future: true
@@ -38,15 +39,9 @@ future: true
 minima:
   skin: auto
   social_links:
-    - title: Email
-      icon: envelope
-      url: "mailto:b.hamonangan.p@gmail.com"
     - title: GitHub Profile
       icon: github
       url: "https://github.com/hamonangann"
-    - title: RSS
-      icon: rss
-      url: "https://hamonangann.github.io/feed.xml"
 defaults:
   - scope:
       path: "assets/img"
