@@ -28,7 +28,7 @@ twitter_username:
 github_username: hamonangann
 
 # Build settings
-#theme: minima
+# theme: minima
 remote_theme: jekyll/minima
 plugins:
   - jekyll-feed
