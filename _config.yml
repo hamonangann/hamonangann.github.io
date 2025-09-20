@@ -28,14 +28,14 @@ twitter_username:
 github_username: hamonangann
 
 # Build settings
-# theme: minima
-remote_theme: jekyll/minima
 plugins:
   - jekyll-feed
   - jekyll-remote-theme
+remote_theme: jekyll/minima@93b1921
+future: true
+
 minima:
   skin: auto
-future: true
 
 defaults:
   - scope:
