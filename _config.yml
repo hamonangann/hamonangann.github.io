@@ -24,19 +24,29 @@ description: >- # this means to ignore newlines until "baseurl:"
   Yet Another Personal Blog
 baseurl: # the subpath of your site, e.g. /blog
 url: "https://hamonangann.github.io" # the base hostname & protocol for your site, e.g. http://example.com
-twitter_username: 
-github_username: hamonangann
+# twitter_username: 
+# github_username: hamonangann
 
 # Build settings
+# theme: minima
 plugins:
   - jekyll-feed
   - jekyll-remote-theme
-remote_theme: jekyll/minima@93b1921
+remote_theme: jekyll/minima@1fe0fbf
 future: true
 
 minima:
   skin: auto
-
+  social_links:
+    - title: Email
+      icon: envelope
+      url: "mailto:b.hamonangan.p@gmail.com"
+    - title: GitHub Profile
+      icon: github
+      url: "https://github.com/hamonangann"
+    - title: RSS
+      icon: rss
+      url: "https://hamonangann.github.io/feed.xml"
 defaults:
   - scope:
       path: "assets/img"
