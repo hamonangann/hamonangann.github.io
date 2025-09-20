@@ -53,11 +53,15 @@ layout: base
      <script>
       window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
         if (event.matches) {
-          document.getElementById('comments-dark').style.display = 'block'
-          document.getElementById('comments-light').style.display = 'none'
+          const commentsDark = document.getElementById('comments-dark')
+          commentsDark.onload = () => {
+            commentsDark.style.display = 'block'
+          }
         } else {
-          document.getElementById('comments-dark').style.display = 'none'
-          document.getElementById('comments-light').style.display = 'block'
+          const commentsLight = document.getElementById('comments-light')
+          commentsLight.onload = () => {
+            commentsLight.style.display = 'block'
+          }
         }
       });
     </script>
