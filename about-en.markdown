@@ -24,7 +24,6 @@ All are released with free software licenses.
 
 - **[Perkalian Web](https://perkalian.netlify.app)**: I made deliberate practice less boring by adding a timer and 3 lives. This game is educational and serves as a method to teach multiplication concepts. [Repo](https://github.com/hamonangann/perkalian-web).
 
-
     <div class="img-dark" markdown="1">![Perkalian](/img/about-perkalian-dark.png)</div>
 
     <div class="img-light" markdown="1">![Perkalian](/img/about-perkalian-light.png)</div>
