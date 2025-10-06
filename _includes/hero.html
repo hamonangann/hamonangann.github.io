@@ -1,8 +1,8 @@
 <div class="post-opening">
-  <div class="post-highlight">
+  <span class="post-highlight">
     {{ post-highlight }}
   </div>
-  <div class="featured-image">
-    <img src="{{ '' | append: post.featured_image | relative_url }}"/>
-  </div>
+  <span class="featured-image">
+    {{ post-featured-image }}
+  </span>
 </div>

@@ -2,12 +2,17 @@
 layout: page
 title: About
 permalink: /about/
-featured_image: /img/profile-pic.jpg
 ---
 
 {% capture post-highlight %}
 
 **B. Hamonangan:** I was born in [Java](https://en.wikipedia.org/wiki/Java) with a hobby of breaking and fixing things, mainly computers. I studied Computer Science at the University of Indonesia. Following graduation, I attended a coding boot camp at Sea Ltd, making my education a blend of formal and informal. I learned how to talk to [Python](https://en.wikipedia.org/wiki/Python_(programming_language)), just like Harry Potter. Later, I moved to Japan to work as a programmer.
+
+{% endcapture %}
+
+{% capture post-featured-image %}
+
+![B. Hamonangan](/img/profile-pic.jpg)
 
 {% endcapture %}
 
