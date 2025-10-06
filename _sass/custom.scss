@@ -38,10 +38,12 @@
 .post-opening {
   display: flex;
   flex-wrap: wrap-reverse;
+  align-items: center;
 
   .featured-image {
-    max-width: 300px;
+    max-width: 20%;
     margin-bottom: 0;
+    margin-left: 20px;
     align-items: center;
   }
 
@@ -62,4 +64,13 @@
 
 #comments-light {
   display: none
+}
+
+@media screen and (min-width: 768px) {
+  .post-opening {
+    .featured-image {
+      width: 100%;
+      margin-left: 0;
+    }
+  }
 }
