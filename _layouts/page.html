@@ -8,6 +8,18 @@ layout: base
   </header>
 
   <div class="post-content">
+    <div class="post-opening">
+      {% if post-highlight %}
+      <div class="post-highlight">
+        {{ post.highlight }}
+      </div>
+      {%- endif -%}
+      {% if post.featured_image %}
+      <div class="featured-image">
+        <img src="{{ '' | append: post.featured_image | relative_url }}"/>
+      </div>
+      {%- endif -%}
+    </div>
     {{ content }}
   </div>
 

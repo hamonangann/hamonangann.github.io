@@ -35,6 +35,24 @@
   }
 }
 
+.post-opening {
+  display: flex;
+  flex-wrap: wrap-reverse;
+
+  .featured-image {
+    min-width: 450px;
+    flex-grow: 1;
+    margin-bottom: 0;
+    align-items: center;
+  }
+
+  .post-highlight {
+    flex-grow: 1;
+    margin-bottom: 0;
+    align-items: center;
+  }
+}
+
 .read-more-link {
     padding-top: 4px;
 }
