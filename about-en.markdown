@@ -30,6 +30,14 @@ Mail me at [b.hamonangan@protonmail.com
 
 - [But How Do It Know—The Basic Principles of Computers For Everyone] by J. Clark Scott. It explains to everyone how computer parts work in the simplest way possible. -->
 
+### Writings
+
+Aside from this blog, I also wrote:
+
+- [I Published a Golang Library and It's Easier Than I Thought](https://global.moneyforward-dev.jp/2025/12/11/i-published-a-golang-library-and-its-easier-than-i-thought/) -  Money Forward Developers Blog.
+
+- [4 Go Data Structures and Algorithms Interesting Implementations](https://global.moneyforward-dev.jp/2025/12/09/4-go-data-structures-and-algorithms-interesting-implementations/) - Money Forward Developers Blog.
+
 ### Projects
 
 All are released with free software licenses.
