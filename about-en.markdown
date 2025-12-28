@@ -44,6 +44,8 @@ All are released with free software licenses.
 
 - **[Polygon](https://pkg.go.dev/github.com/hamonangann/polygon)**: I developed a Go library to measure the area of a 100-sided polygon that exists in my dream. [Repo](https://github.com/hamonangann/polygon).
 
+- **[Lucas](https://pkg.go.dev/github.com/hamonangann/polygon)**: I created a Go library to efficiently count large N-th Fibonacci numbers. The method is well-known, but I extend it to generalized Lucas sequences. [Repo](https://github.com/hamonangann/lucas).
+
 - **[Perkalian Web](https://perkalian.netlify.app)**: I made deliberate practice less boring by adding a timer and 3 lives. This game is educational and serves as a method to teach multiplication concepts. [Repo](https://github.com/hamonangann/perkalian-web).
 
     <div class="img-dark" markdown="1">
