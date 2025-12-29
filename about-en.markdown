@@ -21,20 +21,11 @@ Mail me at [b.hamonangan@protonmail.com
 
 {% include hero.html %}
 
-
-
-
-<!-- ### Useful readings
-
-- [Automate the Boring Stuff with Python](https://automatetheboringstuff.com/) by AI Swegart. It tells everyone in front of a computer how to get things done quicker and easier with programming.
-
-- [But How Do It Know—The Basic Principles of Computers For Everyone] by J. Clark Scott. It explains to everyone how computer parts work in the simplest way possible. -->
-
 ### Writings
 
 Aside from this blog, I also wrote:
 
-- [I Published a Golang Library and It's Easier Than I Thought](https://global.moneyforward-dev.jp/2025/12/11/i-published-a-golang-library-and-its-easier-than-i-thought/) -  Money Forward Developers Blog.
+- [I Published a Golang Library and It's Easier Than I Thought](https://global.moneyforward-dev.jp/2025/12/11/i-published-a-golang-library-and-its-easier-than-i-thought/) - Money Forward Developers Blog.
 
 - [4 Go Data Structures and Algorithms Interesting Implementations](https://global.moneyforward-dev.jp/2025/12/09/4-go-data-structures-and-algorithms-interesting-implementations/) - Money Forward Developers Blog.
 
@@ -44,7 +35,7 @@ All are released with free software licenses.
 
 - **[Polygon](https://pkg.go.dev/github.com/hamonangann/polygon)**: I developed a Go library to measure the area of a 100-sided polygon that exists in my dream. [Repo](https://github.com/hamonangann/polygon).
 
-- **[Lucas](https://pkg.go.dev/github.com/hamonangann/polygon)**: I created a Go library to efficiently count large N-th Fibonacci numbers. The method is well-known, but I extend it to generalized Lucas sequences. [Repo](https://github.com/hamonangann/lucas).
+- **[Lucas](https://pkg.go.dev/github.com/hamonangann/lucas)**: I composed a Go library to quickly count 100000th Fibonacci number. The method is well-known, so I try to extend it to generalized Lucas sequences. [Repo](https://github.com/hamonangann/lucas).
 
 - **[Perkalian Web](https://perkalian.netlify.app)**: I made deliberate practice less boring by adding a timer and 3 lives. This game is educational and serves as a method to teach multiplication concepts. [Repo](https://github.com/hamonangann/perkalian-web).
 
@@ -65,3 +56,7 @@ All are released with free software licenses.
     <div class="img-light" markdown="1">
     ![SusunJadwal](/img/about-sunjad-light.png)
     </div>
+
+### Hobbies
+
+In Japan, I shop for DVDs and physical books that are still widely available. Also, please let me know of any Baroque music concerts in the Tokyo area.
