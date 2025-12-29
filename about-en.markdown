@@ -59,4 +59,4 @@ All are released with free software licenses.
 
 ### Hobbies
 
-In Japan, I shop for DVDs and physical books that are still widely available. Also, please let me know of any Baroque music concerts in the Tokyo area.
+In Japan, I shop for DVDs and physical books that are still widely available. Also, I occasionally attend concerts and listen to [Handel](https://en.wikipedia.org/wiki/George_Frideric_Handel) or [Bach](https://en.wikipedia.org/wiki/Johann_Sebastian_Bach)'s works.
